@@ -18,4 +18,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AddHomeLocations.class);
         startActivity(intent);
     }
+
+    public void goToAddLabels(View view) {
+        Intent intent = new Intent(this, AddLabels.class);
+        startActivity(intent);
+    }
 }
