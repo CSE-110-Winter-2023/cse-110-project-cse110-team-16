@@ -7,8 +7,8 @@ import java.util.ArrayList;
 public class LocationEntityTracker {
     Activity activity;
 
-    iLocationEntity user;
-    ArrayList<? extends iLocationEntity> homes;
+    User user;
+    ArrayList<Home> homes;
     ArrayList<Float> lastKnownDirection;
 
     public LocationEntityTracker(Activity activity, User user, ArrayList<Home> homes){
@@ -25,7 +25,7 @@ public class LocationEntityTracker {
         }
         return directions;
     }
-    public Float getHomeDirectionFromUser(iLocationEntity home){
+    public Float getHomeDirectionFromUser(Home home){
         if(user.getLocation() == null) return 0.0f;
         return user.getLocation().bearingTo(home.getLocation());
     }

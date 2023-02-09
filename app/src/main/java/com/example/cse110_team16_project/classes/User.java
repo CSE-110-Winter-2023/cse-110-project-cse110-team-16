@@ -11,7 +11,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
 
-public class User implements iLocationEntity{
+public class User{
     Activity activity;
     private FusedLocationProviderClient fusedLocationClient;
     Location location = null;
@@ -28,12 +28,10 @@ public class User implements iLocationEntity{
         }
     }
 
-    @Override
     public void setLocation(Location location) {
         this.location = location;
     }
 
-    @Override
     public Location getLocation() {
         return location;
     }

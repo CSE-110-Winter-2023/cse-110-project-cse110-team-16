@@ -2,7 +2,7 @@ package com.example.cse110_team16_project.classes;
 
 import android.location.Location;
 
-public class Home implements iLocationEntity{
+public class Home{
     Location location;
     String label;
     public Home(Location location, String label){
