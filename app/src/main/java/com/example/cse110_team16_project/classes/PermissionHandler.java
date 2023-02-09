@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project;
+package com.example.cse110_team16_project.classes;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
@@ -8,6 +8,8 @@ import android.app.AlertDialog;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.example.cse110_team16_project.R;
 
 public class PermissionHandler {
     static final int APP_REQUEST_CODE = 110;
@@ -42,7 +44,7 @@ public class PermissionHandler {
         return (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) == PERMISSION_GRANTED);
     }
 
-    //
+    //currently unused
     public void handlePermission(String permission, String rationaleTitle, String rationaleText) {
         if(ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) == PERMISSION_GRANTED) {
             return;
@@ -65,5 +67,9 @@ public class PermissionHandler {
                     new String[]{permission},
                     APP_REQUEST_CODE);
         }
+    }
+
+    public boolean checkSelfPermission(String permission){
+        return ContextCompat.checkSelfPermission(activity, permission) == PERMISSION_GRANTED;
     }
 }

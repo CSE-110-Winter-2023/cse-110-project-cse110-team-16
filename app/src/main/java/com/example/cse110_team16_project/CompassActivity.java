@@ -14,6 +14,7 @@ import android.os.Bundle;
 import com.example.cse110_team16_project.classes.AppDatabase;
 import com.example.cse110_team16_project.classes.CompassUIManager;
 import com.example.cse110_team16_project.classes.Home;
+import com.example.cse110_team16_project.classes.LocationEntityTracker;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
@@ -27,6 +28,7 @@ public class CompassActivity extends AppCompatActivity {
     private ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
     private Future<Void> future;
     private List<Home> homes;
+    private LocationEntityTracker tracker;
     AppDatabase appDatabase;
 
     @Override
@@ -43,6 +45,11 @@ public class CompassActivity extends AppCompatActivity {
         //CompassUIManager manager = CompassUIManager(this,)
     }
 
+    @Override
+    protected void onPause(){
+        super.onPause();
+        tracker.unregisterListeners();
+    }
     public AppDatabase getAppDatabase(){
         return appDatabase;
     }

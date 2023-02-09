@@ -12,7 +12,6 @@ import java.util.List;
 
 public class CompassUIManager {
     Activity activity;
-    private User user;
     private List<TextView> homeLabels;
     private List<Float> homeDirection;
     private List<ImageView> homeIcons;
@@ -23,7 +22,6 @@ public class CompassUIManager {
 
     CompassUIManager(Activity activity, List<Home> homes, ImageView compass){
         this.activity = activity;
-        this.user = new User(activity);
         this.compass = compass;
         populateHomes(homes);
     }

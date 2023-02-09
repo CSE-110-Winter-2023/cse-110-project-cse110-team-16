@@ -1,32 +1,18 @@
 package com.example.cse110_team16_project.classes;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.hardware.SensorManager;
 import android.location.Location;
 
 
-import com.example.cse110_team16_project.PermissionHandler;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
 
 public class User{
-    Activity activity;
-    private FusedLocationProviderClient fusedLocationClient;
     Location location = null;
+    float direction = 0.0f;
     //SensorManager sm;
 
-    @SuppressLint("MissingPermission")
-    User(Activity activity){
-        this.activity = activity;
-        PermissionHandler handler = new PermissionHandler(activity);
-        if(handler.handleLocationPermission()){
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
-            fusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(activity, this::setLocation);
-        }
-    }
+    User(){}
 
     public void setLocation(Location location) {
         this.location = location;
@@ -36,12 +22,12 @@ public class User{
         return location;
     }
 
-    @SuppressLint("MissingPermission")
-    public Location updateLocation(){
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(activity, (Location location) -> {
-                        if(location != null) this.location = location;
-                        });
-        return this.location;
+    public void setDirection(float direction){
+        this.direction = direction;
     }
+
+    public float getDirection(){
+        return this.direction;
+    }
+
 }
