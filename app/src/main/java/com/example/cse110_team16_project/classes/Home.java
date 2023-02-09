@@ -4,6 +4,18 @@ import android.location.Location;
 
 public class Home implements iLocationEntity{
     Location location;
-    public void setLocation(Location location){};
-    public Location getLocation(){return this.location;};
+    String label;
+    public Home(Location location, String label){
+        this.location = location;
+        this.label = label;
+    }
+    public void setLocation(Location location){
+        this.location = location;
+    }
+    public Location getLocation(){
+        return this.location;
+    }
+    public String getLabel(){
+        return this.label;
+    }
 }

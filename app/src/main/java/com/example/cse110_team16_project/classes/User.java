@@ -15,7 +15,7 @@ public class User implements iLocationEntity{
     Activity activity;
     private FusedLocationProviderClient fusedLocationClient;
     Location location = null;
-    SensorManager sm;
+    //SensorManager sm;
 
     @SuppressLint("MissingPermission")
     User(Activity activity){
