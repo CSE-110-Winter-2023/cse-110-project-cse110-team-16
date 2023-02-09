@@ -3,13 +3,14 @@ package com.example.cse110_team16_project.classes;
 import android.app.Activity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class LocationEntityTracker {
     Activity activity;
 
     User user;
-    ArrayList<Home> homes;
-    ArrayList<Float> lastKnownDirection;
+    List<Home> homes;
+    List<Float> lastKnownDirection;
 
     public LocationEntityTracker(Activity activity, User user, ArrayList<Home> homes){
         this.activity = activity;
@@ -18,8 +19,8 @@ public class LocationEntityTracker {
         lastKnownDirection = getAllHomesDirectionFromUser();
     }
 
-    public ArrayList<Float> getAllHomesDirectionFromUser(){
-        ArrayList<Float> directions = new ArrayList<>(homes.size());
+    public List<Float> getAllHomesDirectionFromUser(){
+        List<Float> directions = new ArrayList<>(homes.size());
         for(int i = 0; i < homes.size(); i++){
             directions.add(getHomeDirectionFromUser(homes.get(i)));
         }
