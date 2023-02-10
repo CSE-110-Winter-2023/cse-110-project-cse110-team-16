@@ -23,19 +23,19 @@ public interface HomeDao {
     @Delete
     public void deleteHomes(Home... homes);
 
-    @Query("SELECT * FROM Home")
+    @Query("SELECT * FROM Home WHERE label = :id")
     public Home loadHomeById(String id);
 
     @Query("SELECT * FROM Home")
     public List<Home> loadAllHomes();
 
-    @Query("SELECT location FROM Home")
-    public Location getLocationByID(String id);
+    @Query("SELECT coordinates FROM Home WHERE label = :id")
+    public Coordinates getCoordinatesByID(String id);
 
-    @Query("SELECT location FROM Home")
-    public List<Location> getAllLocations();
+    @Query("SELECT coordinates FROM Home")
+    public List<Coordinates> getAllCoordinates();
 
-    @Query("SELECT label FROM Home")
+    @Query("SELECT label FROM Home WHERE label = :id")
     public String getLabelByID(String id);
 
     @Query("SELECT label FROM Home")

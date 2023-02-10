@@ -2,27 +2,28 @@ package com.example.cse110_team16_project.classes;
 
 import android.location.Location;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
-import androidx.room.Dao;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
 public class Home{
     @ColumnInfo
-    Location location;
+    Coordinates coordinates;
     @ColumnInfo
-    @PrimaryKey(autoGenerate=true)
+    @PrimaryKey
+    @NonNull
     String label;
-    public Home(Location location, String label){
-        this.location = location;
+    public Home(Coordinates coordinates, String label){
+        this.coordinates = coordinates;
         this.label = label;
     }
-    public void setLocation(Location location){
-        this.location = location;
+    public void setCoordinates(Location location){
+        this.coordinates = coordinates;
     }
-    public Location getLocation(){
-        return this.location;
+    public Coordinates getLocation(){
+        return this.coordinates;
     }
     public String getLabel(){
         return this.label;

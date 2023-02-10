@@ -14,17 +14,17 @@ User class is responsible for storing information about the User's location and 
 It is NOT responsible for updating the User position, this is currently handled in LocationEntityTracker.
  */
 public class User{
-    private MutableLiveData<Location> location = new MutableLiveData<>(null);
+    private MutableLiveData<Coordinates> coordinates = new MutableLiveData<>(null);
     private MutableLiveData<Float> direction = new MutableLiveData<>(0.0f);
 
     User(){}
 
-    public void setLocation(Location location) {
-        this.location.postValue(location);
+    public void setCoordinates(Coordinates coordinates) {
+        this.coordinates.postValue(coordinates);
     }
 
-    public LiveData<Location> getLocation() {
-        return location;
+    public LiveData<Coordinates> getCoordinates() {
+        return coordinates;
     }
 
     public void setDirection(float direction){

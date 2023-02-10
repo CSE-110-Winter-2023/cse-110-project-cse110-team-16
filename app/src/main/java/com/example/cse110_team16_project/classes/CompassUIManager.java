@@ -44,7 +44,7 @@ public class CompassUIManager {
         tracker.getUserDirection().observe((LifecycleOwner) activity, direction ->{
             updateUI(tracker.getUserDirection().getValue(),tracker.getLastKnownDirectionHomesFromUser());
         });
-        tracker.getUserLocation().observe((LifecycleOwner) activity, location ->{
+        tracker.getUserCoordinates().observe((LifecycleOwner) activity, location ->{
             updateUI(tracker.getUserDirection().getValue(),tracker.getLastKnownDirectionHomesFromUser());
         });
     }

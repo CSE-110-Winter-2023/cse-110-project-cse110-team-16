@@ -26,7 +26,7 @@ public class LocationEntityTracker {
 
         locationService = LocationService.singleton(activity);
         locationService.getLocation().observe((LifecycleOwner) activity, loc->{
-            user.setLocation(loc);
+            user.setCoordinates(new Coordinates(loc));
             updateAllHomesDirectionFromUser();
         });
 
@@ -50,8 +50,8 @@ public class LocationEntityTracker {
         return this.activity;
     }
 
-    public LiveData<Location> getUserLocation(){
-        return user.getLocation();
+    public LiveData<Coordinates> getUserCoordinates(){
+        return user.getCoordinates();
     }
 
     public LiveData<Float> getUserDirection(){
@@ -61,13 +61,13 @@ public class LocationEntityTracker {
         return this.lastKnownDirectionHomesFromUser;
     }
     public void updateAllHomesDirectionFromUser(){
-        if(user.getLocation() == null) return;
+        if(user.getCoordinates() == null) return;
         for(int i = 0; i < homes.size(); i++){
             lastKnownDirectionHomesFromUser.set(i,getHomeDirectionFromUser(homes.get(i)));
         }
     }
     public Float getHomeDirectionFromUser(Home home){
-        return user.getLocation().getValue().bearingTo(home.getLocation());
+        return user.getCoordinates().getValue().bearingTo(home.getLocation());
     }
 
     public void registerListeners(){
