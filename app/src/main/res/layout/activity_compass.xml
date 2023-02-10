@@ -2,25 +2,76 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/MainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CompassActivity">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/botGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent=".90" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/topGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent=".10" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/rightGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.90" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/leftGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.10" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/CompassLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/botGuide"
         app:layout_constraintDimensionRatio="1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="@id/rightGuide"
+        app:layout_constraintStart_toStartOf="@id/leftGuide"
+        app:layout_constraintTop_toTopOf="@id/topGuide">
 
         <ImageView
-            android:id="@+id/compassView"
+            android:id="@+id/compassRing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="@string/compassViewContentDescription"
-            app:srcCompat="@drawable/compassbackground" />
+            android:contentDescription="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/compassring" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/sampleHome"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:text="Parents' Home"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintCircle="@id/CompassLayout"
+        app:layout_constraintCircleAngle="0"
+        app:layout_constraintCircleRadius="170dp"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

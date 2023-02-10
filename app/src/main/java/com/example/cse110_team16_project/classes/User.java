@@ -3,30 +3,35 @@ package com.example.cse110_team16_project.classes;
 import android.location.Location;
 
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
-
+/*
+User class is responsible for storing information about the User's location and information.
+It is NOT responsible for updating the User position, this is currently handled in LocationEntityTracker.
+ */
 public class User{
-    Location location = null;
-    float direction = 0.0f;
-    //SensorManager sm;
+    private MutableLiveData<Location> location = new MutableLiveData<>(null);
+    private MutableLiveData<Float> direction = new MutableLiveData<>(0.0f);
 
     User(){}
 
     public void setLocation(Location location) {
-        this.location = location;
+        this.location.postValue(location);
     }
 
-    public Location getLocation() {
+    public LiveData<Location> getLocation() {
         return location;
     }
 
     public void setDirection(float direction){
-        this.direction = direction;
+        this.direction.postValue(direction);
     }
 
-    public float getDirection(){
+    public LiveData<Float> getDirection(){
         return this.direction;
     }
 

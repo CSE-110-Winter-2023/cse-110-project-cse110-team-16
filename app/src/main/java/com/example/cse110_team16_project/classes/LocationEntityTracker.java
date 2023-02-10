@@ -1,56 +1,79 @@
 package com.example.cse110_team16_project.classes;
 
 import android.app.Activity;
-import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorListener;
-import android.hardware.SensorManager;
-import android.location.LocationManager;
+import android.location.Location;
 
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class LocationEntityTracker {
     Activity activity;
-    User user = new User();
-    List<Home> homes;
-    List<Float> lastKnownDirection;
+    private User user = new User();
+    private List<Home> homes;
+    private List<Float> lastKnownDirectionHomesFromUser;
     private LocationService locationService;
     private OrientationService orientationService;
 
-    public LocationEntityTracker(Activity activity, ArrayList<Home> homes){
+    public LocationEntityTracker(Activity activity, List<Home> homes){
         this.activity = activity;
         this.homes = homes;
-        lastKnownDirection = new ArrayList<>(homes.size());
+        lastKnownDirectionHomesFromUser = new ArrayList<>(homes.size());
         setAllDirectionsDefault();
 
         locationService = LocationService.singleton(activity);
         locationService.getLocation().observe((LifecycleOwner) activity, loc->{
             user.setLocation(loc);
+            updateAllHomesDirectionFromUser();
         });
 
         orientationService = OrientationService.singleton(activity);
         orientationService.getOrientation().observe((LifecycleOwner) activity, azimuth -> {
             user.setDirection(azimuth);
+            updateAllHomesDirectionFromUser();
         });
     }
     public void setAllDirectionsDefault(){
-        for(int i = 0; i < lastKnownDirection.size(); i++){
-            lastKnownDirection.set(i,0.0f);
+        for(int i = 0; i < lastKnownDirectionHomesFromUser.size(); i++){
+            lastKnownDirectionHomesFromUser.set(i,0.0f);
         }
+    }
+
+    public List<Home> getHomes(){
+        return this.homes;
+    }
+
+    protected Activity getActivity(){
+        return this.activity;
+    }
+
+    public LiveData<Location> getUserLocation(){
+        return user.getLocation();
+    }
+
+    public LiveData<Float> getUserDirection(){
+        return user.getDirection();
+    }
+    public List<Float> getLastKnownDirectionHomesFromUser(){
+        return this.lastKnownDirectionHomesFromUser;
     }
     public void updateAllHomesDirectionFromUser(){
         if(user.getLocation() == null) return;
         for(int i = 0; i < homes.size(); i++){
-            lastKnownDirection.set(i,getHomeDirectionFromUser(homes.get(i)));
+            lastKnownDirectionHomesFromUser.set(i,getHomeDirectionFromUser(homes.get(i)));
         }
     }
     public Float getHomeDirectionFromUser(Home home){
-        return user.getLocation().bearingTo(home.getLocation());
+        return user.getLocation().getValue().bearingTo(home.getLocation());
     }
 
+    public void registerListeners(){
+        orientationService.registerSensorListeners();
+        locationService.registerLocationListener();
+    }
     public void unregisterListeners(){
         orientationService.unregisterSensorListeners();
         locationService.unregisterLocationListener();

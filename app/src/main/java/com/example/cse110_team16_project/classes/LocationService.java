@@ -35,7 +35,7 @@ public class LocationService implements LocationListener {
     }
 
     @SuppressLint("MissingPermission")
-    private void registerLocationListener() {
+    protected void registerLocationListener() {
         PermissionHandler pm = new PermissionHandler(activity);
         if(!pm.handleLocationPermission()){
             throw new IllegalStateException("App needs location permission to get latest location");
