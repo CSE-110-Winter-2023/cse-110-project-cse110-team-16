@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.text.Layout;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,6 +18,9 @@ import java.util.List;
 
 
 public class CompassUIManager {
+    private static final String TAG = CompassUIManager.class.getSimpleName();
+    //FOR DEBUGGING
+
     private static final float SCREEN_PERCENTAGE = .475f;
     Activity activity;
     private List<TextView> homeLabels;
@@ -79,7 +83,8 @@ public class CompassUIManager {
         }
     }
 
-    public void updateCompassDirection(float direction){
-        compass.setRotation(direction);
+    public void updateCompassDirection(float userDirection){
+        compass.setRotation(-userDirection);
+        Log.d(TAG,Float.toString(compass.getRotation()));
     }
 }

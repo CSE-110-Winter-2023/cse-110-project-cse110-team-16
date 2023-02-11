@@ -2,6 +2,7 @@ package com.example.cse110_team16_project.classes;
 
 import android.app.Activity;
 import android.location.Location;
+import android.util.Log;
 
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
@@ -10,7 +11,11 @@ import androidx.lifecycle.MutableLiveData;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class LocationEntityTracker {
+    private static final String TAG = LocationEntityTracker.class.getSimpleName();
+    //FOR DEBUGGING
+
     Activity activity;
     private User user = new User();
     private List<Home> homes;
@@ -32,7 +37,8 @@ public class LocationEntityTracker {
 
         orientationService = OrientationService.singleton(activity);
         orientationService.getOrientation().observe((LifecycleOwner) activity, azimuth -> {
-            user.setDirection(azimuth);
+            user.setDirection((float)((Math.toDegrees(azimuth)+360)%360));
+            Log.d(TAG,Float.toString(user.getDirection().getValue())); //DEBUG
             updateAllHomesDirectionFromUser();
         });
     }

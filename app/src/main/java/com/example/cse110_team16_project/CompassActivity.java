@@ -79,13 +79,13 @@ public class CompassActivity extends AppCompatActivity {
     @Override
     protected void onPause(){
         super.onPause();
-        tracker.unregisterListeners();
+        //tracker.unregisterListeners();
     }
 
     @Override
     protected void onResume(){
         super.onResume();
-        tracker.registerListeners();
+        //tracker.registerListeners();
     }
     public AppDatabase getAppDatabase(){
         return appDatabase;
