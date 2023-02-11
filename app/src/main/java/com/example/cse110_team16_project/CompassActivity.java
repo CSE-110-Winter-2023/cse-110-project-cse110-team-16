@@ -47,7 +47,7 @@ public class CompassActivity extends AppCompatActivity {
                     this, Manifest.permission.ACCESS_FINE_LOCATION) ==
                     PackageManager.PERMISSION_GRANTED) {
                 // You can use the API that requires the permission.
-                finishCreate();
+                finishOnCreate();
             } else {
                 // You can directly ask for the permission.
                 ActivityCompat.requestPermissions(this,
@@ -59,7 +59,7 @@ public class CompassActivity extends AppCompatActivity {
         });
     }
 
-    private void finishCreate(){
+    private void finishOnCreate(){
         tracker = new LocationEntityTracker(this,homes);
         manager = new CompassUIManager(tracker, findViewById(R.id.compassRing),
                  findViewById(R.id.sampleHome));
@@ -72,7 +72,7 @@ public class CompassActivity extends AppCompatActivity {
         if (requestCode == APP_REQUEST_CODE) {// If request is cancelled, the result arrays are empty.
             if (grantResults.length > 0 &&
                     grantResults[0] == PERMISSION_GRANTED) {
-                finishCreate();
+                finishOnCreate();
             }
         }
         // Other 'case' lines to check for other

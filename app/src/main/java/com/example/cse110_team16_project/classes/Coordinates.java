@@ -11,13 +11,8 @@ public class Coordinates extends Pair<Double,Double>{
         super(latitude,longitude);
     }
 
-    public Coordinates(Location location){
+    public Coordinates(@NonNull Location location){
         super(location.getLatitude(),location.getLongitude());
-    }
-
-    public Coordinates(String string){
-        super(Double.valueOf(string.split(",",2)[0]),
-                Double.valueOf(string.split(",",2)[1]));
     }
 
     public double getLongitude(){
@@ -33,13 +28,14 @@ public class Coordinates extends Pair<Double,Double>{
     public String toString(){
         return this.first + "," + this.second;
     }
+
     //https://www.movable-type.co.uk/scripts/latlong.html
     //initial bearing
-    public float bearingTo(Coordinates c){
-        double lng1 = this.getLongitude();
-        double lng2 = c.getLongitude();
-        double lat1 = this.getLatitude();
-        double lat2 = c.getLatitude();
+    public float bearingTo(@NonNull Coordinates c){
+        double lat1 = Math.toRadians(this.getLatitude());
+        double lat2 = Math.toRadians(c.getLatitude());
+        double lng1 = Math.toRadians(this.getLongitude());
+        double lng2 = Math.toRadians(c.getLongitude());
         double dLon = (lng2-lng1);
         double y = Math.sin(dLon) * Math.cos(lat2);
         double x = Math.cos(lat1)*Math.sin(lat2) - Math.sin(lat1)*Math.cos(lat2)*Math.cos(dLon);

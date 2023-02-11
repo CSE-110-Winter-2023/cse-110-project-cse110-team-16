@@ -22,7 +22,7 @@ public class Home{
     public void setCoordinates(Location location){
         this.coordinates = coordinates;
     }
-    public Coordinates getLocation(){
+    public Coordinates getCoordinates(){
         return this.coordinates;
     }
     public String getLabel(){

@@ -73,7 +73,7 @@ public class LocationEntityTracker {
         }
     }
     public Float getHomeDirectionFromUser(Home home){
-        return user.getCoordinates().getValue().bearingTo(home.getLocation());
+        return user.getCoordinates().getValue().bearingTo(home.getCoordinates());
     }
 
     public void registerListeners(){
