@@ -42,16 +42,12 @@ public class CompassActivity extends AppCompatActivity {
         setContentView(R.layout.activity_compass);
 
         appDatabase = Room.databaseBuilder(this,AppDatabase.class,AppDatabase.NAME)
-                .fallbackToDestructiveMigration().build();
+                .fallbackToDestructiveMigration().allowMainThreadQueries().build();
 
-        this.future = backgroundThreadExecutor.submit(() -> {
             homes = appDatabase.homeDao().loadAllHomes();
             tracker = new LocationEntityTracker(this,homes);
             manager = new CompassUIManager(tracker,(ImageView) findViewById(R.id.compassRing),
                     (TextView) findViewById(R.id.sampleHome));
-            return null;
-        });
-
     }
 
     @Override

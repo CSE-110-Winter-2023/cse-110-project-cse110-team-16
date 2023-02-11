@@ -35,12 +35,14 @@ public class CompassUIManager {
         this.tracker = tracker;
         this.compass = compass;
         this.sampleHome = sampleHome;
-        populateHomeIcons(tracker.getHomes());
         DisplayMetrics displayMetrics = activity.getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
         int dpRadius = (int)(dpWidth/SCREEN_PERCENTAGE);
         layoutParams = (ConstraintLayout.LayoutParams) sampleHome.getLayoutParams();
         layoutParams.circleRadius = dpRadius;
+
+        populateHomeIcons(tracker.getHomes());
+
         tracker.getUserDirection().observe((LifecycleOwner) activity, direction ->{
             updateUI(tracker.getUserDirection().getValue(),tracker.getLastKnownDirectionHomesFromUser());
         });
