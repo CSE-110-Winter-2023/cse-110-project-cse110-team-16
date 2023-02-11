@@ -22,12 +22,12 @@ public class CompassUIManager {
     private List<TextView> homeLabels;
     private List<Float> homeDirection;
     //private List<ImageView> homeIcons;
-    private int[] defaultColors = {0xFF000000,
+    private final int[] defaultColors = {0xFF000000,
             0xFF003300,0xFF000033}; //black, kashmir green, midnight blue
     //TODO: DECLARATION ABOVE IS DISGUSTING, MAKE TOLERABLE LATER
-    private ImageView compass;
-    private TextView sampleHome;
-    private LocationEntityTracker tracker;
+    private final ImageView compass;
+    private final TextView sampleHome;
+    private final LocationEntityTracker tracker;
     ConstraintLayout.LayoutParams layoutParams;
 
     public CompassUIManager(LocationEntityTracker tracker, ImageView compass, TextView sampleHome){
@@ -43,12 +43,11 @@ public class CompassUIManager {
 
         populateHomeIcons(tracker.getHomes());
 
-        tracker.getUserDirection().observe((LifecycleOwner) activity, direction ->{
-            updateUI(tracker.getUserDirection().getValue(),tracker.getLastKnownDirectionHomesFromUser());
-        });
-        tracker.getUserCoordinates().observe((LifecycleOwner) activity, location ->{
-            updateUI(tracker.getUserDirection().getValue(),tracker.getLastKnownDirectionHomesFromUser());
-        });
+        tracker.getUserDirection().observe((LifecycleOwner) activity, direction ->
+                updateUI(tracker.getUserDirection().getValue(),tracker.getLastKnownDirectionHomesFromUser()));
+        tracker.getUserCoordinates().observe((LifecycleOwner) activity, location ->
+            updateUI(tracker.getUserDirection().getValue(),tracker.getLastKnownDirectionHomesFromUser()));
+
     }
 
     public void populateHomeIcons(List<Home> homes){
