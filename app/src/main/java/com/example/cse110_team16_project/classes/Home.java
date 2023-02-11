@@ -1,11 +1,11 @@
 package com.example.cse110_team16_project.classes;
 
-import android.location.Location;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+
+import com.example.cse110_team16_project.classes.Coordinates;
 
 @Entity
 public class Home{
@@ -19,7 +19,7 @@ public class Home{
         this.coordinates = coordinates;
         this.label = label;
     }
-    public void setCoordinates(Location location){
+    public void setCoordinates(Coordinates coordinates){
         this.coordinates = coordinates;
     }
     public Coordinates getCoordinates(){

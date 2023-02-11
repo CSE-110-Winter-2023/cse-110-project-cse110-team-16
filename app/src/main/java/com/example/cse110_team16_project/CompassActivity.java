@@ -3,6 +3,8 @@ package com.example.cse110_team16_project;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 import android.Manifest;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -10,13 +12,13 @@ import androidx.room.Room;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.example.cse110_team16_project.classes.AppDatabase;
+import com.example.cse110_team16_project.Room.AppDatabase;
 import com.example.cse110_team16_project.classes.CompassUIManager;
 import com.example.cse110_team16_project.classes.Home;
-import com.example.cse110_team16_project.classes.LocationEntityTracker;
+import com.example.cse110_team16_project.classes.HomeDirectionTracker;
+import com.example.cse110_team16_project.classes.User;
+import com.example.cse110_team16_project.classes.UserTracker;
 
 
 import java.util.List;
@@ -29,7 +31,8 @@ public class CompassActivity extends AppCompatActivity {
     private ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
     private Future<Void> future;
     private List<Home> homes;
-    private LocationEntityTracker tracker;
+    private UserTracker userTracker;
+    private HomeDirectionTracker homeDirectionTracker;
     private CompassUIManager manager;
     private AppDatabase appDatabase;
 
@@ -60,14 +63,14 @@ public class CompassActivity extends AppCompatActivity {
     }
 
     private void finishOnCreate(){
-        tracker = new LocationEntityTracker(this,homes);
-        manager = new CompassUIManager(tracker, findViewById(R.id.compassRing),
+        userTracker = new UserTracker(this,new User());
+        manager = new CompassUIManager(userTracker, homeDirectionTracker,findViewById(R.id.compassRing),
                  findViewById(R.id.sampleHome));
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == APP_REQUEST_CODE) {// If request is cancelled, the result arrays are empty.
             if (grantResults.length > 0 &&

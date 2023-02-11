@@ -1,9 +1,10 @@
-package com.example.cse110_team16_project.classes;
+package com.example.cse110_team16_project.Room;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
-import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
+
+import com.example.cse110_team16_project.classes.Home;
 
 @Database(entities={Home.class},version=1)
 @TypeConverters({Converters.class})

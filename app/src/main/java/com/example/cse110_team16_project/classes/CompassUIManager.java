@@ -1,10 +1,7 @@
 package com.example.cse110_team16_project.classes;
 
 import android.app.Activity;
-import android.graphics.Color;
-import android.text.Layout;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,7 +10,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.LifecycleOwner;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -31,12 +27,15 @@ public class CompassUIManager {
     //TODO: DECLARATION ABOVE IS DISGUSTING, MAKE TOLERABLE LATER
     private final ImageView compass;
     private final TextView sampleHome;
-    private final LocationEntityTracker tracker;
+    private final UserTracker userTracker;
+    private final HomeDirectionTracker homeDirectionTracker;
     ConstraintLayout.LayoutParams layoutParams;
 
-    public CompassUIManager(LocationEntityTracker tracker, ImageView compass, TextView sampleHome){
-        this.activity = tracker.getActivity();
-        this.tracker = tracker;
+    public CompassUIManager(UserTracker userTracker, HomeDirectionTracker homeDirectionTracker,
+                            ImageView compass, TextView sampleHome){
+        this.activity = userTracker.getActivity();
+        this.userTracker = userTracker;
+        this.homeDirectionTracker = homeDirectionTracker;
         this.compass = compass;
         this.sampleHome = sampleHome;
         DisplayMetrics displayMetrics = activity.getResources().getDisplayMetrics();
@@ -45,12 +44,14 @@ public class CompassUIManager {
         layoutParams = (ConstraintLayout.LayoutParams) sampleHome.getLayoutParams();
         layoutParams.circleRadius = dpRadius;
 
-        populateHomeIcons(tracker.getHomes());
+        populateHomeIcons(homeDirectionTracker.getHomes());
 
-        tracker.getUserDirection().observe((LifecycleOwner) activity, direction ->
-                updateUI(tracker.getUserDirection().getValue(),tracker.getLastKnownDirectionHomesFromUser()));
-        tracker.getUserCoordinates().observe((LifecycleOwner) activity, location ->
-            updateUI(tracker.getUserDirection().getValue(),tracker.getLastKnownDirectionHomesFromUser()));
+        userTracker.getUserDirection().observe((LifecycleOwner) activity, direction ->
+                updateUI(userTracker.getUserDirection().getValue(), homeDirectionTracker.
+                        getLastKnownHomeDirectionsFromUser()));
+        userTracker.getUserCoordinates().observe((LifecycleOwner) activity, location ->
+            updateUI(userTracker.getUserDirection().getValue(), homeDirectionTracker.
+                    getLastKnownHomeDirectionsFromUser()));
 
     }
 
