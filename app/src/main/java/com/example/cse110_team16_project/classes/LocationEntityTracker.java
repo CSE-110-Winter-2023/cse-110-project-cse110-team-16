@@ -38,7 +38,7 @@ public class LocationEntityTracker {
         orientationService = OrientationService.singleton(activity);
         orientationService.getOrientation().observe((LifecycleOwner) activity, azimuth -> {
             user.setDirection((float)((Math.toDegrees(azimuth)+360)%360));
-            Log.d(TAG,Float.toString(user.getDirection().getValue())); //DEBUG
+            //Log.d(TAG,Float.toString(user.getDirection().getValue())); //DEBUG
             updateAllHomesDirectionFromUser();
         });
     }

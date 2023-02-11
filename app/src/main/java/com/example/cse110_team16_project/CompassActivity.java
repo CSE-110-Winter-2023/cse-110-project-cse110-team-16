@@ -26,8 +26,8 @@ import java.util.concurrent.Future;
 
 public class CompassActivity extends AppCompatActivity {
     private static final int APP_REQUEST_CODE = 110;
-    //private ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
-    //private Future<Void> future;
+    private ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
+    private Future<Void> future;
     private List<Home> homes;
     private LocationEntityTracker tracker;
     private CompassUIManager manager;
@@ -38,22 +38,25 @@ public class CompassActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compass);
 
-        appDatabase = Room.databaseBuilder(this,AppDatabase.class,AppDatabase.NAME)
-                .fallbackToDestructiveMigration().allowMainThreadQueries().build();
-            //allowMainThreadQueries workaround for my incompetence at Async
-        homes = appDatabase.homeDao().loadAllHomes();
-        if (ContextCompat.checkSelfPermission(
-                this, Manifest.permission.ACCESS_FINE_LOCATION) ==
-                PackageManager.PERMISSION_GRANTED) {
-            // You can use the API that requires the permission.
-            finishCreate();
-        } else {
-            // You can directly ask for the permission.
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION},
-                    APP_REQUEST_CODE);
-        }
+        this.future = backgroundThreadExecutor.submit(() ->{
+            appDatabase = Room.databaseBuilder(this,AppDatabase.class,AppDatabase.NAME)
+                    .fallbackToDestructiveMigration().allowMainThreadQueries().build();
+                //allowMainThreadQueries workaround for my incompetence at Async
+            homes = appDatabase.homeDao().loadAllHomes();
+            if (ContextCompat.checkSelfPermission(
+                    this, Manifest.permission.ACCESS_FINE_LOCATION) ==
+                    PackageManager.PERMISSION_GRANTED) {
+                // You can use the API that requires the permission.
+                finishCreate();
+            } else {
+                // You can directly ask for the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.ACCESS_COARSE_LOCATION},
+                        APP_REQUEST_CODE);
+            }
+            return null;
+        });
     }
 
     private void finishCreate(){

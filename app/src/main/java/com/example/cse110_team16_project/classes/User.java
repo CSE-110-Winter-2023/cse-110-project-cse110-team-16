@@ -27,6 +27,7 @@ public class User{
         return coordinates;
     }
 
+    //should send a value in degrees
     public void setDirection(float direction){
         this.direction.postValue(direction);
     }

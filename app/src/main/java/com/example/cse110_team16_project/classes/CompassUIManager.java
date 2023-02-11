@@ -67,24 +67,28 @@ public class CompassUIManager {
         }
     }
 
-    public void updateIcon(TextView tv, Float homeDirection){
+    public void updateIconDirection(TextView tv, Float homeDirection){
         layoutParams.circleAngle = homeDirection;
-        tv.setLayoutParams(layoutParams);
+        activity.runOnUiThread(() -> {
+            tv.setLayoutParams(layoutParams);
+        });
     }
 
     public void updateUI(float userDirection, List<Float> homeDirections){
-
         updateCompassDirection(userDirection);
         updateHomeIconDirections(homeDirections);
     }
     public void updateHomeIconDirections(List<Float> homeDirections){
         for(int i = 1; i < homeLabels.size(); i++){
-            updateIcon(homeLabels.get(i),homeDirections.get(i));
+                updateIconDirection(homeLabels.get(i), homeDirections.get(i));
         }
     }
 
+    //given userDirection in degrees, changes compass to face correct direction
     public void updateCompassDirection(float userDirection){
-        compass.setRotation(-userDirection);
-        Log.d(TAG,Float.toString(compass.getRotation()));
+        activity.runOnUiThread(() -> {
+            compass.setRotation(-userDirection);
+        });
+        //Log.d(TAG,Float.toString(compass.getRotation()));
     }
 }
