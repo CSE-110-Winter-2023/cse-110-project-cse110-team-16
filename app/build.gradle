@@ -39,4 +39,44 @@ dependencies {
     testImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    // pasted from https://developer.android.com/training/data-storage/room#java
+//    def room_version = "2.5.0"
+//
+//    implementation "androidx.room:room-runtime:$room_version"
+//    annotationProcessor "androidx.room:room-compiler:$room_version"
+//
+//    // To use Kotlin annotation processing tool (kapt)
+//    kapt "androidx.room:room-compiler:$room_version"
+//    // To use Kotlin Symbol Processing (KSP)
+//    ksp "androidx.room:room-compiler:$room_version"
+//
+//    // optional - RxJava2 support for Room
+//    implementation "androidx.room:room-rxjava2:$room_version"
+//
+//    // optional - RxJava3 support for Room
+//    implementation "androidx.room:room-rxjava3:$room_version"
+//
+//    // optional - Guava support for Room, including Optional and ListenableFuture
+//    implementation "androidx.room:room-guava:$room_version"
+//
+//    // optional - Test helpers
+//    testImplementation "androidx.room:room-testing:$room_version"
+//    implementation "androidx.room:room-paging:$room_version"
+
+    // Pasted from https://dr-shradhasrathod.medium.com/android-room-database-with-java-beginners-dabfbbcd46a5
+    // optional - Paging 3 Integration
+
+    implementation "androidx.appcompat:appcompat:$rootProject.appCompatVersion"
+
+    implementation "androidx.room:room-runtime:$rootProject.roomVersion"
+    annotationProcessor "androidx.room:room-compiler:$rootProject.roomVersion"
+    androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
+
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$rootProject.lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata:$rootProject.lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-common-java8:$rootProject.lifecycleVersion"
+
+    implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintLayoutVersion"
+    implementation "com.google.android.material:material:$rootProject.materialVersion"
 }
