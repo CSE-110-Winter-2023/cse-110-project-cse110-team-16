@@ -16,7 +16,7 @@ import android.os.Bundle;
 import com.example.cse110_team16_project.Room.AppDatabase;
 import com.example.cse110_team16_project.classes.CompassUIManager;
 import com.example.cse110_team16_project.classes.Home;
-import com.example.cse110_team16_project.classes.HomeDirectionTracker;
+import com.example.cse110_team16_project.classes.HomeDirectionUpdater;
 import com.example.cse110_team16_project.classes.User;
 import com.example.cse110_team16_project.classes.UserTracker;
 
@@ -31,8 +31,9 @@ public class CompassActivity extends AppCompatActivity {
     private ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
     private Future<Void> future;
     private List<Home> homes;
+    private User user;
     private UserTracker userTracker;
-    private HomeDirectionTracker homeDirectionTracker;
+    private HomeDirectionUpdater homeDirectionUpdater;
     private CompassUIManager manager;
     private AppDatabase appDatabase;
 
@@ -46,28 +47,35 @@ public class CompassActivity extends AppCompatActivity {
                     .fallbackToDestructiveMigration().allowMainThreadQueries().build();
                 //allowMainThreadQueries workaround for my incompetence at Async
             homes = appDatabase.homeDao().loadAllHomes();
-            if (ContextCompat.checkSelfPermission(
-                    this, Manifest.permission.ACCESS_FINE_LOCATION) ==
-                    PackageManager.PERMISSION_GRANTED) {
-                // You can use the API that requires the permission.
-                finishOnCreate();
-            } else {
-                // You can directly ask for the permission.
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                                Manifest.permission.ACCESS_COARSE_LOCATION},
-                        APP_REQUEST_CODE);
-            }
+            this.handleLocationPermission();
             return null;
         });
     }
 
     private void finishOnCreate(){
-        userTracker = new UserTracker(this,new User());
-        manager = new CompassUIManager(userTracker, homeDirectionTracker,findViewById(R.id.compassRing),
-                 findViewById(R.id.sampleHome));
+        this.user = new User();
+        runOnUiThread(() -> {
+            userTracker = new UserTracker(this, user);
+            homeDirectionUpdater = new HomeDirectionUpdater(this, homes, user);
+            manager = new CompassUIManager(userTracker, homeDirectionUpdater, findViewById(R.id.compassRing),
+                    findViewById(R.id.sampleHome));
+        });
     }
 
+    private void handleLocationPermission(){
+        if (ContextCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED) {
+            // You can use the API that requires the permission.
+            finishOnCreate();
+        } else {
+            // You can directly ask for the permission.
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION},
+                    APP_REQUEST_CODE);
+        }
+    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {

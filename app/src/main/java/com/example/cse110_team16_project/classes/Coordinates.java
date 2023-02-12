@@ -23,9 +23,7 @@ public class Coordinates extends Pair<Double,Double>{
         return this.first;
     }
 
-    @Override
-    @NonNull
-    public String toString(){
+    public String convertToString(){
         return this.first + "," + this.second;
     }
 

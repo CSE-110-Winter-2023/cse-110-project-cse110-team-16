@@ -14,6 +14,6 @@ public class Converters {
 
     @TypeConverter
     public static String CoordinatesToString(Coordinates c){
-        return c == null ? null : c.toString();
+        return c == null ? null : c.convertToString();
     }
 }

@@ -2,20 +2,30 @@ package com.example.cse110_team16_project.classes;
 
 import android.app.Activity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.LifecycleOwner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 
 public class CompassUIManager {
     private static final String TAG = CompassUIManager.class.getSimpleName();
     //FOR DEBUGGING
+
+    private ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
+    private Future<Void> future;
 
     private static final float SCREEN_PERCENTAGE = .475f;
     Activity activity;
@@ -28,36 +38,33 @@ public class CompassUIManager {
     private final ImageView compass;
     private final TextView sampleHome;
     private final UserTracker userTracker;
-    private final HomeDirectionTracker homeDirectionTracker;
-    ConstraintLayout.LayoutParams layoutParams;
+    private final HomeDirectionUpdater homeDirectionUpdater;
 
-    public CompassUIManager(UserTracker userTracker, HomeDirectionTracker homeDirectionTracker,
+    public CompassUIManager(@NonNull UserTracker userTracker, @NonNull HomeDirectionUpdater homeDirectionTracker,
                             ImageView compass, TextView sampleHome){
         this.activity = userTracker.getActivity();
         this.userTracker = userTracker;
-        this.homeDirectionTracker = homeDirectionTracker;
+        this.homeDirectionUpdater = homeDirectionTracker;
         this.compass = compass;
         this.sampleHome = sampleHome;
         DisplayMetrics displayMetrics = activity.getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
         int dpRadius = (int)(dpWidth/SCREEN_PERCENTAGE);
-        layoutParams = (ConstraintLayout.LayoutParams) sampleHome.getLayoutParams();
-        layoutParams.circleRadius = dpRadius;
 
         populateHomeIcons(homeDirectionTracker.getHomes());
 
         userTracker.getUserDirection().observe((LifecycleOwner) activity, direction ->
-                updateUI(userTracker.getUserDirection().getValue(), homeDirectionTracker.
-                        getLastKnownHomeDirectionsFromUser()));
-        userTracker.getUserCoordinates().observe((LifecycleOwner) activity, location ->
-            updateUI(userTracker.getUserDirection().getValue(), homeDirectionTracker.
-                    getLastKnownHomeDirectionsFromUser()));
+                this.future = backgroundThreadExecutor.submit(() ->
+                {
+                    updateUI(direction, homeDirectionTracker.
+                        getLastKnownHomeDirectionsFromUser());
+                    return null;
+                }));
+
 
     }
 
     public void populateHomeIcons(List<Home> homes){
-        sampleHome.setLayoutParams(layoutParams);
-
         homeLabels = new ArrayList<>(homes.size());
         for(int i = 0; i < homes.size(); i++){
             TextView tv = sampleHome;
@@ -69,13 +76,11 @@ public class CompassUIManager {
     }
 
     public void updateIconDirection(TextView tv, Float homeDirection){
-        layoutParams.circleAngle = homeDirection;
-        activity.runOnUiThread(() -> {
-            tv.setLayoutParams(layoutParams);
-        });
+
     }
 
     public void updateUI(float userDirection, List<Float> homeDirections){
+        if(Math.abs(userDirection - compass.getRotation()) < .15f) return;
         updateCompassDirection(userDirection);
         updateHomeIconDirections(homeDirections);
     }
@@ -87,9 +92,12 @@ public class CompassUIManager {
 
     //given userDirection in degrees, changes compass to face correct direction
     public void updateCompassDirection(float userDirection){
+
         activity.runOnUiThread(() -> {
+            //compass.startAnimation(ra);
             compass.setRotation(-userDirection);
+            //Log.d(TAG,Float.toString(compass.getRotation()));
         });
-        //Log.d(TAG,Float.toString(compass.getRotation()));
+
     }
 }
