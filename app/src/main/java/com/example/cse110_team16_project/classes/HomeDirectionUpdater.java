@@ -21,7 +21,7 @@ public class HomeDirectionUpdater {
     private List<Float> lastKnownHomeDirectionsFromUser;
     private User user;
 
-    public HomeDirectionUpdater(Activity activity, List<Home> homes, @NonNull User user){
+    public HomeDirectionUpdater(Activity activity, @NonNull List<Home> homes, @NonNull User user){
         this.homes = homes;
         this.user = user;
         setAllDirectionsDefault();

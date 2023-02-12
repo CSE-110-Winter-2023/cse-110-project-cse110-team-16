@@ -34,6 +34,7 @@ public class CompassUIManager {
     //private List<ImageView> homeIcons;
     private final int[] defaultColors = {0xFF000000,
             0xFF003300,0xFF000033}; //black, kashmir green, midnight blue
+    //Initial colors of the text/icons for the first three homes
     //TODO: DECLARATION ABOVE IS DISGUSTING, MAKE TOLERABLE LATER
     private final ImageView compass;
     private final TextView sampleHome;
@@ -47,9 +48,11 @@ public class CompassUIManager {
         this.homeDirectionUpdater = homeDirectionTracker;
         this.compass = compass;
         this.sampleHome = sampleHome;
+
         DisplayMetrics displayMetrics = activity.getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
         int dpRadius = (int)(dpWidth/SCREEN_PERCENTAGE);
+        //potentially use to make app work with different screen sizes
 
         populateHomeIcons(homeDirectionTracker.getHomes());
 
@@ -64,26 +67,30 @@ public class CompassUIManager {
 
     }
 
+    //create views on the UI for each home
     public void populateHomeIcons(List<Home> homes){
+
         homeLabels = new ArrayList<>(homes.size());
         for(int i = 0; i < homes.size(); i++){
-            TextView tv = sampleHome;
-            tv.setId(View.generateViewId());
-            tv.setText(homes.get(i).getLabel());
-            tv.setTextColor(defaultColors[i]);
-            homeLabels.add(tv);
+            TextView tv = new TextView(activity);
+
         }
     }
 
-    public void updateIconDirection(TextView tv, Float homeDirection){
+    //update the position of the view representing a home on the compass to the correct direction
 
+    //params View to update, direction the home is from user in degrees from absolute north
+    public void updateIconDirection(TextView tv, Float homeDirection){
     }
 
+
     public void updateUI(float userDirection, List<Float> homeDirections){
-        if(Math.abs(userDirection - compass.getRotation()) < .15f) return;
+        //if(Math.abs(userDirection - compass.getRotation()) < .15f) return;
+
         updateCompassDirection(userDirection);
         updateHomeIconDirections(homeDirections);
     }
+
     public void updateHomeIconDirections(List<Float> homeDirections){
         for(int i = 1; i < homeLabels.size(); i++){
                 updateIconDirection(homeLabels.get(i), homeDirections.get(i));
@@ -98,6 +105,7 @@ public class CompassUIManager {
             compass.setRotation(-userDirection);
             //Log.d(TAG,Float.toString(compass.getRotation()));
         });
+
 
     }
 }
