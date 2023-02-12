@@ -30,6 +30,7 @@ public class UserTracker {
     private final LocationService locationService;
     private final OrientationService orientationService;
 
+    //TODO: Dependency Inversion on Services, but not much to test on this class
     public UserTracker(Activity activity, User user){
         this.activity = activity;
         this.user = user;
