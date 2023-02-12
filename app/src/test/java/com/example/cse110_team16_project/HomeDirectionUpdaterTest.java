@@ -41,18 +41,24 @@ public class HomeDirectionUpdaterTest {
         ActivityScenario scenario = rule.getScenario();
 
         User user = new User();
-        Coordinates homeCoordinates = new Coordinates(1,1.15056);
-        String homeLabel = "Parents' Home";
-        List<Home> homes = new ArrayList<>(Arrays.asList(new Home(homeCoordinates,homeLabel)));
+        Coordinates homeCoordinates1 = new Coordinates(1,1.15056);
+        String homeLabel1 = "Parents' Home";
+        Coordinates homeCoordinates2 = new Coordinates(2,0);
+        String homeLabel2 = "Best Friend's Home";
+        List<Home> homes = new ArrayList<>(Arrays.asList(new Home(homeCoordinates1,homeLabel1),
+                new Home(homeCoordinates2,homeLabel2)));
         scenario.moveToState(Lifecycle.State.CREATED);
         scenario.onActivity(activity ->
         {
             HomeDirectionUpdater homeDirectionUpdater = new HomeDirectionUpdater(activity, homes, user);
-            assertEquals(new ArrayList<Float>(Arrays.asList(0f)),homeDirectionUpdater.getLastKnownHomeDirectionsFromUser());
+            assertEquals(new ArrayList<Float>(Arrays.asList(0f,0f)),homeDirectionUpdater.getLastKnownHomeDirectionsFromUser());
             homeDirectionUpdater.updateAllHomesDirectionFromUser();
             ArrayList<Float> expected = new ArrayList<>(Arrays.asList(homeDirectionUpdater.
-                    getHomeDirectionFromUser(user.getCoordinates().getValue(),homes.get(0))));
+                    getHomeDirectionFromUser(user.getCoordinates().getValue(),homes.get(0)),
+                    homeDirectionUpdater.
+                            getHomeDirectionFromUser(user.getCoordinates().getValue(),homes.get(1))));
             assertEquals(49f,expected.get(0),.1f);
+            assertEquals(0f,expected.get(1),.1f);
             assertEquals(expected,
                     homeDirectionUpdater.getLastKnownHomeDirectionsFromUser());
 
