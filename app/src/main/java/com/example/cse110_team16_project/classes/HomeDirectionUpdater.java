@@ -36,8 +36,8 @@ public class HomeDirectionUpdater {
     }
     public void setAllDirectionsDefault(){
         lastKnownHomeDirectionsFromUser = new ArrayList<>(homes.size());
-        for(int i = 0; i < lastKnownHomeDirectionsFromUser.size(); i++){
-            lastKnownHomeDirectionsFromUser.set(i,0.0f);
+        for(int i = 0; i < homes.size(); i++){
+            lastKnownHomeDirectionsFromUser.add(i,0.0f);
         }
     }
 
@@ -45,10 +45,13 @@ public class HomeDirectionUpdater {
         return this.homes;
     }
 
+    public void setHomes(List<Home> homes) {this.homes = homes;}
+
     public List<Float> getLastKnownHomeDirectionsFromUser(){
         return this.lastKnownHomeDirectionsFromUser;
     }
-    public void updateAllHomesDirectionFromUser(){for(int i = 0; i < homes.size(); i++){
+    public void updateAllHomesDirectionFromUser(){
+        for(int i = 0; i < homes.size(); i++){
             lastKnownHomeDirectionsFromUser.set(i,getHomeDirectionFromUser(user.getCoordinates().getValue(),
                     homes.get(i)));
         }

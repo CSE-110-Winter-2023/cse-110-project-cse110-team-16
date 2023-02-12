@@ -44,8 +44,7 @@ public class CompassActivity extends AppCompatActivity {
 
         this.future = backgroundThreadExecutor.submit(() ->{
             appDatabase = Room.databaseBuilder(this,AppDatabase.class,AppDatabase.NAME)
-                    .fallbackToDestructiveMigration().allowMainThreadQueries().build();
-                //allowMainThreadQueries workaround for my incompetence at Async
+                    .fallbackToDestructiveMigration().build();
             homes = appDatabase.homeDao().loadAllHomes();
             this.handleLocationPermission();
             return null;
