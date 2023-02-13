@@ -2,11 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET" /> <!--not currently used-->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!--not currently used-->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- not currently used -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- not currently used -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
 
     <application
         android:allowBackup="true"
@@ -18,6 +17,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CSE110_Team16_Project"
         tools:targetApi="31">
+        <activity
+            android:name=".CompassActivity_North"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".CompassActivity"
             android:exported="false">
@@ -41,4 +47,3 @@
     </application>
 
 </manifest>
-

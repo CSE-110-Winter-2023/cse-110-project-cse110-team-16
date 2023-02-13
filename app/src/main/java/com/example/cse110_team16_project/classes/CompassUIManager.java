@@ -11,7 +11,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.lifecycle.LifecycleOwner;
+
+import com.example.cse110_team16_project.R;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +86,9 @@ public class CompassUIManager {
 
     //params View to update, direction the home is from user in degrees from absolute north
     public void updateIconDirection(TextView tv, Float homeDirection){
+        ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) tv.getLayoutParams();
+        layoutParams.circleAngle = homeDirection;
+        tv.setLayoutParams(layoutParams);
     }
 
 
@@ -88,13 +96,21 @@ public class CompassUIManager {
         //if(Math.abs(userDirection - compass.getRotation()) < .15f) return;
 
         updateCompassDirection(userDirection);
-        updateHomeIconDirections(homeDirections);
+        updateHomeIconDirections(homeDirections, userDirection);
     }
 
-    public void updateHomeIconDirections(List<Float> homeDirections){
+    public void updateHomeIconDirections(List<Float> homeDirections, float userDirection){
+        /*
         for(int i = 1; i < homeLabels.size(); i++){
-                updateIconDirection(homeLabels.get(i), homeDirections.get(i));
+            updateIconDirection(homeLabels.get(i), homeDirections.get(i));
         }
+        */
+
+        activity.runOnUiThread(()->{
+            // Set direction for sample home
+            updateIconDirection(sampleHome, (float) 170 - userDirection);
+        });
+
     }
 
     //given userDirection in degrees, changes compass to face correct direction

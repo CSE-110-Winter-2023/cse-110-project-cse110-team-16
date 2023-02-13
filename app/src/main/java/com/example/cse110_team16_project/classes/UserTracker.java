@@ -1,6 +1,7 @@
 package com.example.cse110_team16_project.classes;
 
 import android.app.Activity;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
