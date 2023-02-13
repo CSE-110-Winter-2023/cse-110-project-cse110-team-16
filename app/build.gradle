@@ -6,12 +6,6 @@ android {
     namespace 'com.example.cse110_team16_project'
     compileSdk 33
 
-    testOptions {
-        unitTests {
-            includeAndroidResources = true
-        }
-    }
-
     defaultConfig {
         applicationId "com.example.cse110_team16_project"
         minSdk 28
@@ -37,6 +31,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildToolsVersion '33.0.1'
 }
 
 dependencies {
