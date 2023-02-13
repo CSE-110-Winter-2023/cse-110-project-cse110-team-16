@@ -5,7 +5,13 @@ plugins {
 android {
     namespace 'com.example.cse110_team16_project'
     compileSdk 33
-
+    
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+    
     defaultConfig {
         applicationId "com.example.cse110_team16_project"
         minSdk 28
