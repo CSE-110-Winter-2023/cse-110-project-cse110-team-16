@@ -35,6 +35,4 @@ public class CoordinatesTest {
         assertEquals(90,d.bearingTo(e),0.10);
         assertEquals(45,c.bearingTo(e),0.10);
     }
-
-
 }
