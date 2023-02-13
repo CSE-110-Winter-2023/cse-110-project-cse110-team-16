@@ -56,7 +56,7 @@ public class CompassActivity extends AppCompatActivity {
         runOnUiThread(() -> {
             userTracker = new UserTracker(this, user);
             homeDirectionUpdater = new HomeDirectionUpdater(this, homes, user);
-            manager = new CompassUIManager(userTracker, homeDirectionUpdater, findViewById(R.id.compassRing),
+            manager = new CompassUIManager(this, user, homeDirectionUpdater, findViewById(R.id.compassRing),
                     findViewById(R.id.sampleHome));
         });
     }
