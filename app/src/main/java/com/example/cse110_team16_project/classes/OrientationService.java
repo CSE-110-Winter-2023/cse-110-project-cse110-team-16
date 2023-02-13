@@ -80,7 +80,7 @@ public class OrientationService implements SensorEventListener{
     }
 
     public void unregisterSensorListeners(){
-        sensorManager.unregisterListener((SensorListener) this);
+        sensorManager.unregisterListener(this);
     }
 
     public LiveData<Float> getOrientation() {return this.azimuth;}
