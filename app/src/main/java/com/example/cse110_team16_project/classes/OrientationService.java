@@ -34,11 +34,15 @@ public class OrientationService implements SensorEventListener{
     }
 
     protected void registerSensorListeners(){
-        sensorManager.registerListener((SensorEventListener) this,sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+        Sensor accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        if(accelerometer != null)
+            sensorManager.registerListener((SensorEventListener) this,accelerometer,
                 SensorManager.SENSOR_DELAY_NORMAL);
-        sensorManager.registerListener((SensorEventListener) this,sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD),
-                sensorManager.SENSOR_DELAY_NORMAL);
-
+        Sensor magneticField = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        if (magneticField != null) {
+            sensorManager.registerListener(this, magneticField,
+                    SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_DELAY_UI);
+        }
     }
 
     public void onSensorChanged(SensorEvent event) {
@@ -78,7 +82,7 @@ public class OrientationService implements SensorEventListener{
     }
 
     public void unregisterSensorListeners(){
-        sensorManager.unregisterListener((SensorListener) this);
+        sensorManager.unregisterListener(this);
     }
 
     public LiveData<Float> getOrientation() {return this.azimuth;}

@@ -56,7 +56,7 @@ public class CompassActivity extends AppCompatActivity {
         runOnUiThread(() -> {
             userTracker = new UserTracker(this, user);
             homeDirectionUpdater = new HomeDirectionUpdater(this, homes, user);
-            manager = new CompassUIManager(userTracker, homeDirectionUpdater, findViewById(R.id.compassRing),
+            manager = new CompassUIManager(this, user, homeDirectionUpdater, findViewById(R.id.compassRing),
                     findViewById(R.id.sampleHome));
         });
     }
@@ -92,13 +92,13 @@ public class CompassActivity extends AppCompatActivity {
     @Override
     protected void onPause(){
         super.onPause();
-        //tracker.unregisterListeners();
+        if(userTracker != null) userTracker.unregisterListeners();
     }
 
     @Override
     protected void onResume(){
         super.onResume();
-        //tracker.registerListeners();
+        if(userTracker != null) userTracker.registerListeners();
     }
     public AppDatabase getAppDatabase(){
         return appDatabase;

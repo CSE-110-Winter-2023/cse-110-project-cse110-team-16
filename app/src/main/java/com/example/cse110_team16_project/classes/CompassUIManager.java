@@ -45,13 +45,15 @@ public class CompassUIManager {
     //TODO: DECLARATION ABOVE IS DISGUSTING, MAKE TOLERABLE LATER
     private final ImageView compass;
     private final TextView sampleHome;
-    private final UserTracker userTracker;
+    private final User user;
     private final HomeDirectionUpdater homeDirectionUpdater;
 
-    public CompassUIManager(@NonNull UserTracker userTracker, @NonNull HomeDirectionUpdater homeDirectionTracker,
-                            ImageView compass, TextView sampleHome) {
-        this.activity = userTracker.getActivity();
-        this.userTracker = userTracker;
+
+    public CompassUIManager(Activity activity, @NonNull User user, @NonNull HomeDirectionUpdater homeDirectionTracker,
+                            ImageView compass, TextView sampleHome){
+        this.activity = activity;
+        this.user = user;
+
         this.homeDirectionUpdater = homeDirectionTracker;
         this.compass = compass;
         this.sampleHome = sampleHome;
@@ -63,7 +65,7 @@ public class CompassUIManager {
 
         populateHomeIcons(homeDirectionTracker.getHomes());
 
-        userTracker.getUserDirection().observe((LifecycleOwner) activity, direction ->
+        user.getDirection().observe((LifecycleOwner) activity, direction ->
                 this.future = backgroundThreadExecutor.submit(() ->
                 {
                     updateUI(direction, homeDirectionTracker.

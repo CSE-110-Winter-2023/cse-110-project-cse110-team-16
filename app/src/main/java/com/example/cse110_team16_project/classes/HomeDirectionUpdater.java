@@ -26,7 +26,7 @@ public class HomeDirectionUpdater {
         this.user = user;
         setAllDirectionsDefault();
 
-        user.getDirection().observe((LifecycleOwner) activity, direction ->
+        user.getCoordinates().observe((LifecycleOwner) activity, coordinates ->
                 this.future = backgroundThreadExecutor.submit(() -> {
                     updateAllHomesDirectionFromUser();
                     return null;
