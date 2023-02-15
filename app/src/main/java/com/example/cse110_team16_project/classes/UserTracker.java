@@ -49,4 +49,8 @@ public class UserTracker {
         orientationService.unregisterSensorListeners();
         locationService.unregisterLocationListener();
     }
+
+    public void mockUserDirection(float mockDirection){
+        orientationService.setMockOrientationSource(mockDirection);
+    }
 }

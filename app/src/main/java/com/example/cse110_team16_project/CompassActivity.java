@@ -24,7 +24,6 @@ import com.example.cse110_team16_project.classes.UserTracker;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class CompassActivity extends AppCompatActivity {
     private static final int APP_REQUEST_CODE = 110;
@@ -34,13 +33,14 @@ public class CompassActivity extends AppCompatActivity {
     private UserTracker userTracker;
     private HomeDirectionUpdater homeDirectionUpdater;
     private CompassUIManager manager;
-    private AppDatabase appDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         setContentView(R.layout.activity_compass);
-
         backgroundThreadExecutor.submit(this::handleLocationPermission);
     }
 
@@ -56,7 +56,7 @@ public class CompassActivity extends AppCompatActivity {
     }
 
     private void loadHomes(){
-        appDatabase = Room.databaseBuilder(this,AppDatabase.class,AppDatabase.NAME)
+        AppDatabase appDatabase = Room.databaseBuilder(this,AppDatabase.class,AppDatabase.NAME)
                 .fallbackToDestructiveMigration().build();
         homes = appDatabase.homeDao().loadAllHomes();
     }
@@ -99,7 +99,5 @@ public class CompassActivity extends AppCompatActivity {
         super.onResume();
         if(userTracker != null) userTracker.registerListeners();
     }
-    public AppDatabase getAppDatabase(){
-        return appDatabase;
-    }
+
 }

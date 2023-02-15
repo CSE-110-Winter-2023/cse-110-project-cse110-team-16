@@ -17,7 +17,7 @@ public class LocationService implements LocationListener {
 
     private static LocationService instance;
 
-    private MutableLiveData<Location> location;
+    private final MutableLiveData<Location> location;
 
     private final LocationManager locationManager;
 
@@ -56,8 +56,4 @@ public class LocationService implements LocationListener {
         return this.location;
     }
 
-    public void setMockOrientationSource(MutableLiveData<Location> mockDataSource){
-        unregisterLocationListener();
-        this.location = mockDataSource;
-    }
 }
