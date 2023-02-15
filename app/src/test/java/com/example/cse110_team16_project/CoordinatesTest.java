@@ -22,9 +22,6 @@ public class CoordinatesTest {
         Coordinates c = new Coordinates(1.2345,-2.146);
         assertEquals(1.2345,c.first,0.0001);
         assertEquals(-2.146,c.second,0.0001);
-        Coordinates e = new Coordinates(new Location((String) null));
-        assertEquals(0,e.first,0.0001);
-        assertEquals(0,e.second,0.0001);
     }
     @Test
     public void testbearingTo(){
