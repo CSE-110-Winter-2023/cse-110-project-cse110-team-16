@@ -45,10 +45,17 @@ public class CompassUIManager {
         user.getDirection().observe((LifecycleOwner) activity, direction ->
                 backgroundThreadExecutor.submit(() ->
                         updateUI(direction, homeDirectionUpdater.
-                                getLastKnownHomeDirectionsFromUser())
+                                getLastKnownHomeDirectionsFromUser().getValue())
                 )
         );
 
+        homeDirectionUpdater.getLastKnownHomeDirectionsFromUser().observe((LifecycleOwner) activity,
+                directions -> backgroundThreadExecutor.submit(() -> {
+                    if (user.getDirection().getValue() != null) {
+                        updateUI(user.getDirection().getValue(), directions);
+                    }
+                })
+        );
     }
 
     //create views on the UI for each home
@@ -76,10 +83,10 @@ public class CompassUIManager {
         //if(Math.abs(userDirection - compass.getRotation()) < .15f) return;
 
         updateCompassDirection(userDirection);
-        updateHomeIconDirections(homeDirections, userDirection);
+        updateHomeIconDirections(userDirection, homeDirections);
     }
 
-    public void updateHomeIconDirections(List<Float> homeDirections, float userDirection) {
+    public void updateHomeIconDirections( float userDirection, List<Float> homeDirections) {
 //        for (int i = 0; i < homeLabels.size(); i++) {
             // TODO: fake coordinates, should use robolectric test
             Coordinates homePos = new Coordinates(32.734648946916835, -117.19090054085841);
