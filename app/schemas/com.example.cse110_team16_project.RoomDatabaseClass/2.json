@@ -1,0 +1,46 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "d70f23f408492e4aa1bc03addc02c1ef",
+    "entities": [
+      {
+        "tableName": "HomeCoords",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`label` TEXT NOT NULL, `xCoord` REAL NOT NULL, `yCoord` REAL NOT NULL, PRIMARY KEY(`label`))",
+        "fields": [
+          {
+            "fieldPath": "label",
+            "columnName": "label",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "xCoord",
+            "columnName": "xCoord",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "yCoord",
+            "columnName": "yCoord",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "label"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd70f23f408492e4aa1bc03addc02c1ef')"
+    ]
+  }
+}
