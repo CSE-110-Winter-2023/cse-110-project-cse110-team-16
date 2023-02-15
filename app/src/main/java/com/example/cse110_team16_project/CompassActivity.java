@@ -52,6 +52,12 @@ public class CompassActivity extends AppCompatActivity {
             homeDirectionUpdater = new HomeDirectionUpdater(this, homes, user);
             manager = new CompassUIManager(this, user, homeDirectionUpdater, findViewById(R.id.compassRing),
                     findViewById(R.id.sampleHome));
+
+
+            Bundle extras = getIntent().getExtras();
+            if(extras != null){
+                userTracker.mockUserDirection(extras.getFloat("mockDirection"));
+            }
         });
     }
 
@@ -81,7 +87,8 @@ public class CompassActivity extends AppCompatActivity {
         if (requestCode == APP_REQUEST_CODE) {// If request is cancelled, the result arrays are empty.
             if (grantResults.length > 0 &&
                     grantResults[0] == PERMISSION_GRANTED) {
-                finishOnCreate();
+                backgroundThreadExecutor.submit(this::finishOnCreate);
+
             }
         }
         // Other 'case' lines to check for other
