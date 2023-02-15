@@ -28,8 +28,7 @@ import java.util.concurrent.Future;
 
 public class CompassActivity extends AppCompatActivity {
     private static final int APP_REQUEST_CODE = 110;
-    private ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
-    private Future<Void> future;
+    private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
     private List<Home> homes;
     private User user;
     private UserTracker userTracker;
@@ -42,16 +41,11 @@ public class CompassActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compass);
 
-        this.future = backgroundThreadExecutor.submit(() ->{
-            appDatabase = Room.databaseBuilder(this,AppDatabase.class,AppDatabase.NAME)
-                    .fallbackToDestructiveMigration().build();
-            homes = appDatabase.homeDao().loadAllHomes();
-            this.handleLocationPermission();
-            return null;
-        });
+        backgroundThreadExecutor.submit(this::handleLocationPermission);
     }
 
     private void finishOnCreate(){
+        loadHomes();
         this.user = new User();
         runOnUiThread(() -> {
             userTracker = new UserTracker(this, user);
@@ -61,6 +55,11 @@ public class CompassActivity extends AppCompatActivity {
         });
     }
 
+    private void loadHomes(){
+        appDatabase = Room.databaseBuilder(this,AppDatabase.class,AppDatabase.NAME)
+                .fallbackToDestructiveMigration().build();
+        homes = appDatabase.homeDao().loadAllHomes();
+    }
     private void handleLocationPermission(){
         if (ContextCompat.checkSelfPermission(
                 this, Manifest.permission.ACCESS_FINE_LOCATION) ==

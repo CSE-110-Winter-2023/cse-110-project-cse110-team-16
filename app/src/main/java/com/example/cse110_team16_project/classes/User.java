@@ -13,7 +13,6 @@ coordinates is not allowed to be null
  */
 public class User{
     private final MutableLiveData<Coordinates> coordinates;
-
     private final MutableLiveData<Float> direction;
 
     public User(){

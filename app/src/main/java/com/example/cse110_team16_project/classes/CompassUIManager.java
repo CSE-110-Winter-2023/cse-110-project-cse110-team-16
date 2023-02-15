@@ -44,12 +44,10 @@ public class CompassUIManager {
 
         user.getDirection().observe((LifecycleOwner) activity, direction ->
                 backgroundThreadExecutor.submit(() ->
-                {
-                    updateUI(direction, homeDirectionUpdater.
-                            getLastKnownHomeDirectionsFromUser());
-                    return null;
-                }));
-
+                        updateUI(direction, homeDirectionUpdater.
+                                getLastKnownHomeDirectionsFromUser())
+                )
+        );
 
     }
 
