@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">CSE110_Team16_Project</string>
+    <string name="compassViewContentDescription">Background Compass Rose</string>
+    <string name="location_request_rationale_title">Social Compass Requires Permissions</string>
+    <string name="location_request_rationale_text">The Social Compass application requires location permissions to run. Please enable location access.</string>
+    <string name="ok">OK</string>
 </resources>
