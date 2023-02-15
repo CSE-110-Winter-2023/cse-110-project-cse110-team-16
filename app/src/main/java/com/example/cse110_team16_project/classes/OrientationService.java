@@ -5,9 +5,7 @@ import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorListener;
 import android.hardware.SensorManager;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -75,8 +73,6 @@ public class OrientationService implements SensorEventListener{
         if(success){
             float[] orientation = new float[3];
             SensorManager.getOrientation(r,orientation);
-
-            Log.d("Azimuth", Float.toString(orientation[0]));
             this.azimuth.postValue(orientation[0]);
         }
     }
@@ -91,4 +87,5 @@ public class OrientationService implements SensorEventListener{
         unregisterSensorListeners();
         this.azimuth = mockDataSource;
     }
+
 }

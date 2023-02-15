@@ -2,7 +2,6 @@ package com.example.cse110_team16_project.classes;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
@@ -17,7 +16,6 @@ import androidx.lifecycle.MutableLiveData;
 public class LocationService implements LocationListener {
 
     private static LocationService instance;
-    private final Activity activity;
 
     private MutableLiveData<Location> location;
 
@@ -32,12 +30,11 @@ public class LocationService implements LocationListener {
 
     protected LocationService(Activity activity, int updateTime) {
         this.location = new MutableLiveData<>();
-        this.activity = activity;
         this.locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
-        this.registerLocationListener(updateTime);
+        this.registerLocationListener(activity, updateTime);
     }
 
-    protected void registerLocationListener(int minTime) {
+    protected void registerLocationListener(Activity activity, int minTime) {
         if(ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PERMISSION_GRANTED){
             throw new IllegalStateException("App needs location permission to get latest location");
         }

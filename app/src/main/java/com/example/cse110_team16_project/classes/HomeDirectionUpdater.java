@@ -4,22 +4,18 @@ import android.app.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class HomeDirectionUpdater {
-    private ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
-    private Future<Void> future;
+    private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
 
     private List<Home> homes;
     private List<Float> lastKnownHomeDirectionsFromUser;
-    private User user;
+    private final User user;
 
     public HomeDirectionUpdater(Activity activity, @NonNull List<Home> homes, @NonNull User user){
         this.homes = homes;
@@ -27,7 +23,7 @@ public class HomeDirectionUpdater {
         setAllDirectionsDefault();
 
         user.getCoordinates().observe((LifecycleOwner) activity, coordinates ->
-                this.future = backgroundThreadExecutor.submit(() -> {
+                backgroundThreadExecutor.submit(() -> {
                     updateAllHomesDirectionFromUser();
                     return null;
                 })
@@ -51,8 +47,10 @@ public class HomeDirectionUpdater {
         return this.lastKnownHomeDirectionsFromUser;
     }
     public void updateAllHomesDirectionFromUser(){
+        Coordinates userCoordinates = user.getCoordinates().getValue();
+        if(userCoordinates == null) return;
         for(int i = 0; i < homes.size(); i++){
-            lastKnownHomeDirectionsFromUser.set(i,getHomeDirectionFromUser(user.getCoordinates().getValue(),
+            lastKnownHomeDirectionsFromUser.set(i,getHomeDirectionFromUser(userCoordinates,
                     homes.get(i)));
         }
     }
