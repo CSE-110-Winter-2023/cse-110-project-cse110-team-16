@@ -22,6 +22,25 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden">
+        </activity>
+        <activity
+            android:name=".SanityActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".AddLabels"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".AddHomeLocations"
+            android:exported="false">
+>>>>>>> 858f72a (implemented persistence of coords as floats)
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
