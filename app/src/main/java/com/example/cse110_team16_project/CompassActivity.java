@@ -2,6 +2,8 @@ package com.example.cse110_team16_project;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
+import static com.example.cse110_team16_project.classes.Constants.APP_REQUEST_CODE;
+
 import android.Manifest;
 
 import androidx.annotation.NonNull;
@@ -26,7 +28,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class CompassActivity extends AppCompatActivity {
-    private static final int APP_REQUEST_CODE = 110;
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
     private List<Home> homes;
     private User user;

@@ -4,6 +4,8 @@ import android.app.Activity;
 
 import androidx.lifecycle.LifecycleOwner;
 
+import com.example.cse110_team16_project.Room.Converters;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -26,7 +28,7 @@ public class UserTracker {
         locationService.getLocation().observe((LifecycleOwner) activity, loc->
                 backgroundThreadExecutor.submit(()-> {
                     if(loc != null) {
-                        user.setCoordinates(new Coordinates(loc));
+                        user.setCoordinates(Converters.LocationToCoordinates(loc));
                     }
                 return null;
                 }
