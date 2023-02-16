@@ -19,7 +19,8 @@ import java.util.concurrent.Executors;
 public class CompassUIManager {
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
 
-    private static final float SCREEN_PERCENTAGE = .475f;
+    //private static final float SCREEN_PERCENTAGE = .475f;
+
     Activity activity;
     private List<TextView> homeLabels;
     private final int[] defaultColors = {R.color.black,
