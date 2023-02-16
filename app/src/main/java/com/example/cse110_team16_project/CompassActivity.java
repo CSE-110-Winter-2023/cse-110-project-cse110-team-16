@@ -59,9 +59,10 @@ public class CompassActivity extends AppCompatActivity {
                     findViewById(R.id.sampleHome));
 
 
-            Bundle extras = getIntent().getExtras();
-            if(extras != null){
-                userTracker.mockUserDirection(extras.getFloat("mockDirection"));
+            SharedPreferences preferences = getSharedPreferences("HomeLoc", MODE_PRIVATE);
+            float mockDir = preferences.getFloat("mockDirection", -1.0F);
+            if(mockDir >= 0f){
+                userTracker.mockUserDirection(mockDir);
             }
         });
     }
