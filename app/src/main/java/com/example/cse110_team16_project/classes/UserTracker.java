@@ -20,27 +20,32 @@ public class UserTracker {
     private final LocationService locationService;
     private final OrientationService orientationService;
 
-    //TODO: Dependency Inversion on Services, but not much to test on this class
     public UserTracker(Activity activity, User user){
+        this(activity,user,LocationService.singleton(activity,UPDATE_TIME),
+                OrientationService.singleton(activity));
+    }
+
+    public UserTracker(Activity activity, User user, LocationService locationService,
+                       OrientationService orientationService) {
         this.activity = activity;
 
-        locationService = LocationService.singleton(activity, UPDATE_TIME);
-        locationService.getLocation().observe((LifecycleOwner) activity, loc->
+        this.locationService = locationService;
+        this.locationService.getLocation().observe((LifecycleOwner) activity, loc->
                 backgroundThreadExecutor.submit(()-> {
-                    if(loc != null) {
-                        user.setCoordinates(Converters.LocationToCoordinates(loc));
-                    }
-                return null;
-                }
-        ));
+                            if(loc != null) {
+                                user.setCoordinates(Converters.LocationToCoordinates(loc));
+                            }
+                            return null;
+                        }
+                ));
 
-        orientationService = OrientationService.singleton(activity);
-        orientationService.getOrientation().observe((LifecycleOwner) activity, azimuth ->
+        this.orientationService = orientationService;
+        this.orientationService.getOrientation().observe((LifecycleOwner) activity, azimuth ->
                 backgroundThreadExecutor.submit(()-> {
-                    user.setDirection((float)((Math.toDegrees(azimuth)+360)%360));
-                    return null;
-                }
-        ));
+                            user.setDirection((float)((Math.toDegrees(azimuth)+360)%360));
+                            return null;
+                        }
+                ));
     }
 
     public void registerListeners(){
