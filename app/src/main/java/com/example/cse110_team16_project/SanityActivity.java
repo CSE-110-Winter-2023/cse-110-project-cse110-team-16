@@ -17,10 +17,10 @@ public class SanityActivity extends AppCompatActivity {
         TextView textViewX = findViewById(R.id.textX);
         TextView textViewY = findViewById(R.id.textY);
 
-        SharedPreferences preferences = getSharedPreferences("HomeLoc", MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences("famHomeLoc", MODE_PRIVATE);
         float yourFamX = preferences.getFloat("yourFamX", 0.0F);
-        Log.d("TESTPref", yourFamX + "");
         float yourFamY = preferences.getFloat("yourFamY", 0.0F);
+        Log.d("TESTPref", yourFamX + "");
         Log.d("TESTPref", yourFamY + "");
 
         textViewX.setText(yourFamX + "");

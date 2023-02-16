@@ -12,16 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class AddHomeLocations extends AppCompatActivity {
-//    public double yourHomeX, yourHomeY;
-//
-//    public double getYourHomeX(){
-//        return yourHomeX;
-//    }
-//
-//    public double getYourHomeY(){
-//        return yourHomeY;
-//    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,12 +23,6 @@ public class AddHomeLocations extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         saveProfile();
-
-//        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-//        String home = preferences.getString("home", "");
-//        double[] yourHomeArr = storeCoords(home);
-//        yourHomeX = yourHomeArr[0];
-//        yourHomeY = yourHomeArr[1];
     }
 
 //    public void loadProfile() {
@@ -70,17 +54,8 @@ public class AddHomeLocations extends AppCompatActivity {
 
     }
 
-//    public void uploadCoords(TextView view, String x, String y) {
-//        SharedPreferences preferences = getSharedPreferences("HomeLoc", Context.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = preferences.edit();
-//        float[] floats = this.storeCoords(view.getText().toString());
-//        editor.putFloat(x, floats[0]);
-//        editor.putFloat(y, floats[1]);
-//        editor.apply();
-//    }
-
     public void saveProfile() {
-        SharedPreferences preferences = getSharedPreferences("HomeLoc", Context.MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences("famHomeLoc", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
         TextView homeView = findViewById(R.id.yourHomeField);
@@ -90,20 +65,12 @@ public class AddHomeLocations extends AppCompatActivity {
         editor.putFloat("yourFamX", yourFamFloats[0]);
         editor.putFloat("yourFamY", yourFamFloats[1]);
 
-//        uploadCoords(homeView, "yourHomeX", "yourHomeY");
-//        uploadCoords(famView, "yourFamHomeX", "yourFamHomeY");
-//        uploadCoords(friendView, "yourFriendHomeX", "yourFriendHomeY");
-
         Log.d("TESTFLOAT", yourFamFloats[0] + "");
         Log.d("TESTFLOAT", yourFamFloats[1] + "");
 
-        //editor.putString("home", homeView.getText().toString());
-
-//        TextView famHomeView = findViewById(R.id.yourFamHomeField);
-//        editor.putString("famHome", famHomeView.getText().toString());
-//
-//        TextView friendHomeView = findViewById(R.id.yourBestFriendHomeField);
-//        editor.putString("friendHome", friendHomeView.getText().toString());
+//        Intent sendingIntent = new Intent(this, CompassActivity.class);
+//        sendingIntent.putExtra("mockDirection", 0);
+//        startActivity(sendingIntent);
 
         editor.apply();
     }
