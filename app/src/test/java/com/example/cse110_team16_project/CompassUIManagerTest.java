@@ -33,7 +33,7 @@ public class CompassUIManagerTest {
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule
             .grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
     @Test
-    public void testupdateCompassDirection() {
+    public void testUpdateCompassDirection() {
         ActivityScenario<CompassActivity> scenario = rule.getScenario();
 
         Home home = new Home(new Coordinates(42.68753,38.6543),
