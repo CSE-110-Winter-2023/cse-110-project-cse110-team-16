@@ -70,13 +70,8 @@ public class CompassUIManager {
     }
 
     public void updateHomeIconDirections( float userDirection, List<Float> homeDirections) {
-         // TODO: fake coordinates, should use robolectric test
-            Coordinates homePos = new Coordinates(32.734648946916835, -117.19090054085841);
-            Coordinates userPos = new Coordinates(32.8806731315563, -117.23402032381517);
-            final float homeDirection = userPos.bearingTo(homePos);
-
             // Set direction for sample home
-            updateIconDirection(sampleHome, homeDirection - userDirection);
+            updateIconDirection(sampleHome, homeDirections.get(0) - userDirection);
     }
 
     //update the position of the view representing a home on the compass to the correct direction
