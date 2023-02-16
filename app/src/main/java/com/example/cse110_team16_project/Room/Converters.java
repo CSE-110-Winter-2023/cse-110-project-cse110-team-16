@@ -16,7 +16,7 @@ public class Converters {
 
     @TypeConverter
     public static String CoordinatesToString(Coordinates c){
-        return c == null ? null : c.convertToString();
+        return c == null ? null : c.first + "," + c.second;
     }
 
     public static Coordinates LocationToCoordinates(Location location){
