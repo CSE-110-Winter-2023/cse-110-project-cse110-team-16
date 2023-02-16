@@ -70,16 +70,33 @@ public class AddHomeLocations extends AppCompatActivity {
 
     }
 
+//    public void uploadCoords(TextView view, String x, String y) {
+//        SharedPreferences preferences = getSharedPreferences("HomeLoc", Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = preferences.edit();
+//        float[] floats = this.storeCoords(view.getText().toString());
+//        editor.putFloat(x, floats[0]);
+//        editor.putFloat(y, floats[1]);
+//        editor.apply();
+//    }
+
     public void saveProfile() {
         SharedPreferences preferences = getSharedPreferences("HomeLoc", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
         TextView homeView = findViewById(R.id.yourHomeField);
-        float[] yourHomeFloats = this.storeCoords(homeView.getText().toString());
-        Log.d("TESTFLOAT", yourHomeFloats[0] + "");
-        Log.d("TESTFLOAT", yourHomeFloats[1] + "");
-        editor.putFloat("yourHomeX", yourHomeFloats[0]);
-        editor.putFloat("yourHomeY", yourHomeFloats[1]);
+        TextView famView = findViewById(R.id.yourFamHomeField);
+        TextView friendView = findViewById(R.id.yourBestFriendHomeField);
+        float[] yourFamFloats = this.storeCoords(famView.getText().toString());
+        editor.putFloat("yourFamX", yourFamFloats[0]);
+        editor.putFloat("yourFamY", yourFamFloats[1]);
+
+//        uploadCoords(homeView, "yourHomeX", "yourHomeY");
+//        uploadCoords(famView, "yourFamHomeX", "yourFamHomeY");
+//        uploadCoords(friendView, "yourFriendHomeX", "yourFriendHomeY");
+
+        //        Log.d("TESTFLOAT", yourHomeFloats[0] + "");
+//        Log.d("TESTFLOAT", yourHomeFloats[1] + "");
+
         //editor.putString("home", homeView.getText().toString());
 
 //        TextView famHomeView = findViewById(R.id.yourFamHomeField);
