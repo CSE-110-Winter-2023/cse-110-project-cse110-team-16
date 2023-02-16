@@ -11,10 +11,6 @@ public class Coordinates extends Pair<Double,Double>{
         super(latitude,longitude);
     }
 
-    public Coordinates(@NonNull Location location){
-        super(location.getLatitude(),location.getLongitude());
-    }
-
     public double getLongitude(){
         return this.second;
     }

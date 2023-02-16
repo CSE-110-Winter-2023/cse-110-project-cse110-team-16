@@ -2,6 +2,8 @@ package com.example.cse110_team16_project;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
+import static com.example.cse110_team16_project.classes.Constants.APP_REQUEST_CODE;
+
 import android.Manifest;
 
 import androidx.annotation.NonNull;
@@ -24,43 +26,47 @@ import com.example.cse110_team16_project.classes.UserTracker;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class CompassActivity extends AppCompatActivity {
-    private static final int APP_REQUEST_CODE = 110;
-    private ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
-    private Future<Void> future;
+    private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
     private List<Home> homes;
     private User user;
     private UserTracker userTracker;
     private HomeDirectionUpdater homeDirectionUpdater;
     private CompassUIManager manager;
-    private AppDatabase appDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         setContentView(R.layout.activity_compass);
-
-        this.future = backgroundThreadExecutor.submit(() ->{
-            appDatabase = Room.databaseBuilder(this,AppDatabase.class,AppDatabase.NAME)
-                    .fallbackToDestructiveMigration().build();
-            homes = appDatabase.homeDao().loadAllHomes();
-            this.handleLocationPermission();
-            return null;
-        });
+        backgroundThreadExecutor.submit(this::handleLocationPermission);
     }
 
     private void finishOnCreate(){
+        loadHomes();
         this.user = new User();
         runOnUiThread(() -> {
             userTracker = new UserTracker(this, user);
             homeDirectionUpdater = new HomeDirectionUpdater(this, homes, user);
             manager = new CompassUIManager(this, user, homeDirectionUpdater, findViewById(R.id.compassRing),
                     findViewById(R.id.sampleHome));
+
+
+            Bundle extras = getIntent().getExtras();
+            if(extras != null){
+                userTracker.mockUserDirection(extras.getFloat("mockDirection"));
+            }
         });
     }
 
+    private void loadHomes(){
+        AppDatabase appDatabase = Room.databaseBuilder(this,AppDatabase.class,AppDatabase.NAME)
+                .fallbackToDestructiveMigration().build();
+        homes = appDatabase.homeDao().loadAllHomes();
+    }
     private void handleLocationPermission(){
         if (ContextCompat.checkSelfPermission(
                 this, Manifest.permission.ACCESS_FINE_LOCATION) ==
@@ -82,7 +88,8 @@ public class CompassActivity extends AppCompatActivity {
         if (requestCode == APP_REQUEST_CODE) {// If request is cancelled, the result arrays are empty.
             if (grantResults.length > 0 &&
                     grantResults[0] == PERMISSION_GRANTED) {
-                finishOnCreate();
+                backgroundThreadExecutor.submit(this::finishOnCreate);
+
             }
         }
         // Other 'case' lines to check for other
@@ -100,7 +107,5 @@ public class CompassActivity extends AppCompatActivity {
         super.onResume();
         if(userTracker != null) userTracker.registerListeners();
     }
-    public AppDatabase getAppDatabase(){
-        return appDatabase;
-    }
+
 }

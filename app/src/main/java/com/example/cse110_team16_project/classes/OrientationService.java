@@ -5,21 +5,19 @@ import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorListener;
 import android.hardware.SensorManager;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 public class OrientationService implements SensorEventListener{
     private static OrientationService instance;
-
+    private boolean mockMode = false;
     private final SensorManager sensorManager;
 
     private float[] accelerometerReading;
     private float[] magnetometerReading;
-    private MutableLiveData<Float> azimuth;
+    private final MutableLiveData<Float> azimuth;
 
     public static OrientationService singleton(Activity activity){
         if(instance == null) {
@@ -34,9 +32,10 @@ public class OrientationService implements SensorEventListener{
     }
 
     protected void registerSensorListeners(){
+        if(mockMode) return;
         Sensor accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         if(accelerometer != null)
-            sensorManager.registerListener((SensorEventListener) this,accelerometer,
+            sensorManager.registerListener(this,accelerometer,
                 SensorManager.SENSOR_DELAY_NORMAL);
         Sensor magneticField = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         if (magneticField != null) {
@@ -75,8 +74,6 @@ public class OrientationService implements SensorEventListener{
         if(success){
             float[] orientation = new float[3];
             SensorManager.getOrientation(r,orientation);
-
-            Log.d("Azimuth", Float.toString(orientation[0]));
             this.azimuth.postValue(orientation[0]);
         }
     }
@@ -87,8 +84,15 @@ public class OrientationService implements SensorEventListener{
 
     public LiveData<Float> getOrientation() {return this.azimuth;}
 
-    public void setMockOrientationSource(MutableLiveData<Float> mockDataSource){
+    public void setMockOrientationSource(float mockOrientation){
         unregisterSensorListeners();
-        this.azimuth = mockDataSource;
+        mockMode = true;
+        azimuth.postValue(mockOrientation);
     }
+
+    public void disableMockMode(){
+        mockMode = false;
+        registerSensorListeners();
+    }
+
 }

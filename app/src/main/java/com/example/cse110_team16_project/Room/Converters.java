@@ -1,5 +1,7 @@
 package com.example.cse110_team16_project.Room;
 
+import android.location.Location;
+
 import androidx.room.TypeConverter;
 
 import com.example.cse110_team16_project.classes.Coordinates;
@@ -15,5 +17,9 @@ public class Converters {
     @TypeConverter
     public static String CoordinatesToString(Coordinates c){
         return c == null ? null : c.convertToString();
+    }
+
+    public static Coordinates LocationToCoordinates(Location location){
+        return new Coordinates(location.getLatitude(),location.getLongitude());
     }
 }
