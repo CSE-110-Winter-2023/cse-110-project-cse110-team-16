@@ -94,8 +94,8 @@ public class AddHomeLocations extends AppCompatActivity {
 //        uploadCoords(famView, "yourFamHomeX", "yourFamHomeY");
 //        uploadCoords(friendView, "yourFriendHomeX", "yourFriendHomeY");
 
-        //        Log.d("TESTFLOAT", yourHomeFloats[0] + "");
-//        Log.d("TESTFLOAT", yourHomeFloats[1] + "");
+        Log.d("TESTFLOAT", yourFamFloats[0] + "");
+        Log.d("TESTFLOAT", yourFamFloats[1] + "");
 
         //editor.putString("home", homeView.getText().toString());
 
