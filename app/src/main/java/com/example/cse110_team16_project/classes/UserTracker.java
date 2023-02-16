@@ -13,7 +13,8 @@ import java.util.concurrent.Executors;
 public class UserTracker {
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
 
-    public static final int UPDATE_TIME = 200;
+    private static final int UPDATE_TIME = 200;
+    private static final int UPDATE_MIN_METERS = 20;
 
     Activity activity;
 
@@ -21,7 +22,7 @@ public class UserTracker {
     private final OrientationService orientationService;
 
     public UserTracker(Activity activity, User user){
-        this(activity,user,LocationService.singleton(activity,UPDATE_TIME),
+        this(activity,user,LocationService.singleton(activity,UPDATE_TIME, UPDATE_MIN_METERS),
                 OrientationService.singleton(activity));
     }
 
@@ -50,7 +51,7 @@ public class UserTracker {
 
     public void registerListeners(){
         orientationService.registerSensorListeners();
-        locationService.registerLocationListener(activity, UPDATE_TIME);
+        locationService.registerLocationListener(activity, UPDATE_TIME, UPDATE_MIN_METERS);
     }
     public void unregisterListeners(){
         orientationService.unregisterSensorListeners();

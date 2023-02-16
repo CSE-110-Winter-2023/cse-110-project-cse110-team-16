@@ -21,26 +21,26 @@ public class LocationService implements LocationListener {
 
     private final LocationManager locationManager;
 
-    public static LocationService singleton(Activity activity, int minTime) {
+    public static LocationService singleton(Activity activity, int minTime, int minDistance) {
         if(instance == null){
-            instance = new LocationService(activity, minTime);
+            instance = new LocationService(activity, minTime, minDistance);
         }
         return instance;
     }
 
-    protected LocationService(Activity activity, int updateTime) {
+    protected LocationService(Activity activity, int updateTime, int minDistance) {
         this.location = new MutableLiveData<>();
         this.locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
-        this.registerLocationListener(activity, updateTime);
+        this.registerLocationListener(activity, updateTime, minDistance);
     }
 
-    protected void registerLocationListener(Activity activity, int minTime) {
+    protected void registerLocationListener(Activity activity, int minTime, int minDistance) {
         if(ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PERMISSION_GRANTED){
             throw new IllegalStateException("App needs location permission to get latest location");
         }
 
         this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                minTime,10,this);
+                minTime,minDistance,this);
     }
 
     @Override

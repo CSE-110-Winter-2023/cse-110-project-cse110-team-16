@@ -17,16 +17,21 @@ public class OrientationService implements SensorEventListener{
 
     private float[] accelerometerReading;
     private float[] magnetometerReading;
+    private float minChange;
     private final MutableLiveData<Float> azimuth;
 
-    public static OrientationService singleton(Activity activity){
+    public static OrientationService singleton(Activity activity, float minChange){
         if(instance == null) {
-            instance = new OrientationService(activity);
+            instance = new OrientationService(activity, minChange);
         }
             return instance;
     }
-    protected OrientationService(Activity activity){
+    public static OrientationService singleton(Activity activity){
+        return singleton(activity,0f);
+    }
+    protected OrientationService(Activity activity, float minChange){
         this.azimuth = new MutableLiveData<>();
+        this.minChange = minChange;
         this.sensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
         this.registerSensorListeners();
     }
@@ -74,7 +79,10 @@ public class OrientationService implements SensorEventListener{
         if(success){
             float[] orientation = new float[3];
             SensorManager.getOrientation(r,orientation);
-            this.azimuth.postValue(orientation[0]);
+            if(this.azimuth.getValue() == null || Math.abs(orientation[0] -
+                    this.azimuth.getValue()) > minChange) {
+                this.azimuth.postValue(orientation[0]);
+            }
         }
     }
 
@@ -95,4 +103,7 @@ public class OrientationService implements SensorEventListener{
         registerSensorListeners();
     }
 
+    public void setMinChange(float newMinChange){
+        this.minChange = newMinChange;
+    }
 }
