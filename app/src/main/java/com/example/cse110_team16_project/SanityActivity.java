@@ -18,13 +18,13 @@ public class SanityActivity extends AppCompatActivity {
         TextView textViewY = findViewById(R.id.textY);
 
         SharedPreferences preferences = getSharedPreferences("HomeLoc", MODE_PRIVATE);
-        float yourHomeX = preferences.getFloat("yourHomeX", 0.0F);
-        Log.d("TESTPref", yourHomeX + "");
-        float yourHomeY = preferences.getFloat("yourHomeY", 0.0F);
-        Log.d("TESTPref", yourHomeY + "");
+        float yourFamX = preferences.getFloat("yourFamX", 0.0F);
+        Log.d("TESTPref", yourFamX + "");
+        float yourFamY = preferences.getFloat("yourFamY", 0.0F);
+        Log.d("TESTPref", yourFamY + "");
 
-        textViewX.setText(yourHomeX + "");
-        textViewY.setText(yourHomeY + "");
+        textViewX.setText(yourFamX + "");
+        textViewY.setText(yourFamY + "");
 
     }
 }
