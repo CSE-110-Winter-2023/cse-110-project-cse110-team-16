@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat;
 import androidx.room.Room;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -136,4 +137,9 @@ public class CompassActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onNewIntent(Intent intent){
+        super.onNewIntent(intent);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+    }
 }
