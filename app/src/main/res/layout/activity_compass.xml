@@ -64,7 +64,7 @@
         android:id="@+id/sampleHome"
         android:layout_width="64dp"
         android:layout_height="96dp"
-        android:text="Best Friend's House"
+        android:text="Sample Text"
         android:ellipsize="end"
         android:textSize="12sp"
         android:textColor="#097969"

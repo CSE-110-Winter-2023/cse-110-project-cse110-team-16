@@ -74,7 +74,32 @@ public class CompassUIManager {
     public void updateIconDirection(TextView tv, Float homeDirection) {
         ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) tv.getLayoutParams();
         layoutParams.circleAngle = homeDirection;
-        activity.runOnUiThread(() -> tv.setLayoutParams(layoutParams));
+        tv.setLayoutParams(layoutParams);
+        // Deprecated label setting
+        //tv.setText("Best Friend's House");
+    }
+
+    public void updateIconLabel(TextView tv, String label){
+        tv.setText(label);
+    }
+
+    public void updateHomeIconDirections(List<Float> homeDirections, float userDirection) {
+//        for (int i = 0; i < homeLabels.size(); i++) {
+            // TODO: fake coordinates, should use robolectric test
+            Coordinates homePos = new Coordinates(32.734648946916835, -117.19090054085841);
+            Coordinates userPos = new Coordinates(32.8806731315563, -117.23402032381517);
+            final float homeDirection = userPos.bearingTo(homePos);
+
+            // Mocklabel for testing display of labels
+            String mockLabel = "Parent's house";
+
+            // final float homeDirection = homeDirections.get(i);
+            activity.runOnUiThread(() -> {
+                // Set direction for sample home
+                updateIconDirection(sampleHome, homeDirection - userDirection);
+                updateIconLabel(sampleHome, mockLabel);
+            });
+//        }
     }
 
     //given userDirection in degrees, changes compass to face correct direction
