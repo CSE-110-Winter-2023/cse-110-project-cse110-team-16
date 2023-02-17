@@ -11,20 +11,12 @@ public class Coordinates extends Pair<Double,Double>{
         super(latitude,longitude);
     }
 
-    public Coordinates(@NonNull Location location){
-        super(location.getLatitude(),location.getLongitude());
-    }
-
     public double getLongitude(){
         return this.second;
     }
 
     public double getLatitude(){
         return this.first;
-    }
-
-    public String convertToString(){
-        return this.first + "," + this.second;
     }
 
     //https://www.movable-type.co.uk/scripts/latlong.html

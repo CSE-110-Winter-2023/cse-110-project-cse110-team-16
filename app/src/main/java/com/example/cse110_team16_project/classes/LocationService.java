@@ -2,7 +2,6 @@ package com.example.cse110_team16_project.classes;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
@@ -17,33 +16,31 @@ import androidx.lifecycle.MutableLiveData;
 public class LocationService implements LocationListener {
 
     private static LocationService instance;
-    private final Activity activity;
 
-    private MutableLiveData<Location> location;
+    private final MutableLiveData<Location> location;
 
     private final LocationManager locationManager;
 
-    public static LocationService singleton(Activity activity, int minTime) {
+    public static LocationService singleton(Activity activity, int minTime, int minDistance) {
         if(instance == null){
-            instance = new LocationService(activity, minTime);
+            instance = new LocationService(activity, minTime, minDistance);
         }
         return instance;
     }
 
-    protected LocationService(Activity activity, int updateTime) {
+    protected LocationService(Activity activity, int updateTime, int minDistance) {
         this.location = new MutableLiveData<>();
-        this.activity = activity;
         this.locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
-        this.registerLocationListener(updateTime);
+        this.registerLocationListener(activity, updateTime, minDistance);
     }
 
-    protected void registerLocationListener(int minTime) {
+    protected void registerLocationListener(Activity activity, int minTime, int minDistance) {
         if(ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PERMISSION_GRANTED){
             throw new IllegalStateException("App needs location permission to get latest location");
         }
 
         this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                minTime,10,this);
+                minTime,minDistance,this);
     }
 
     @Override
@@ -59,8 +56,4 @@ public class LocationService implements LocationListener {
         return this.location;
     }
 
-    public void setMockOrientationSource(MutableLiveData<Location> mockDataSource){
-        unregisterLocationListener();
-        this.location = mockDataSource;
-    }
 }

@@ -5,40 +5,48 @@ import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorListener;
 import android.hardware.SensorManager;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 public class OrientationService implements SensorEventListener{
     private static OrientationService instance;
-
+    private boolean mockMode = false;
     private final SensorManager sensorManager;
 
     private float[] accelerometerReading;
     private float[] magnetometerReading;
-    private MutableLiveData<Float> azimuth;
+    private float minChange;
+    private final MutableLiveData<Float> azimuth;
 
-    public static OrientationService singleton(Activity activity){
+    public static OrientationService singleton(Activity activity, float minChange){
         if(instance == null) {
-            instance = new OrientationService(activity);
+            instance = new OrientationService(activity, minChange);
         }
             return instance;
     }
-    protected OrientationService(Activity activity){
+    public static OrientationService singleton(Activity activity){
+        return singleton(activity,0f);
+    }
+    protected OrientationService(Activity activity, float minChange){
         this.azimuth = new MutableLiveData<>();
+        this.minChange = minChange;
         this.sensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
         this.registerSensorListeners();
     }
 
     protected void registerSensorListeners(){
-        sensorManager.registerListener((SensorEventListener) this,sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+        if(mockMode) return;
+        Sensor accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        if(accelerometer != null)
+            sensorManager.registerListener(this,accelerometer,
                 SensorManager.SENSOR_DELAY_NORMAL);
-        sensorManager.registerListener((SensorEventListener) this,sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD),
-                sensorManager.SENSOR_DELAY_NORMAL);
-
+        Sensor magneticField = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        if (magneticField != null) {
+            sensorManager.registerListener(this, magneticField,
+                    SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_DELAY_UI);
+        }
     }
 
     public void onSensorChanged(SensorEvent event) {
@@ -71,20 +79,33 @@ public class OrientationService implements SensorEventListener{
         if(success){
             float[] orientation = new float[3];
             SensorManager.getOrientation(r,orientation);
-
-            Log.d("Azimuth", Float.toString(orientation[0]));
-            this.azimuth.postValue(orientation[0]);
+            if(this.azimuth.getValue() == null || Math.abs(orientation[0] -
+                    this.azimuth.getValue()) > minChange) {
+                this.azimuth.postValue(orientation[0]);
+            }
         }
     }
 
     public void unregisterSensorListeners(){
-        sensorManager.unregisterListener((SensorListener) this);
+        sensorManager.unregisterListener(this);
     }
 
     public LiveData<Float> getOrientation() {return this.azimuth;}
 
-    public void setMockOrientationSource(MutableLiveData<Float> mockDataSource){
+    public void setMockOrientationSource(float mockOrientation){
         unregisterSensorListeners();
-        this.azimuth = mockDataSource;
+        mockMode = true;
+        azimuth.postValue(mockOrientation);
     }
+
+    public void disableMockMode(){
+        mockMode = false;
+        registerSensorListeners();
+    }
+
+    public void setMinChange(float newMinChange){
+        this.minChange = newMinChange;
+    }
+
+    public boolean getMockMode(){return mockMode;}
 }

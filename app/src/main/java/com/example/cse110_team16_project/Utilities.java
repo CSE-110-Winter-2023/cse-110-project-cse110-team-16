@@ -2,19 +2,23 @@ package com.example.cse110_team16_project;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.util.DisplayMetrics;
 
 import java.util.Optional;
 
 public class Utilities {
+    public static int getDPScreenWidth(Activity activity){
+        DisplayMetrics displayMetrics = activity.getResources().getDisplayMetrics();
+        return (int) (displayMetrics.widthPixels / displayMetrics.density);
+    }
+
     public static void showAlert(Activity activity, String message) {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(activity);
 
         alertBuilder
                 .setTitle("Alert!")
                 .setMessage(message)
-                .setPositiveButton("Ok", (dialog, id) -> {
-                    dialog.cancel();
-                })
+                .setPositiveButton("Ok", (dialog, id) -> dialog.cancel())
                 .setCancelable(true);
 
         AlertDialog alertDialog = alertBuilder.create();
@@ -27,9 +31,7 @@ public class Utilities {
         alertBuilder
                 .setTitle("Error!")
                 .setMessage(message)
-                .setPositiveButton("Ok", (dialog, id) -> {
-                    dialog.cancel();
-                })
+                .setPositiveButton("Ok", (dialog, id) -> dialog.cancel())
                 .setCancelable(true);
 
         AlertDialog alertDialog = alertBuilder.create();

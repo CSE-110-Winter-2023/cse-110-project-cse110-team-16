@@ -5,8 +5,6 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.example.cse110_team16_project.classes.Coordinates;
-
 @Entity
 public class Home{
     @ColumnInfo
@@ -15,16 +13,17 @@ public class Home{
     @PrimaryKey
     @NonNull
     String label;
-    public Home(Coordinates coordinates, String label){
+    public Home(Coordinates coordinates, @NonNull String label){
         this.coordinates = coordinates;
         this.label = label;
     }
-    public void setCoordinates(Coordinates coordinates){
+    public void setCoordinates(@NonNull Coordinates coordinates){
         this.coordinates = coordinates;
     }
     public Coordinates getCoordinates(){
         return this.coordinates;
     }
+    @NonNull
     public String getLabel(){
         return this.label;
     }

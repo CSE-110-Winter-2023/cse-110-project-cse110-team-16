@@ -2,6 +2,8 @@ package com.example.cse110_team16_project;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
+import static com.example.cse110_team16_project.classes.Constants.APP_REQUEST_CODE;
+
 import android.Manifest;
 
 import androidx.annotation.NonNull;
@@ -10,55 +12,88 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.room.Room;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.example.cse110_team16_project.Room.AppDatabase;
 import com.example.cse110_team16_project.classes.CompassUIManager;
+import com.example.cse110_team16_project.classes.Coordinates;
 import com.example.cse110_team16_project.classes.Home;
 import com.example.cse110_team16_project.classes.HomeDirectionUpdater;
 import com.example.cse110_team16_project.classes.User;
 import com.example.cse110_team16_project.classes.UserTracker;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class CompassActivity extends AppCompatActivity {
-    private static final int APP_REQUEST_CODE = 110;
-    private ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
-    private Future<Void> future;
+    private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
     private List<Home> homes;
     private User user;
     private UserTracker userTracker;
     private HomeDirectionUpdater homeDirectionUpdater;
     private CompassUIManager manager;
-    private AppDatabase appDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         setContentView(R.layout.activity_compass);
-
-        this.future = backgroundThreadExecutor.submit(() ->{
-            appDatabase = Room.databaseBuilder(this,AppDatabase.class,AppDatabase.NAME)
-                    .fallbackToDestructiveMigration().build();
-            homes = appDatabase.homeDao().loadAllHomes();
-            this.handleLocationPermission();
-            return null;
-        });
+        handleLocationPermission();
     }
 
     private void finishOnCreate(){
+        loadHomes();
         this.user = new User();
         runOnUiThread(() -> {
             userTracker = new UserTracker(this, user);
             homeDirectionUpdater = new HomeDirectionUpdater(this, homes, user);
-            manager = new CompassUIManager(userTracker, homeDirectionUpdater, findViewById(R.id.compassRing),
+            manager = new CompassUIManager(this, user, homeDirectionUpdater, findViewById(R.id.compassRing),
                     findViewById(R.id.sampleHome));
         });
+    }
+
+    private void loadHomes(){
+        /*
+        AppDatabase appDatabase = Room.databaseBuilder(this,AppDatabase.class,AppDatabase.NAME)
+                .fallbackToDestructiveMigration().build();
+        homes = appDatabase.homeDao().loadAllHomes();
+         */
+
+        //TODO: Verify correct name parameter
+        SharedPreferences labelPreferences = getSharedPreferences("FamHomeLabel",Context.MODE_PRIVATE);
+        SharedPreferences locationPreferences = getSharedPreferences("famHomeLoc", Context.MODE_PRIVATE);
+
+        homes = new ArrayList<>();
+
+        //TODO: Verify correct prefs
+        //all arrays should be same length
+        String[] prefLabelStrings = new String[]{"famLabel"};
+        String[] prefLatStrings = new String[]{"yourFamX"};
+        String[] prefLongStrings = new String[]{"yourFamY"};
+
+        for (int i = 0; i < prefLabelStrings.length; i++) {
+            String label = labelPreferences.getString(prefLabelStrings[i], null);
+            if(label == null) continue;
+            double lat = locationPreferences.getFloat(prefLatStrings[i], 0.0f);
+            double longitude = locationPreferences.getFloat(prefLongStrings[i], 0.0f);
+            Coordinates parentCoordinates = new Coordinates(lat,longitude);
+
+            Home home = new Home(parentCoordinates, label);
+            homes.add(home);
+        }
+    }
+
+    public List<Home> getHomes(){
+        return homes;
     }
 
     private void handleLocationPermission(){
@@ -82,25 +117,35 @@ public class CompassActivity extends AppCompatActivity {
         if (requestCode == APP_REQUEST_CODE) {// If request is cancelled, the result arrays are empty.
             if (grantResults.length > 0 &&
                     grantResults[0] == PERMISSION_GRANTED) {
-                finishOnCreate();
+                backgroundThreadExecutor.submit(this::finishOnCreate);
+
             }
         }
         // Other 'case' lines to check for other
         // permissions this app might request.
     }
 
+    public User getUser(){return user;}
     @Override
     protected void onPause(){
         super.onPause();
-        //tracker.unregisterListeners();
+        if(userTracker != null) userTracker.unregisterListeners();
     }
 
     @Override
     protected void onResume(){
         super.onResume();
-        //tracker.registerListeners();
+        if(userTracker != null) {
+            userTracker.registerListeners();
+            SharedPreferences preferences = getSharedPreferences("HomeLoc", MODE_PRIVATE);
+            float mockDir = preferences.getFloat("mockDirection", -1.0F);
+            userTracker.mockUserDirection(mockDir);
+        }
     }
-    public AppDatabase getAppDatabase(){
-        return appDatabase;
+
+    @Override
+    protected void onNewIntent(Intent intent){
+        super.onNewIntent(intent);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
     }
 }

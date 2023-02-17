@@ -7,8 +7,6 @@ import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.*;
 
-import android.location.Location;
-
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
@@ -22,6 +20,7 @@ import com.example.cse110_team16_project.classes.User;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -38,7 +37,7 @@ public class HomeDirectionUpdaterTest {
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
     @Test
     public void testHomeDirectionUpdater(){
-        ActivityScenario scenario = rule.getScenario();
+        ActivityScenario<CompassActivity> scenario = rule.getScenario();
 
         User user = new User();
         Coordinates homeCoordinates1 = new Coordinates(1,1.15056);
@@ -51,16 +50,16 @@ public class HomeDirectionUpdaterTest {
         scenario.onActivity(activity ->
         {
             HomeDirectionUpdater homeDirectionUpdater = new HomeDirectionUpdater(activity, homes, user);
-            assertEquals(new ArrayList<Float>(Arrays.asList(0f,0f)),homeDirectionUpdater.getLastKnownHomeDirectionsFromUser());
+            assertEquals(new ArrayList<>(Arrays.asList(0f,0f)),homeDirectionUpdater.getLastKnownHomeDirectionsFromUser().getValue());
             homeDirectionUpdater.updateAllHomesDirectionFromUser();
             ArrayList<Float> expected = new ArrayList<>(Arrays.asList(homeDirectionUpdater.
-                    getHomeDirectionFromUser(user.getCoordinates().getValue(),homes.get(0)),
+                    getHomeDirectionFromUser(Objects.requireNonNull(user.getCoordinates().getValue()),homes.get(0)),
                     homeDirectionUpdater.
                             getHomeDirectionFromUser(user.getCoordinates().getValue(),homes.get(1))));
             assertEquals(49f,expected.get(0),.1f);
             assertEquals(0f,expected.get(1),.1f);
             assertEquals(expected,
-                    homeDirectionUpdater.getLastKnownHomeDirectionsFromUser());
+                    homeDirectionUpdater.getLastKnownHomeDirectionsFromUser().getValue());
 
         });
 
