@@ -33,8 +33,7 @@ public class CompassActivityTest {
     @Rule
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule
             .grant(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION);
-    @Rule
-    public RuleChain chain = RuleChain.outerRule(mRuntimePermissionRule).around(instantTaskExecutorRule);
+
     @Test
     public void IntegrationTest() {
         SharedPreferences labelPreferences = RuntimeEnvironment.getApplication().
