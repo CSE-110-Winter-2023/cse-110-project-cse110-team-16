@@ -46,7 +46,7 @@ public class CompassActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         setContentView(R.layout.activity_compass);
-        backgroundThreadExecutor.submit(this::handleLocationPermission);
+        handleLocationPermission();
     }
 
     private void finishOnCreate(){
@@ -57,13 +57,6 @@ public class CompassActivity extends AppCompatActivity {
             homeDirectionUpdater = new HomeDirectionUpdater(this, homes, user);
             manager = new CompassUIManager(this, user, homeDirectionUpdater, findViewById(R.id.compassRing),
                     findViewById(R.id.sampleHome));
-
-
-            SharedPreferences preferences = getSharedPreferences("HomeLoc", MODE_PRIVATE);
-            float mockDir = preferences.getFloat("mockDirection", -1.0F);
-            if(mockDir >= 0f){
-                userTracker.mockUserDirection(mockDir);
-            }
         });
     }
 
@@ -135,7 +128,12 @@ public class CompassActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        if(userTracker != null) userTracker.registerListeners();
+        if(userTracker != null) {
+            userTracker.registerListeners();
+            SharedPreferences preferences = getSharedPreferences("HomeLoc", MODE_PRIVATE);
+            float mockDir = preferences.getFloat("mockDirection", -1.0F);
+            userTracker.mockUserDirection(mockDir);
+        }
     }
 
 }

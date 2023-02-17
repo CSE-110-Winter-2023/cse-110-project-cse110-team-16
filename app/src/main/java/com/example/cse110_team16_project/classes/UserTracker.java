@@ -58,7 +58,9 @@ public class UserTracker {
         locationService.unregisterLocationListener();
     }
 
+    //disables mocking of userOrientation if param < 0f
     public void mockUserDirection(float mockDirection){
-        orientationService.setMockOrientationSource(mockDirection);
+        if(mockDirection < 0f) orientationService.disableMockMode();
+        else orientationService.setMockOrientationSource(mockDirection);
     }
 }

@@ -106,4 +106,6 @@ public class OrientationService implements SensorEventListener{
     public void setMinChange(float newMinChange){
         this.minChange = newMinChange;
     }
+
+    public boolean getMockMode(){return mockMode;}
 }
