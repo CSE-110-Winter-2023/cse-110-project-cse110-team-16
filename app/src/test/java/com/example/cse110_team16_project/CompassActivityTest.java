@@ -34,7 +34,7 @@ public class CompassActivityTest {
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule
             .grant(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION);
     @Rule
-    public RuleChain chain = RuleChain.outerRule(mRuntimePermissionRule);
+    public RuleChain chain = RuleChain.outerRule(mRuntimePermissionRule).around(instantTaskExecutorRule);
     @Test
     public void IntegrationTest() {
         SharedPreferences labelPreferences = RuntimeEnvironment.getApplication().
@@ -47,8 +47,6 @@ public class CompassActivityTest {
         locationPreferences.edit().putFloat("yourFamY", 22.1314f).commit();
 
         ActivityScenario<CompassActivity> scenario = ActivityScenario.launch(CompassActivity.class);
-        scenario.moveToState(Lifecycle.State.CREATED);
-        scenario.moveToState(Lifecycle.State.STARTED);
         scenario.moveToState(Lifecycle.State.RESUMED);
         scenario.onActivity(activity ->{
             assertNotNull(activity.getHomes());
