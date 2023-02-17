@@ -1,15 +1,13 @@
 package com.example.cse110_team16_project;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class AddHomeLocations extends AppCompatActivity {
     @Override
@@ -100,6 +98,9 @@ public class AddHomeLocations extends AppCompatActivity {
             editor.putFloat("mockDirection", -1F);
         }
 
+        editor.apply();
+
+//        saveProfile();
         finish();
 //        Intent intent = new Intent(this, CompassActivity.class);
 //        startActivity(intent);
