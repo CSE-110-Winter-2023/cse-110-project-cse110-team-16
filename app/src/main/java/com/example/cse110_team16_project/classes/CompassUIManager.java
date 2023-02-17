@@ -35,7 +35,7 @@ public class CompassUIManager {
         this.compass = compass;
         this.sampleHome = sampleHome;
 
-        //populateHomeIcons(homeDirectionUpdater.getHomes());
+        populateHomeIcons(homeDirectionUpdater.getHomes());
 
         user.getDirection().observe((LifecycleOwner) activity, direction ->
                 backgroundThreadExecutor.submit(() ->
@@ -55,13 +55,8 @@ public class CompassUIManager {
 
     //create views on the UI for each home
     public void populateHomeIcons(List<Home> homes) {
-
-        homeLabels = new ArrayList<>(homes.size());
-        for (int i = 0; i < homes.size(); i++) {
-            TextView tv = new TextView(activity);
-            //add stuff here
-            homeLabels.add(tv);
-        }
+        if(homes.size() == 0) return;
+        sampleHome.setText(homes.get(0).getLabel());
     }
 
     public void updateUI(float userDirection, List<Float> homeDirections) {

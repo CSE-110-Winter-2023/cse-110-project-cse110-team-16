@@ -76,7 +76,7 @@ public class CompassActivity extends AppCompatActivity {
 
         //TODO: Verify correct prefs
         //all arrays should be same length
-        String[] prefLabelStrings = new String[]{"famHLabel"};
+        String[] prefLabelStrings = new String[]{"famLabel"};
         String[] prefLatStrings = new String[]{"yourFamX"};
         String[] prefLongStrings = new String[]{"yourFamY"};
 
@@ -91,6 +91,11 @@ public class CompassActivity extends AppCompatActivity {
             homes.add(home);
         }
     }
+
+    public List<Home> getHomes(){
+        return homes;
+    }
+
     private void handleLocationPermission(){
         if (ContextCompat.checkSelfPermission(
                 this, Manifest.permission.ACCESS_FINE_LOCATION) ==
@@ -120,6 +125,7 @@ public class CompassActivity extends AppCompatActivity {
         // permissions this app might request.
     }
 
+    public User getUser(){return user;}
     @Override
     protected void onPause(){
         super.onPause();
