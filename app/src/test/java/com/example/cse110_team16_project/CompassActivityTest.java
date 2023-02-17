@@ -51,8 +51,8 @@ public class CompassActivityTest {
         scenario.onActivity(activity ->{
             assertNotNull(activity.getHomes());
             assertEquals("Parents' Home", activity.getHomes().get(0).getLabel());
-            assertEquals(32.1316f, activity.getHomes().get(0).getCoordinates().getLatitude(),0.001f);
-            assertEquals(22.1314f, activity.getHomes().get(0).getCoordinates().getLongitude(),0.001f);
+            assertEquals(32.1316, activity.getHomes().get(0).getCoordinates().getLatitude(),0.001);
+            assertEquals(22.1314, activity.getHomes().get(0).getCoordinates().getLongitude(),0.001);
         });
     }
 }
