@@ -12,16 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class AddHomeLocations extends AppCompatActivity {
-//    public double yourHomeX, yourHomeY;
-//
-//    public double getYourHomeX(){
-//        return yourHomeX;
-//    }
-//
-//    public double getYourHomeY(){
-//        return yourHomeY;
-//    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,12 +23,6 @@ public class AddHomeLocations extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         saveProfile();
-
-//        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-//        String home = preferences.getString("home", "");
-//        double[] yourHomeArr = storeCoords(home);
-//        yourHomeX = yourHomeArr[0];
-//        yourHomeY = yourHomeArr[1];
     }
 
 //    public void loadProfile() {
@@ -70,15 +54,6 @@ public class AddHomeLocations extends AppCompatActivity {
 
     }
 
-//    public void uploadCoords(TextView view, String x, String y) {
-//        SharedPreferences preferences = getSharedPreferences("HomeLoc", Context.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = preferences.edit();
-//        float[] floats = this.storeCoords(view.getText().toString());
-//        editor.putFloat(x, floats[0]);
-//        editor.putFloat(y, floats[1]);
-//        editor.apply();
-//    }
-
     public void saveProfile() {
         SharedPreferences preferences = getSharedPreferences("HomeLoc", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -86,30 +61,23 @@ public class AddHomeLocations extends AppCompatActivity {
         TextView homeView = findViewById(R.id.yourHomeField);
         TextView famView = findViewById(R.id.yourFamHomeField);
         TextView friendView = findViewById(R.id.yourBestFriendHomeField);
-        float[] yourFamFloats = this.storeCoords(famView.getText().toString());
-        editor.putFloat("yourFamX", yourFamFloats[0]);
-        editor.putFloat("yourFamY", yourFamFloats[1]);
 
-//        uploadCoords(homeView, "yourHomeX", "yourHomeY");
-//        uploadCoords(famView, "yourFamHomeX", "yourFamHomeY");
-//        uploadCoords(friendView, "yourFriendHomeX", "yourFriendHomeY");
-
-        //        Log.d("TESTFLOAT", yourHomeFloats[0] + "");
-//        Log.d("TESTFLOAT", yourHomeFloats[1] + "");
-
-        //editor.putString("home", homeView.getText().toString());
-
-//        TextView famHomeView = findViewById(R.id.yourFamHomeField);
-//        editor.putString("famHome", famHomeView.getText().toString());
-//
-//        TextView friendHomeView = findViewById(R.id.yourBestFriendHomeField);
-//        editor.putString("friendHome", friendHomeView.getText().toString());
+        if(famView.getText().toString().isEmpty() == false) {
+            float[] yourFamFloats = this.storeCoords(famView.getText().toString());
+            editor.putFloat("yourFamX", yourFamFloats[0]);
+            editor.putFloat("yourFamY", yourFamFloats[1]);
+        } else {
+            editor.putFloat("yourFamX", 0F);
+            editor.putFloat("yourFamY", 0F);
+        }
 
         editor.apply();
     }
 
     public void onSubmitClicked(View view) {
         finish();
+        Intent intent = new Intent(this, AddLabels.class);
+        startActivity(intent);
     }
 
     public void onSanityClicked(View view) {
@@ -117,5 +85,22 @@ public class AddHomeLocations extends AppCompatActivity {
 
         Intent intent = new Intent(this, SanityActivity.class);
         startActivity(intent);
+    }
+
+    public void onMockClicked(View view) {
+        SharedPreferences preferences = getSharedPreferences("HomeLoc", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        TextView mockView = findViewById(R.id.mockDirectionText);
+        if(mockView.getText().toString().isEmpty() == false) {
+            float mockFloat = Float.parseFloat(mockView.getText().toString());
+            editor.putFloat("mockDirection", mockFloat);
+        } else {
+            editor.putFloat("mockDirection", -1F);
+        }
+
+        finish();
+//        Intent intent = new Intent(this, CompassActivity.class);
+//        startActivity(intent);
     }
 }
