@@ -1,12 +1,12 @@
 package com.example.cse110_team16_project;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class AddLabels extends AppCompatActivity {
 
@@ -33,6 +33,7 @@ public class AddLabels extends AppCompatActivity {
     }
 
     public void onSubmitClicked(View view) {
+        this.saveProfile();
         finish();
     }
 }
