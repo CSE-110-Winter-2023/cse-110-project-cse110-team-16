@@ -42,7 +42,7 @@ public class AddHomeLocations extends AppCompatActivity {
 //        friendHomeView.setText(friendHome);
 //    }
 
-    public float[] storeCoords(String coords) {
+    public static float[] storeCoords(String coords) {
         coords = coords.substring(1,coords.length() - 1);
         String[] arrOfStr = coords.split(", ", 2);
 
@@ -75,6 +75,7 @@ public class AddHomeLocations extends AppCompatActivity {
     }
 
     public void onSubmitClicked(View view) {
+        saveProfile();
         finish();
         Intent intent = new Intent(this, AddLabels.class);
         startActivity(intent);
