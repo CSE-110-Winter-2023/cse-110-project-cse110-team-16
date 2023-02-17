@@ -41,7 +41,7 @@ public class CompassActivityTest {
         labelPreferences.edit().putString("famLabel", "Parents' Home").commit();
 
         SharedPreferences locationPreferences = RuntimeEnvironment.getApplication().
-                getSharedPreferences("FamHomeLoc", Context.MODE_PRIVATE);
+                getSharedPreferences("famHomeLoc", Context.MODE_PRIVATE);
         locationPreferences.edit().putFloat("yourFamX", 32.13164f).commit();
         locationPreferences.edit().putFloat("yourFamY", 22.13144f).commit();
         assertEquals(32.13164f,locationPreferences.getFloat("yourFamX",-1f),.0001f);
@@ -52,8 +52,8 @@ public class CompassActivityTest {
             assertNotNull(activity.getHomes());
             assertEquals(1,activity.getHomes().size());
             assertEquals("Parents' Home", activity.getHomes().get(0).getLabel());
-            //assertEquals(32.13164, activity.getHomes().get(0).getCoordinates().getLatitude(),0.001);
-            //assertEquals(22.13144, activity.getHomes().get(0).getCoordinates().getLongitude(),0.001);
+            assertEquals(32.13164, activity.getHomes().get(0).getCoordinates().getLatitude(),0.001);
+            assertEquals(22.13144, activity.getHomes().get(0).getCoordinates().getLongitude(),0.001);
         });
     }
 }
