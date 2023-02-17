@@ -17,7 +17,7 @@ public class Home{
         this.coordinates = coordinates;
         this.label = label;
     }
-    public void setCoordinates(Coordinates coordinates){
+    public void setCoordinates(@NonNull Coordinates coordinates){
         this.coordinates = coordinates;
     }
     public Coordinates getCoordinates(){

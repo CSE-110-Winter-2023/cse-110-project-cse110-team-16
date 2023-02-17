@@ -4,8 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-
-
 /*
 User class is responsible for storing information about the User's location and information.
 It is NOT responsible for updating the User position, this is currently handled in UserTracker.

@@ -19,10 +19,6 @@ public class Coordinates extends Pair<Double,Double>{
         return this.first;
     }
 
-    public String convertToString(){
-        return this.first + "," + this.second;
-    }
-
     //https://www.movable-type.co.uk/scripts/latlong.html
     //initial bearing
     public float bearingTo(@NonNull Coordinates c){

@@ -41,6 +41,7 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.test:rules:1.5.0'
     def room_version = "2.5.0"
 
     implementation 'androidx.appcompat:appcompat:1.6.0'
@@ -55,6 +56,8 @@ dependencies {
     testImplementation 'androidx.test:core:1.4.0'
     testImplementation 'androidx.test.ext:junit:1.1.3'
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
+    androidTestImplementation "androidx.test:rules:1.3.0"
+    androidTestImplementation "com.android.support.test:runner:1.0.0"
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 

@@ -24,7 +24,7 @@ public class CoordinatesTest {
         assertEquals(-2.146,c.second,0.0001);
     }
     @Test
-    public void testbearingTo(){
+    public void testBearingTo(){
         Coordinates c = new Coordinates(1,2);
         Coordinates d = new Coordinates(3,2);
         Coordinates e = new Coordinates(3,4);
