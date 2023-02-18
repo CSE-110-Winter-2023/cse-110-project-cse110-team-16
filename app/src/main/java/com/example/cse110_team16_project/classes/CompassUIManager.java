@@ -66,6 +66,7 @@ public class CompassUIManager {
 
     public void updateHomeIconDirections( float userDirection, List<Float> homeDirections) {
             // Set direction for sample home
+            if(homeDirections.size() == 0) return;
             updateIconDirection(sampleHome, homeDirections.get(0) - userDirection);
     }
 
