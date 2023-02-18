@@ -151,6 +151,10 @@ public class CompassActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
     }
 
+    public CompassUIManager getManager() {
+        return manager;
+    }
+
     public void onBackClicked(View view) {
         startActivity(new Intent(this, AddHomeLocations.class));
     }

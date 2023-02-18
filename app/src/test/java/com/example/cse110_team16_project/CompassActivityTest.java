@@ -32,6 +32,7 @@ import org.robolectric.Shadows;
 import org.robolectric.annotation.LooperMode;
 import org.robolectric.shadows.ShadowApplication;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 @RunWith(RobolectricTestRunner.class)
@@ -81,15 +82,15 @@ public class CompassActivityTest {
             ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams)
                     activity.findViewById(R.id.sampleHome).getLayoutParams();
             try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
+                activity.getManager().getFuture().get();
+            } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
             assertEquals(174,layoutParams.circleAngle,1f);
             activity.getUser().setDirection(90);
             try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
+                activity.getManager().getFuture().get();
+            } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
             shadowOf(Looper.getMainLooper()).idle();

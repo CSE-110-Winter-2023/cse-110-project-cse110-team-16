@@ -30,6 +30,7 @@ import org.robolectric.annotation.LooperMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 @RunWith(RobolectricTestRunner.class)
@@ -42,6 +43,7 @@ public class CompassUIManagerTest {
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule
             .grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
 
+    //not much mocking and very intertwined for a unit test
     @Test
     public void testUpdateCompassDirection() {
         ActivityScenario<CompassActivity> scenario = ActivityScenario.launch(CompassActivity.class);
@@ -59,7 +61,9 @@ public class CompassUIManagerTest {
             activity.getUser().setDirection(30);
             assertEquals(30f,activity.getUser().getDirection().getValue(),0.5f);
             try {
-                Thread.sleep(1000);
+                activity.getManager().getFuture().get();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

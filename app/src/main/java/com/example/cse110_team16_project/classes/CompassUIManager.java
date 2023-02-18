@@ -14,11 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 
 public class CompassUIManager {
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
-
+    private Future<Void> future;
     //private static final float SCREEN_PERCENTAGE = .475f;
 
     Activity activity;
@@ -38,17 +39,19 @@ public class CompassUIManager {
         populateHomeIcons(homeDirectionUpdater.getHomes());
 
         user.getDirection().observe((LifecycleOwner) activity, direction ->
-                backgroundThreadExecutor.submit(() ->
-                        updateUI(direction, homeDirectionUpdater.
-                                getLastKnownHomeDirectionsFromUser().getValue())
-                )
+                this.future = backgroundThreadExecutor.submit(() -> {
+                    updateUI(direction, homeDirectionUpdater.
+                            getLastKnownHomeDirectionsFromUser().getValue());
+                    return null;
+                })
         );
 
         homeDirectionUpdater.getLastKnownHomeDirectionsFromUser().observe((LifecycleOwner) activity,
-                directions -> backgroundThreadExecutor.submit(() -> {
+                directions -> this.future = backgroundThreadExecutor.submit(() -> {
                     if (user.getDirection().getValue() != null) {
                         updateUI(user.getDirection().getValue(), directions);
                     }
+                    return null;
                 })
         );
     }
@@ -92,4 +95,6 @@ public class CompassUIManager {
             //Log.d(TAG,Float.toString(compass.getRotation()));
         });
     }
+
+    public Future<Void> getFuture(){return future;}
 }
