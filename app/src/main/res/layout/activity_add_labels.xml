@@ -38,6 +38,7 @@
         android:layout_width="224dp"
         android:layout_height="68dp"
         android:ems="10"
+        android:visibility="invisible"
         android:hint="Best Friend's Home Label"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
