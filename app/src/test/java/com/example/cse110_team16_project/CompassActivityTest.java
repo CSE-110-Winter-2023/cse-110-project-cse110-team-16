@@ -55,7 +55,7 @@ public class CompassActivityTest {
     */
     @Test
     @LooperMode(PAUSED)
-    public void IntegrationTest() {
+    public void Story4Scenario1Test() {
         SharedPreferences labelPreferences = RuntimeEnvironment.getApplication().
                 getSharedPreferences("FamHomeLabel", Context.MODE_PRIVATE);
         labelPreferences.edit().putString("famLabel", "Parents' Home").commit();
