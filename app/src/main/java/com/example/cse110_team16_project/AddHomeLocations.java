@@ -102,7 +102,7 @@ public class AddHomeLocations extends AppCompatActivity {
 
 //        saveProfile();
         finish();
-//        Intent intent = new Intent(this, CompassActivity.class);
-//        startActivity(intent);
+        Intent intent = new Intent(this, CompassActivity.class);
+        startActivity(intent);
     }
 }

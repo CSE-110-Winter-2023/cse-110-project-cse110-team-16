@@ -1,6 +1,7 @@
 package com.example.cse110_team16_project;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -35,5 +36,7 @@ public class AddLabels extends AppCompatActivity {
     public void onSubmitClicked(View view) {
         this.saveProfile();
         finish();
+        Intent intent = new Intent(this, CompassActivity.class);
+        startActivity(intent);
     }
 }
