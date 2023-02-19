@@ -74,7 +74,7 @@ public class CompassUIManager {
     public void updateIconDirection(TextView tv, Float homeDirection) {
         ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) tv.getLayoutParams();
         layoutParams.circleAngle = homeDirection;
-        tv.setLayoutParams(layoutParams);
+        activity.runOnUiThread(() -> tv.setLayoutParams(layoutParams));
         // Deprecated label setting
         //tv.setText("Best Friend's House");
     }
