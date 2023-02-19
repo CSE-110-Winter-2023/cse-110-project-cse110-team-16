@@ -1,6 +1,8 @@
 package com.example.cse110_team16_project;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -12,7 +14,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent intent = new Intent(this,AddHomeLocations.class);
+        SharedPreferences preferences = getSharedPreferences("HomeLoc", Context.MODE_PRIVATE);
+        Intent intent;
+        if(preferences.contains("yourFamX") && preferences.contains("yourFamY")) {
+            intent = new Intent(this, CompassActivity.class);
+        }
+        else {
+            intent = new Intent(this, AddHomeLocations.class);
+        }
         startActivity(intent);
         finish();
     }
