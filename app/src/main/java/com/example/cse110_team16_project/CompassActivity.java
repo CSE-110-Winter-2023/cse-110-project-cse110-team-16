@@ -12,11 +12,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.room.Room;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.View;
 
 import com.example.cse110_team16_project.Room.AppDatabase;
 import com.example.cse110_team16_project.classes.CompassUIManager;
@@ -147,5 +149,11 @@ public class CompassActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent){
         super.onNewIntent(intent);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+    }
+
+    public void onBackClicked(View view) {
+        Intent homeLocationActivity = new Intent(this, AddHomeLocations.class);
+        homeLocationActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(homeLocationActivity);
     }
 }
