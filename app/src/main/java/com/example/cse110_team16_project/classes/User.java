@@ -7,7 +7,8 @@ import androidx.lifecycle.MutableLiveData;
 /*
 User class is responsible for storing information about the User's location and information.
 It is NOT responsible for updating the User position, this is currently handled in UserTracker.
-coordinates is not allowed to be null
+
+coordinates is not allowed to be null and if a null is passed to setCoordinates, user will not update
  */
 public class User{
     private final MutableLiveData<Coordinates> coordinates;
@@ -18,8 +19,8 @@ public class User{
         direction = new MutableLiveData<>(0.0f);
     }
 
-    public void setCoordinates(@NonNull Coordinates coordinates) {
-        this.coordinates.postValue(coordinates);
+    public void setCoordinates(Coordinates coordinates) {
+        if(coordinates != null) this.coordinates.postValue(coordinates);
     }
 
     public LiveData<Coordinates> getCoordinates() {
