@@ -86,6 +86,7 @@ public class CompassActivityTest {
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
+            shadowOf(Looper.getMainLooper()).idle();
             assertEquals(174,layoutParams.circleAngle,1f);
             activity.getUser().setDirection(90);
             try {
