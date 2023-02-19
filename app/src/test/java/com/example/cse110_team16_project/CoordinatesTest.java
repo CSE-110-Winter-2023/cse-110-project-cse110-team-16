@@ -32,4 +32,11 @@ public class CoordinatesTest {
         assertEquals(90,d.bearingTo(e),0.10);
         assertEquals(45,c.bearingTo(e),0.10);
     }
+
+    @Test
+    public void testBearingToAtZeros() {
+        Coordinates c = new Coordinates(0,0);
+        Coordinates d = new Coordinates(0,0);
+        assertEquals(0,c.bearingTo(d),0.10);
+    }
 }
