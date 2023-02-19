@@ -12,11 +12,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        Intent intent = new Intent(this,CompassActivity.class);
-//        startActivity(intent);
+        Intent intent = new Intent(this,AddHomeLocations.class);
+        startActivity(intent);
     }
 
-    public void goToAddHomeLocations(View view) {
+    /*public void goToAddHomeLocations(View view) {
         Intent intent = new Intent(this, AddHomeLocations.class);
         startActivity(intent);
     }
@@ -24,5 +24,5 @@ public class MainActivity extends AppCompatActivity {
     public void goToAddLabels(View view) {
         Intent intent = new Intent(this, AddLabels.class);
         startActivity(intent);
-    }
+    }*/
 }
