@@ -70,7 +70,7 @@ public class CompassActivity extends AppCompatActivity {
 
         //TODO: Verify correct name parameter
         SharedPreferences labelPreferences = getSharedPreferences("FamHomeLabel",Context.MODE_PRIVATE);
-        SharedPreferences locationPreferences = getSharedPreferences("famHomeLoc", Context.MODE_PRIVATE);
+        SharedPreferences locationPreferences = getSharedPreferences("HomeLoc", Context.MODE_PRIVATE);
 
         homes = new ArrayList<>();
 
