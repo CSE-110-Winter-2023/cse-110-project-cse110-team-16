@@ -75,16 +75,20 @@ public class CompassActivityTest {
             assertEquals(32.13164, activity.getHomes().get(0).getCoordinates().getLatitude(),0.001);
             assertEquals(22.13144, activity.getHomes().get(0).getCoordinates().getLongitude(),0.001);
 
-            activity.getUser().setCoordinates(new Coordinates(33.1643,22.0011));
-            assertEquals(new Coordinates(33.1643,22.0011),activity.getUser().getCoordinates().getValue());
             ImageView compassView = activity.findViewById(R.id.compassRing);
             assertEquals(0.0f,compassView.getRotation(),0.1f);
+
+            activity.getUser().setCoordinates(new Coordinates(33.1643,22.0011));
+            assertEquals(new Coordinates(33.1643,22.0011),activity.getUser().getCoordinates().getValue());
+
             try {
+                activity.getHomeDirectionUpdater().getFuture().get();
                 activity.getManager().getFuture().get();
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
             shadowOf(Looper.getMainLooper()).idle();
+
             ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams)
                     activity.findViewById(R.id.sampleHome).getLayoutParams();
             assertEquals(174,layoutParams.circleAngle,1f);

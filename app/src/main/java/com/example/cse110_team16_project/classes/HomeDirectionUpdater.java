@@ -11,10 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class HomeDirectionUpdater {
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
-
+    private Future<Void> future;
     private List<Home> homes;
     private final MutableLiveData<List<Float>> lastKnownHomeDirectionsFromUser;
     private final User user;
@@ -26,7 +27,7 @@ public class HomeDirectionUpdater {
         setAllDirectionsDefault();
 
         user.getCoordinates().observe((LifecycleOwner) activity, coordinates ->
-                backgroundThreadExecutor.submit(() -> {
+                this.future = backgroundThreadExecutor.submit(() -> {
                     updateAllHomesDirectionFromUser();
                     return null;
                 })
@@ -64,4 +65,6 @@ public class HomeDirectionUpdater {
     public Float getHomeDirectionFromUser(Coordinates userCoordinates, Home home){
         return userCoordinates.bearingTo(home.getCoordinates());
     }
+
+    public Future<Void>  getFuture() { return future; }
 }
