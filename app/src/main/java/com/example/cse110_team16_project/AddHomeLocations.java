@@ -14,7 +14,7 @@ public class AddHomeLocations extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_home_locations);
-        // loadProfile();
+        loadProfile();
     }
 
     @Override
@@ -23,22 +23,27 @@ public class AddHomeLocations extends AppCompatActivity {
         saveProfile();
     }
 
-//    public void loadProfile() {
-//        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-//
+    public void loadProfile() {
+        // SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences("HomeLoc", Context.MODE_PRIVATE);
+
 //        String home = preferences.getString("home", "");
 //        TextView homeView = findViewById(R.id.yourHomeField);
-//
-//        String famHome = preferences.getString("famHome", "");
-//        TextView famHomeView = findViewById(R.id.yourFamHomeField);
-//
+
+        // String famHome = preferences.getString("famHome", "");
+        if(preferences.contains("yourFamX") && preferences.contains("yourFamY")) {
+            float famHomeX = preferences.getFloat("yourFamX", 0.0F);
+            float famHomeY = preferences.getFloat("yourFamY", 0.0F);
+            TextView famHomeView = findViewById(R.id.yourFamHomeField);
+            famHomeView.setText("(" + famHomeX + ", " + famHomeY + ")");
+        }
+
 //        String friendHome = preferences.getString("friendHome", "");
 //        TextView friendHomeView = findViewById(R.id.yourBestFriendHomeField);
-//
-//        homeView.setText(home);
-//        famHomeView.setText(famHome);
-//        friendHomeView.setText(friendHome);
-//    }
+
+        // homeView.setText(home);
+        // friendHomeView.setText(friendHome);
+    }
 
     public static float[] storeCoords(String coords) {
         coords = coords.substring(1,coords.length() - 1);
