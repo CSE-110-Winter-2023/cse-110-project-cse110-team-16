@@ -41,7 +41,7 @@ public class CompassActivityTest {
         labelPreferences.edit().putString("famLabel", "Parents' Home").commit();
 
         SharedPreferences locationPreferences = RuntimeEnvironment.getApplication().
-                getSharedPreferences("famHomeLoc", Context.MODE_PRIVATE);
+                getSharedPreferences("HomeLoc", Context.MODE_PRIVATE);
         locationPreferences.edit().putFloat("yourFamX", 32.13164f).commit();
         locationPreferences.edit().putFloat("yourFamY", 22.13144f).commit();
         assertEquals(32.13164f,locationPreferences.getFloat("yourFamX",-1f),.0001f);
