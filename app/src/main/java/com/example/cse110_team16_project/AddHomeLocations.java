@@ -36,6 +36,8 @@ public class AddHomeLocations extends AppCompatActivity {
             float famHomeY = preferences.getFloat("yourFamY", 0.0F);
             TextView famHomeView = findViewById(R.id.yourFamHomeField);
             famHomeView.setText("(" + famHomeX + ", " + famHomeY + ")");
+            //Disallows edits
+            famHomeView.setEnabled(false);
         }
 
 //        String friendHome = preferences.getString("friendHome", "");

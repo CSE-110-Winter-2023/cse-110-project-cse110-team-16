@@ -31,6 +31,8 @@ public class AddLabels extends AppCompatActivity {
             String famHomeLabel = preferences.getString("famLabel", "");
             TextView famHomeView = findViewById(R.id.famHomeLabelField);
             famHomeView.setText(famHomeLabel);
+            //Disallows edits
+            famHomeView.setEnabled(false);
         }
     }
 
