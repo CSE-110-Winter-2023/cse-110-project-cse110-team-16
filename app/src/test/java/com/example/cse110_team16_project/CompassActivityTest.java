@@ -79,14 +79,14 @@ public class CompassActivityTest {
             assertEquals(new Coordinates(33.1643,22.0011),activity.getUser().getCoordinates().getValue());
             ImageView compassView = activity.findViewById(R.id.compassRing);
             assertEquals(0.0f,compassView.getRotation(),0.1f);
-            ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams)
-                    activity.findViewById(R.id.sampleHome).getLayoutParams();
             try {
                 activity.getManager().getFuture().get();
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
             shadowOf(Looper.getMainLooper()).idle();
+            ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams)
+                    activity.findViewById(R.id.sampleHome).getLayoutParams();
             assertEquals(174,layoutParams.circleAngle,1f);
             activity.getUser().setDirection(90);
             try {
