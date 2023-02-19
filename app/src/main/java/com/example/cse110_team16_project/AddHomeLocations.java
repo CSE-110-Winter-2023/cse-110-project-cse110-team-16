@@ -46,7 +46,9 @@ public class AddHomeLocations extends AppCompatActivity {
     }
 
     public static float[] storeCoords(String coords){
-        coords = coords.substring(1,coords.length() - 1);
+        if(coords.charAt(0) == '('){
+            coords = coords.substring(1,coords.length() - 1);
+        }
         String[] arrOfStr = coords.split(",", 2);
 
         float xCoord = Float.parseFloat(arrOfStr[0]);
