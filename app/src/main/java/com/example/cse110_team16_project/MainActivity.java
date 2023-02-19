@@ -16,14 +16,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         SharedPreferences preferences = getSharedPreferences("HomeLoc", Context.MODE_PRIVATE);
         Intent intent;
-        if(preferences.contains("yourFamX") && preferences.contains("yourFamY")) {
+        if(preferences.contains("yourFamX")) {
             intent = new Intent(this, CompassActivity.class);
         }
         else {
             intent = new Intent(this, AddHomeLocations.class);
+            intent.putExtra("isNewUser",true);
         }
-        startActivity(intent);
         finish();
+        startActivity(intent);
+
     }
 
     /*public void goToAddHomeLocations(View view) {

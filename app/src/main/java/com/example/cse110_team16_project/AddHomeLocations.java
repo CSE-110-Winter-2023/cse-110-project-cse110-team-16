@@ -36,6 +36,8 @@ public class AddHomeLocations extends AppCompatActivity {
             float famHomeY = preferences.getFloat("yourFamY", 0.0F);
             TextView famHomeView = findViewById(R.id.yourFamHomeField);
             famHomeView.setText("(" + famHomeX + ", " + famHomeY + ")");
+            //Disallows edits
+            famHomeView.setEnabled(false);
         }
 
 //        String friendHome = preferences.getString("friendHome", "");
@@ -45,19 +47,20 @@ public class AddHomeLocations extends AppCompatActivity {
         // friendHomeView.setText(friendHome);
     }
 
-    public static float[] storeCoords(String coords) {
-        coords = coords.substring(1,coords.length() - 1);
-        String[] arrOfStr = coords.split(", ", 2);
+    public static float[] storeCoords(String coords){
+        if(coords.charAt(0) == '('){
+            coords = coords.substring(1,coords.length() - 1);
+        }
+        String[] arrOfStr = coords.split(",", 2);
 
         float xCoord = Float.parseFloat(arrOfStr[0]);
         float yCoord = Float.parseFloat(arrOfStr[1]);
 
-        float[] toRet = new float[]{xCoord, yCoord};
-        return toRet;
+        return new float[]{xCoord, yCoord};
 
     }
 
-    public void saveProfile() {
+    public boolean saveProfile() {
         SharedPreferences preferences = getSharedPreferences("HomeLoc", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
@@ -65,23 +68,30 @@ public class AddHomeLocations extends AppCompatActivity {
         TextView famView = findViewById(R.id.yourFamHomeField);
         TextView friendView = findViewById(R.id.yourBestFriendHomeField);
 
-        if(famView.getText().toString().isEmpty() == false) {
-            float[] yourFamFloats = this.storeCoords(famView.getText().toString());
-            editor.putFloat("yourFamX", yourFamFloats[0]);
-            editor.putFloat("yourFamY", yourFamFloats[1]);
+        if(!famView.getText().toString().isEmpty()) {
+            try {
+                float[] yourFamFloats = this.storeCoords(famView.getText().toString());
+                editor.putFloat("yourFamX", yourFamFloats[0]);
+                editor.putFloat("yourFamY", yourFamFloats[1]);
+            } catch(Exception e) {
+                Utilities.showAlert(this, "Invalid location input.");
+                return false;
+            }
         } else {
-            editor.putFloat("yourFamX", 0F);
-            editor.putFloat("yourFamY", 0F);
+            Utilities.showAlert(this, "Please enter at least one location");
+            return false;
         }
 
         editor.apply();
+        return true;
     }
 
     public void onSubmitClicked(View view) {
-        saveProfile();
-        finish();
-        Intent intent = new Intent(this, AddLabels.class);
-        startActivity(intent);
+        if(saveProfile()) {
+            finish();
+            Intent intent = new Intent(this, AddLabels.class);
+            startActivity(intent);
+        }
     }
 
     public void onSanityClicked(View view) {
@@ -96,7 +106,7 @@ public class AddHomeLocations extends AppCompatActivity {
         SharedPreferences.Editor editor = preferences.edit();
 
         TextView mockView = findViewById(R.id.mockDirectionText);
-        if(mockView.getText().toString().isEmpty() == false) {
+        if(!mockView.getText().toString().isEmpty()) {
             float mockFloat = Float.parseFloat(mockView.getText().toString());
             editor.putFloat("mockDirection", mockFloat);
         } else {
@@ -105,9 +115,11 @@ public class AddHomeLocations extends AppCompatActivity {
 
         editor.apply();
 
-//        saveProfile();
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if(extras != null && extras.getBoolean("isNewUser")) return;
         finish();
-        Intent intent = new Intent(this, CompassActivity.class);
+        intent = new Intent(this, CompassActivity.class);
         startActivity(intent);
     }
 }
