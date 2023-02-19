@@ -152,8 +152,6 @@ public class CompassActivity extends AppCompatActivity {
     }
 
     public void onBackClicked(View view) {
-        Intent homeLocationActivity = new Intent(this, AddHomeLocations.class);
-        homeLocationActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(homeLocationActivity);
+        startActivity(new Intent(this, AddHomeLocations.class));
     }
 }
