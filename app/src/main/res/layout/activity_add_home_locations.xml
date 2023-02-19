@@ -99,6 +99,7 @@
             android:layout_height="wrap_content"
             android:ems="5"
             android:hint="Degrees"
+            android:inputType="number"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.335"
