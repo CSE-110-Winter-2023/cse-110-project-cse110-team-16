@@ -83,8 +83,7 @@ public class CompassActivity extends AppCompatActivity {
         String[] prefLongStrings = new String[]{"yourFamY"};
 
         for (int i = 0; i < prefLabelStrings.length; i++) {
-            String label = labelPreferences.getString(prefLabelStrings[i], null);
-            if(label == null) continue;
+            String label = labelPreferences.getString(prefLabelStrings[i], "Parents' Home");
             double lat = locationPreferences.getFloat(prefLatStrings[i], 0.0f);
             double longitude = locationPreferences.getFloat(prefLongStrings[i], 0.0f);
             Coordinates parentCoordinates = new Coordinates(lat,longitude);
