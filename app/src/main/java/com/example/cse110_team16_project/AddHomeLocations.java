@@ -116,6 +116,8 @@ public class AddHomeLocations extends AppCompatActivity {
         editor.apply();
 
 //        saveProfile();
+        preferences = getSharedPreferences("FamHomeLabel", Context.MODE_PRIVATE);
+        if(preferences.contains("famLabel")) return;
         finish();
         Intent intent = new Intent(this, CompassActivity.class);
         startActivity(intent);
