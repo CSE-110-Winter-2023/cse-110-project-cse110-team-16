@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Intent intent = new Intent(this,AddHomeLocations.class);
         startActivity(intent);
+        finish();
     }
 
     /*public void goToAddHomeLocations(View view) {
