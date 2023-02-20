@@ -154,6 +154,8 @@ public class CompassActivity extends AppCompatActivity {
         return manager;
     }
 
+    public HomeDirectionUpdater getHomeDirectionUpdater() { return homeDirectionUpdater; }
+
     public void onBackClicked(View view) {
         startActivity(new Intent(this, AddHomeLocations.class));
     }
