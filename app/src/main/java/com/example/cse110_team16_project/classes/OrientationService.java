@@ -95,7 +95,7 @@ public class OrientationService implements SensorEventListener{
     public void setMockOrientationSource(float mockOrientation){
         unregisterSensorListeners();
         mockMode = true;
-        azimuth.postValue(mockOrientation);
+        azimuth.postValue((float) (mockOrientation*Math.PI/180));
     }
 
     public void disableMockMode(){
