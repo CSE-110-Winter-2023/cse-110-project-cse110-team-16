@@ -22,7 +22,7 @@ public class Coordinates extends Pair<Double,Double>{
     //https://www.movable-type.co.uk/scripts/latlong.html
     //initial bearing
     //currently returns 0 if both coordinates are the same
-    public float bearingTo(@NonNull Coordinates c){
+    public Degrees bearingTo(@NonNull Coordinates c){
         double lat1 = Math.toRadians(this.getLatitude());
         double lat2 = Math.toRadians(c.getLatitude());
         double lng1 = Math.toRadians(this.getLongitude());
@@ -31,7 +31,7 @@ public class Coordinates extends Pair<Double,Double>{
         double y = Math.sin(dLon) * Math.cos(lat2);
         double x = Math.cos(lat1)*Math.sin(lat2) - Math.sin(lat1)*Math.cos(lat2)*Math.cos(dLon);
         double theta = (Math.atan2(y, x));
-        return (float) ((Math.toDegrees(theta) + 360) % 360);
+        return new Degrees(Math.toDegrees(theta));
 
     }
 }

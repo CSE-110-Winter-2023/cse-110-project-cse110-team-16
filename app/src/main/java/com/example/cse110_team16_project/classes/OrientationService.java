@@ -10,6 +10,8 @@ import android.hardware.SensorManager;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.cse110_team16_project.Room.Converters;
+
 public class OrientationService implements SensorEventListener{
     private static OrientationService instance;
     private boolean mockMode = false;
@@ -18,7 +20,7 @@ public class OrientationService implements SensorEventListener{
     private float[] accelerometerReading;
     private float[] magnetometerReading;
     private float minChange;
-    private final MutableLiveData<Float> azimuth;
+    private final MutableLiveData<Radians> azimuth;
 
     public static OrientationService singleton(Activity activity, float minChange){
         if(instance == null) {
@@ -80,8 +82,8 @@ public class OrientationService implements SensorEventListener{
             float[] orientation = new float[3];
             SensorManager.getOrientation(r,orientation);
             if(this.azimuth.getValue() == null || Math.abs(orientation[0] -
-                    this.azimuth.getValue()) > minChange) {
-                this.azimuth.postValue(orientation[0]);
+                    this.azimuth.getValue().getRadians()) > minChange) {
+                this.azimuth.postValue(new Radians(orientation[0]));
             }
         }
     }
@@ -90,12 +92,12 @@ public class OrientationService implements SensorEventListener{
         sensorManager.unregisterListener(this);
     }
 
-    public LiveData<Float> getOrientation() {return this.azimuth;}
+    public LiveData<Radians> getOrientation() {return this.azimuth;}
 
-    public void setMockOrientationSource(float mockOrientation){
+    public void setMockOrientationSource(Degrees mockOrientation){
         unregisterSensorListeners();
         mockMode = true;
-        azimuth.postValue((float) (mockOrientation*Math.PI/180));
+        azimuth.postValue(Converters.DegreesToRadians(mockOrientation));
     }
 
     public void disableMockMode(){

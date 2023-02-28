@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project;
+package com.example.cse110_team16_project.classes;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -46,4 +46,5 @@ public class Utilities {
             return Optional.empty();
         }
     }
+
 }

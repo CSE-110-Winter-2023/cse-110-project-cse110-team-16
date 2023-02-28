@@ -12,11 +12,11 @@ coordinates is not allowed to be null and if a null is passed to setCoordinates,
  */
 public class User{
     private final MutableLiveData<Coordinates> coordinates;
-    private final MutableLiveData<Float> direction;
+    private final MutableLiveData<Degrees> direction;
 
     public User(){
         coordinates = new MutableLiveData<>(new Coordinates(0,0)); //Null Island
-        direction = new MutableLiveData<>(0.0f);
+        direction = new MutableLiveData<>(new Degrees(0.0));
     }
 
     public void setCoordinates(Coordinates coordinates) {
@@ -27,12 +27,11 @@ public class User{
         return coordinates;
     }
 
-    //should send a value in degrees
-    public void setDirection(float direction){
+    public void setDirection(Degrees direction){
         this.direction.postValue(direction);
     }
 
-    public LiveData<Float> getDirection(){
+    public LiveData<Degrees> getDirection(){
         return this.direction;
     }
 

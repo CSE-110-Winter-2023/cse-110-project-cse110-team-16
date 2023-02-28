@@ -5,6 +5,8 @@ import android.location.Location;
 import androidx.room.TypeConverter;
 
 import com.example.cse110_team16_project.classes.Coordinates;
+import com.example.cse110_team16_project.classes.Degrees;
+import com.example.cse110_team16_project.classes.Radians;
 
 public class Converters {
     @TypeConverter
@@ -21,5 +23,13 @@ public class Converters {
 
     public static Coordinates LocationToCoordinates(Location location){
         return new Coordinates(location.getLatitude(),location.getLongitude());
+    }
+
+    public static Degrees RadiansToDegrees(Radians radians){
+        return new Degrees(Math.toDegrees(radians.getRadians()));
+    }
+
+    public static Radians DegreesToRadians(Degrees degrees){
+        return new Radians(Math.toRadians(degrees.getDegrees()));
     }
 }

@@ -23,6 +23,7 @@ import android.view.View;
 import com.example.cse110_team16_project.Room.AppDatabase;
 import com.example.cse110_team16_project.classes.CompassUIManager;
 import com.example.cse110_team16_project.classes.Coordinates;
+import com.example.cse110_team16_project.classes.Degrees;
 import com.example.cse110_team16_project.classes.Home;
 import com.example.cse110_team16_project.classes.HomeDirectionUpdater;
 import com.example.cse110_team16_project.classes.User;
@@ -58,8 +59,7 @@ public class CompassActivity extends AppCompatActivity {
         runOnUiThread(() -> {
             userTracker = new UserTracker(this, user);
             homeDirectionUpdater = new HomeDirectionUpdater(this, homes, user);
-            manager = new CompassUIManager(this, user, homeDirectionUpdater, findViewById(R.id.compassRing),
-                    findViewById(R.id.sampleHome));
+            manager = new CompassUIManager(this, user, findViewById(R.id.compassRing));
         });
     }
 
@@ -139,7 +139,7 @@ public class CompassActivity extends AppCompatActivity {
         if(userTracker != null) {
             userTracker.registerListeners();
             SharedPreferences preferences = getSharedPreferences("HomeLoc", MODE_PRIVATE);
-            float mockDir = preferences.getFloat("mockDirection", -1.0F);
+            Degrees mockDir = new Degrees(preferences.getFloat("mockDirection", -1.0F));
             userTracker.mockUserDirection(mockDir);
         }
     }

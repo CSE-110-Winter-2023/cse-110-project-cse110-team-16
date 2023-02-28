@@ -43,7 +43,7 @@ public class UserTracker {
         this.orientationService = orientationService;
         this.orientationService.getOrientation().observe((LifecycleOwner) activity, azimuth ->
                 backgroundThreadExecutor.submit(()-> {
-                            user.setDirection((float)((Math.toDegrees(azimuth)+360)%360));
+                            user.setDirection(Converters.RadiansToDegrees(azimuth));
                             return null;
                         }
                 ));
@@ -59,8 +59,8 @@ public class UserTracker {
     }
 
     //disables mocking of userOrientation if param < 0f
-    public void mockUserDirection(float mockDirection){
-        if(mockDirection < 0f) orientationService.disableMockMode();
+    public void mockUserDirection(Degrees mockDirection){
+        if(mockDirection.getDegrees() < 0) orientationService.disableMockMode();
         else orientationService.setMockOrientationSource(mockDirection);
     }
 }

@@ -13,6 +13,7 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import com.example.cse110_team16_project.classes.Coordinates;
+import com.example.cse110_team16_project.classes.Degrees;
 import com.example.cse110_team16_project.classes.Home;
 import com.example.cse110_team16_project.classes.HomeDirectionUpdater;
 import com.example.cse110_team16_project.classes.User;
@@ -52,12 +53,12 @@ public class HomeDirectionUpdaterTest {
             HomeDirectionUpdater homeDirectionUpdater = new HomeDirectionUpdater(activity, homes, user);
             assertEquals(new ArrayList<>(Arrays.asList(0f,0f)),homeDirectionUpdater.getLastKnownHomeDirectionsFromUser().getValue());
             homeDirectionUpdater.updateAllHomesDirectionFromUser();
-            ArrayList<Float> expected = new ArrayList<>(Arrays.asList(homeDirectionUpdater.
+            ArrayList<Degrees> expected = new ArrayList<>(Arrays.asList(homeDirectionUpdater.
                     getHomeDirectionFromUser(Objects.requireNonNull(user.getCoordinates().getValue()),homes.get(0)),
                     homeDirectionUpdater.
                             getHomeDirectionFromUser(user.getCoordinates().getValue(),homes.get(1))));
-            assertEquals(49f,expected.get(0),.1f);
-            assertEquals(0f,expected.get(1),.1f);
+            assertEquals(49,expected.get(0).getDegrees(),.1);
+            assertEquals(0,expected.get(1).getDegrees(),.1);
             assertEquals(expected,
                     homeDirectionUpdater.getLastKnownHomeDirectionsFromUser().getValue());
 

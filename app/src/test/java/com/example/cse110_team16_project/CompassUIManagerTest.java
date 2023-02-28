@@ -16,6 +16,7 @@ import androidx.test.rule.GrantPermissionRule;
 
 import com.example.cse110_team16_project.classes.CompassUIManager;
 import com.example.cse110_team16_project.classes.Coordinates;
+import com.example.cse110_team16_project.classes.Degrees;
 import com.example.cse110_team16_project.classes.Home;
 import com.example.cse110_team16_project.classes.HomeDirectionUpdater;
 import com.example.cse110_team16_project.classes.User;
@@ -47,24 +48,14 @@ public class CompassUIManagerTest {
     @Test
     public void testUpdateCompassDirection() {
         ActivityScenario<CompassActivity> scenario = ActivityScenario.launch(CompassActivity.class);
-        SharedPreferences labelPreferences = RuntimeEnvironment.getApplication().
-                getSharedPreferences("FamHomeLabel", Context.MODE_PRIVATE);
-        labelPreferences.edit().putString("famLabel", "Parents' Home").commit();
-
-        SharedPreferences locationPreferences = RuntimeEnvironment.getApplication().
-                getSharedPreferences("famHomeLoc", Context.MODE_PRIVATE);
-        locationPreferences.edit().putFloat("yourFamX", 32.13164f).commit();
-        locationPreferences.edit().putFloat("yourFamY", 22.13144f).commit();
 
         scenario.moveToState(Lifecycle.State.RESUMED);
         scenario.onActivity(activity -> {
-            activity.getUser().setDirection(30);
-            assertEquals(30f,activity.getUser().getDirection().getValue(),0.5f);
+            activity.getUser().setDirection(new Degrees(30));
+            assertEquals(30,activity.getUser().getDirection().getValue().getDegrees(),0.5);
             try {
                 activity.getManager().getFuture().get();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
+            } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
             shadowOf(Looper.getMainLooper()).idle();
