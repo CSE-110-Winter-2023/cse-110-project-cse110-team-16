@@ -29,16 +29,16 @@ public class UserTest {
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
     @Test
     public void UserGeneralTest(){
-        User user = new User();
-        assertEquals(new Coordinates(0, 0), "Calvin");
-        assertTrue(user.getName().equals("Calvin"));
+        User user = new User(new Coordinates(0, 0), "Calvin");
+        assertEquals(new Coordinates(0, 0), user.getCoordinates().getValue());
+        assertEquals("Calvin", user.getName());
         user.setCoordinates(new Coordinates(1.1, 2.2));
         assertEquals(new Coordinates(1.1, 2.2), user.getCoordinates().getValue());
     }
     @Test
     public void testCoordinatesNotNull(){
         User user = new User();
-        assertEquals(new Coordinates(0, 0),"Calvin");
+        assertEquals(new Coordinates(0, 0),user.getCoordinates().getValue());
         try {
             user.setCoordinates(null);
             assertNotNull(user.getCoordinates().getValue());

@@ -45,4 +45,8 @@ public class CompassActivityTest {
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule
             .grant(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION);
 
+    @Test
+    public void someTest() {
+        assertEquals(2,2);
+    }
 }

@@ -26,6 +26,7 @@ import com.example.cse110_team16_project.classes.User;
 import com.example.cse110_team16_project.classes.DeviceTracker;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -59,6 +60,7 @@ public class CompassActivity extends AppCompatActivity {
     }
 
     private void loadFriends(){
+        friends = new ArrayList<>();
     }
 
     public List<CoordinateEntity> getFriends(){

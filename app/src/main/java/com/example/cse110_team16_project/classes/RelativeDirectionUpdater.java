@@ -57,7 +57,7 @@ public class RelativeDirectionUpdater {
         List<Degrees> curDirections = getLastKnownHomeDirectionsFromUser().getValue();
         List<Degrees> newDirections = new ArrayList<>(coordinateEntities.size());
         assert curDirections != null;
-        
+
         for(int i = 0; i < coordinateEntities.size(); i++){
 
             newDirections.add(Degrees.addDegrees(Converters.RadiansToDegrees(userDirection),
