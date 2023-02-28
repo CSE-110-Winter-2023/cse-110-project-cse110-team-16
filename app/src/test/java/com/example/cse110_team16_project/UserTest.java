@@ -30,18 +30,15 @@ public class UserTest {
     @Test
     public void UserGeneralTest(){
         User user = new User();
-        assertEquals(new Coordinates(0, 0), user.getCoordinates().getValue());
-        assertEquals(0.0, user.getDirection().getValue().getDegrees(), 0.10);
+        assertEquals(new Coordinates(0, 0), "Calvin");
+        assertTrue(user.getName().equals("Calvin"));
         user.setCoordinates(new Coordinates(1.1, 2.2));
         assertEquals(new Coordinates(1.1, 2.2), user.getCoordinates().getValue());
-        user.setDirection(new Degrees(218.66));
-        assertEquals(218.66, user.getDirection().getValue().getDegrees(), 0.01);
     }
     @Test
     public void testCoordinatesNotNull(){
         User user = new User();
-        assertEquals(new Coordinates(0, 0), user.getCoordinates().getValue());
-        assertEquals(0.0, user.getDirection().getValue().getDegrees(), 0.10);
+        assertEquals(new Coordinates(0, 0),"Calvin");
         try {
             user.setCoordinates(null);
             assertNotNull(user.getCoordinates().getValue());

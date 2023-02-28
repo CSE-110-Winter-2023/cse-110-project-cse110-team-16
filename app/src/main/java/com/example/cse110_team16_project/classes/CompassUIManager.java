@@ -7,8 +7,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
 
 import com.example.cse110_team16_project.R;
+import com.example.cse110_team16_project.Room.Converters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,14 +27,14 @@ public class CompassUIManager {
     Activity activity;
     private final ImageView compass;
 
-    public CompassUIManager(Activity activity, @NonNull User user,
+    public CompassUIManager(Activity activity, @NonNull LiveData<Radians> userDirection,
                             ImageView compass){
         this.activity = activity;
         this.compass = compass;
 
-        user.getDirection().observe((LifecycleOwner) activity, direction ->
+        userDirection.observe((LifecycleOwner) activity, direction ->
                 this.future = backgroundThreadExecutor.submit(() -> {
-                    updateUI(direction);
+                    updateUI(Converters.RadiansToDegrees(direction));
                     return null;
                 })
         );
