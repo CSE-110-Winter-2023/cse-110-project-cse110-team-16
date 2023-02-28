@@ -19,7 +19,6 @@ import android.view.View;
 
 import com.example.cse110_team16_project.classes.CompassUIManager;
 import com.example.cse110_team16_project.classes.CoordinateEntity;
-import com.example.cse110_team16_project.classes.Coordinates;
 import com.example.cse110_team16_project.classes.Degrees;
 import com.example.cse110_team16_project.classes.RelativeDirectionUpdater;
 import com.example.cse110_team16_project.classes.User;
@@ -33,11 +32,11 @@ import java.util.concurrent.Executors;
 
 public class CompassActivity extends AppCompatActivity {
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
-    private List<CoordinateEntity> friends;
+    private List<CoordinateEntity> coordinateEntities;
     private User user;
     private DeviceTracker deviceTracker;
-    private RelativeDirectionUpdater friendDirectionUpdater;
-    private CompassUIManager manager;
+    private RelativeDirectionUpdater relativeDirectionUpdater;
+    private CompassUIManager compassUIManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,21 +49,21 @@ public class CompassActivity extends AppCompatActivity {
     }
 
     private void finishOnCreate(){
-        loadFriends();
+        loadEntities();
         this.user = new User();
         runOnUiThread(() -> {
             deviceTracker = new DeviceTracker(this);
-            friendDirectionUpdater = new RelativeDirectionUpdater(this, friends, deviceTracker.getCoordinates(), deviceTracker.getOrientation());
-            manager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
+            relativeDirectionUpdater = new RelativeDirectionUpdater(this, coordinateEntities, deviceTracker.getCoordinates(), deviceTracker.getOrientation());
+            compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
         });
     }
 
-    private void loadFriends(){
-        friends = new ArrayList<>();
+    private void loadEntities(){
+        coordinateEntities = new ArrayList<>();
     }
 
-    public List<CoordinateEntity> getFriends(){
-        return friends;
+    public List<CoordinateEntity> getCoordinateEntities(){
+        return coordinateEntities;
     }
 
     private void handleLocationPermission(){
@@ -121,11 +120,11 @@ public class CompassActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
     }
 
-    public CompassUIManager getManager() {
-        return manager;
+    public CompassUIManager getCompassUIManager() {
+        return compassUIManager;
     }
 
-    public RelativeDirectionUpdater getFriendDirectionUpdater() { return friendDirectionUpdater; }
+    public RelativeDirectionUpdater getRelativeDirectionUpdater() { return relativeDirectionUpdater; }
 
     public DeviceTracker getDeviceTracker() { return this.deviceTracker; }
 

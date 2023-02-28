@@ -19,7 +19,7 @@ public class RelativeDirectionUpdater {
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
     private Future<Void> future;
     private List<CoordinateEntity> coordinateEntities;
-    private final MutableLiveData<List<Degrees>> lastKnownHomeDirectionsFromUser = new MutableLiveData<>();
+    private final MutableLiveData<List<Degrees>> lastKnownEntityDirectionsFromUser = new MutableLiveData<>();
 
     public RelativeDirectionUpdater(Activity activity, @NonNull List<CoordinateEntity>  coordinateEntities,
                                     @NonNull LiveData<Coordinates> userCoordinates, @NonNull LiveData<Radians> userOrientation){
@@ -39,7 +39,7 @@ public class RelativeDirectionUpdater {
         for(int i = 0; i < coordinateEntities.size(); i++){
             defaultDirections.add(new Degrees(0.0));
         }
-        lastKnownHomeDirectionsFromUser.setValue(defaultDirections);
+        lastKnownEntityDirectionsFromUser.setValue(defaultDirections);
     }
 
     public List<CoordinateEntity> getCoordinateEntities(){
@@ -48,13 +48,13 @@ public class RelativeDirectionUpdater {
 
     public void setCoordinateEntities(List<CoordinateEntity> coordinateEntities) {this.coordinateEntities = coordinateEntities;}
 
-    public LiveData<List<Degrees>> getLastKnownHomeDirectionsFromUser(){
-        return this.lastKnownHomeDirectionsFromUser;
+    public LiveData<List<Degrees>> getLastKnownEntityDirectionsFromUser(){
+        return this.lastKnownEntityDirectionsFromUser;
     }
     public void updateAllEntityDirectionsFromUser(Coordinates userCoordinates, Radians userDirection){
         if(userCoordinates == null) return;
 
-        List<Degrees> curDirections = getLastKnownHomeDirectionsFromUser().getValue();
+        List<Degrees> curDirections = getLastKnownEntityDirectionsFromUser().getValue();
         List<Degrees> newDirections = new ArrayList<>(coordinateEntities.size());
         assert curDirections != null;
 
@@ -64,7 +64,7 @@ public class RelativeDirectionUpdater {
                     getEntityDirectionFromUser(userCoordinates,
                     coordinateEntities.get(i),curDirections.get(i))));
         }
-        lastKnownHomeDirectionsFromUser.postValue(newDirections);
+        lastKnownEntityDirectionsFromUser.postValue(newDirections);
     }
     public Degrees getEntityDirectionFromUser(Coordinates userCoordinates, CoordinateEntity entity, Degrees lastKnown){
         if (entity.getCoordinates().getValue() == null)

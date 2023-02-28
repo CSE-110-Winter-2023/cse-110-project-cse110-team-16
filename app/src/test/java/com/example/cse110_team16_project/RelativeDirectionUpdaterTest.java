@@ -54,7 +54,7 @@ public class RelativeDirectionUpdaterTest {
             MutableLiveData<Coordinates> userCoordinates = new MutableLiveData<>(new Coordinates(0.0,0.0));
             MutableLiveData<Radians> userDirection = new MutableLiveData<>(new Radians(0.0));
             RelativeDirectionUpdater friendDirectionUpdater = new RelativeDirectionUpdater(activity, friends, userCoordinates, userDirection);
-            List<Degrees> friendDirections = friendDirectionUpdater.getLastKnownHomeDirectionsFromUser().getValue();
+            List<Degrees> friendDirections = friendDirectionUpdater.getLastKnownEntityDirectionsFromUser().getValue();
             assertEquals(0.0, friendDirections.get(0).getDegrees(),0.0001);
             assertEquals(0.0, friendDirections.get(1).getDegrees(),0.0001);
             friendDirectionUpdater.updateAllEntityDirectionsFromUser(userCoordinates.getValue(), userDirection.getValue());
@@ -64,7 +64,7 @@ public class RelativeDirectionUpdaterTest {
                             getEntityDirectionFromUser(userCoordinates.getValue(),friends.get(1),new Degrees(0.0))));
             assertEquals(49,expected.get(0).getDegrees(),.1);
             assertEquals(0,expected.get(1).getDegrees(),.1);
-            friendDirections = friendDirectionUpdater.getLastKnownHomeDirectionsFromUser().getValue();
+            friendDirections = friendDirectionUpdater.getLastKnownEntityDirectionsFromUser().getValue();
             assertEquals(expected.get(0).getDegrees(),
                     friendDirections.get(0).getDegrees(),0.001);
             assertEquals(expected.get(1).getDegrees(),

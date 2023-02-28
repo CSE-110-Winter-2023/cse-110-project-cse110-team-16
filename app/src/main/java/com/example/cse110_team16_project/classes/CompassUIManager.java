@@ -40,8 +40,6 @@ public class CompassUIManager {
         );
     }
 
-    //create views on the UI for each home
-
     //given userDirection in degrees, changes compass to face correct direction
     public void updateUI(Degrees userDirection) {
         activity.runOnUiThread(() -> {

@@ -40,7 +40,7 @@ public class CompassUIManagerTest {
         scenario.onActivity(activity -> {
             activity.getDeviceTracker().mockUserDirection(new Degrees(30));
             try {
-                activity.getManager().getFuture().get();
+                activity.getCompassUIManager().getFuture().get();
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
