@@ -34,6 +34,10 @@ public class SCLocation extends CoordinateEntity {
     @NonNull
     private final String public_code;
 
+    @SerializedName("updated_at")
+    @NonNull
+    private Instant lastUpdated = Instant.EPOCH;
+
     public SCLocation(Coordinates coordinates, String label, String public_code){
         super(coordinates);
         this.label = label;
@@ -55,5 +59,14 @@ public class SCLocation extends CoordinateEntity {
 
     public String toJSON() {
         return new Gson().toJson(this);
+    }
+
+    public void setLastUpdated(Instant lastUpdated){
+        this.lastUpdated = lastUpdated;
+    }
+
+    @NonNull
+    public Instant getLastUpdated() {
+        return lastUpdated;
     }
 }
