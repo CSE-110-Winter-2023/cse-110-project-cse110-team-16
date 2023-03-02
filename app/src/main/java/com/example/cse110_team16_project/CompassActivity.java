@@ -35,7 +35,7 @@ import java.util.concurrent.Executors;
 
 public class CompassActivity extends AppCompatActivity {
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
-    private LiveData<List<CoordinateEntity>> coordinateEntities;
+    private MutableLiveData<List<CoordinateEntity>> coordinateEntities = new MutableLiveData<>();;
     private SCLocation user;
     private DeviceTracker deviceTracker;
     private RelativeDirectionUpdater relativeDirectionUpdater;
@@ -53,26 +53,26 @@ public class CompassActivity extends AppCompatActivity {
 
     private void finishOnCreate(){
         loadEntities();
+        loadUserInfo();
 
-        //TODO
-        Coordinates userCoordinates = new Coordinates(0,0);
-        String userLabel = "User";
-        String publicCode = "";
-
-        this.user = new SCLocation(userCoordinates,userLabel,publicCode);
-        runOnUiThread(() -> {
             deviceTracker = new DeviceTracker(this);
             relativeDirectionUpdater = new RelativeDirectionUpdater(this, coordinateEntities, deviceTracker.getCoordinates(), deviceTracker.getOrientation());
             compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
-        });
     }
 
     private void loadEntities(){
         //TODO
-        coordinateEntities = new MutableLiveData<>(new ArrayList<>());
-        //sus
+        coordinateEntities.postValue(new ArrayList<>());
+
     }
 
+    private void loadUserInfo(){
+        //TODO
+        Coordinates userCoordinates = new Coordinates(0,0);
+        String userLabel = "User";
+        String publicCode = "";
+        this.user = new SCLocation(userCoordinates,userLabel,publicCode);
+    }
     public LiveData<List<CoordinateEntity>> getCoordinateEntities(){
         return coordinateEntities;
     }
@@ -98,7 +98,7 @@ public class CompassActivity extends AppCompatActivity {
         if (requestCode == APP_REQUEST_CODE) {// If request is cancelled, the result arrays are empty.
             if (grantResults.length > 0 &&
                     grantResults[0] == PERMISSION_GRANTED) {
-                backgroundThreadExecutor.submit(this::finishOnCreate);
+                finishOnCreate();
 
             }
         }

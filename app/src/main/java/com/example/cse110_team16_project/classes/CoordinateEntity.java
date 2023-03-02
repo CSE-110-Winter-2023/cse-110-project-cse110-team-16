@@ -28,4 +28,11 @@ public abstract class CoordinateEntity {
         return new Coordinates(latitude, longitude);
     }
 
+    public Degrees bearingTo(Coordinates c){
+        return getCoordinates().bearingTo(c);
+    }
+
+    public double distanceTo(Coordinates c){
+        return getCoordinates().distanceTo(c);
+    }
 }

@@ -25,6 +25,13 @@ public class Converters {
         return new Coordinates(location.getLatitude(),location.getLongitude());
     }
 
+    public static Location CoordinatesToLocation(Coordinates c){
+        Location loc = new Location("");
+        loc.setLatitude(c.getLatitude());
+        loc.setLongitude(c.getLongitude());
+        return loc;
+    }
+
     public static Degrees RadiansToDegrees(Radians radians){
         return new Degrees(Math.toDegrees(radians.getRadians()));
     }

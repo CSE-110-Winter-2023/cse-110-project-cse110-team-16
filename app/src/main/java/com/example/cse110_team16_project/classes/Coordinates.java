@@ -24,15 +24,15 @@ public class Coordinates extends Pair<Double,Double>{
     //currently returns 0 if both coordinates are the same
     //TODO: maybe move to Utilities
     public Degrees bearingTo(@NonNull Coordinates c){
-        double lat1 = Math.toRadians(this.getLatitude());
-        double lat2 = Math.toRadians(c.getLatitude());
-        double lng1 = Math.toRadians(this.getLongitude());
-        double lng2 = Math.toRadians(c.getLongitude());
-        double dLon = (lng2-lng1);
-        double y = Math.sin(dLon) * Math.cos(lat2);
-        double x = Math.cos(lat1)*Math.sin(lat2) - Math.sin(lat1)*Math.cos(lat2)*Math.cos(dLon);
-        double theta = (Math.atan2(y, x));
-        return new Degrees(Math.toDegrees(theta));
-
+        Location a = Converters.CoordinatesToLocation(this);
+        Location b = Converters.CoordinatesToLocation(c);
+        return new Degrees(a.bearingTo(b));
     }
+
+    public double distanceTo(@NonNull Coordinates c){
+        Location a = Converters.CoordinatesToLocation(this);
+        Location b = Converters.CoordinatesToLocation(c);
+        return a.distanceTo(b);
+    }
+
 }
