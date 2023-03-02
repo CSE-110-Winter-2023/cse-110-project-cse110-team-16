@@ -2,18 +2,11 @@ package com.example.cse110_team16_project.classes;
 
 import android.app.Activity;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 
-import com.example.cse110_team16_project.R;
-import com.example.cse110_team16_project.Room.Converters;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;

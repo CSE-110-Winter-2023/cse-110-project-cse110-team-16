@@ -7,8 +7,6 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.cse110_team16_project.Room.Converters;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -18,10 +16,10 @@ import java.util.concurrent.Future;
 public class RelativeDirectionUpdater {
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
     private Future<Void> future;
-    private List<CoordinateEntity> coordinateEntities;
+    private LiveData<List<CoordinateEntity>> coordinateEntities;
     private final MutableLiveData<List<Degrees>> lastKnownEntityDirectionsFromUser = new MutableLiveData<>();
 
-    public RelativeDirectionUpdater(Activity activity, @NonNull List<CoordinateEntity>  coordinateEntities,
+    public RelativeDirectionUpdater(Activity activity, @NonNull LiveData<List<CoordinateEntity>>  coordinateEntities,
                                     @NonNull LiveData<Coordinates> userCoordinates, @NonNull LiveData<Radians> userOrientation){
         this.coordinateEntities =  coordinateEntities;
         setAllDirectionsDefault();
@@ -35,18 +33,18 @@ public class RelativeDirectionUpdater {
 
     }
     public void setAllDirectionsDefault(){
-        List<Degrees> defaultDirections = new ArrayList<>(coordinateEntities.size());
-        for(int i = 0; i < coordinateEntities.size(); i++){
+        List<Degrees> defaultDirections = new ArrayList<>(coordinateEntities.getValue().size());
+        for(int i = 0; i < defaultDirections.size(); i++){
             defaultDirections.add(new Degrees(0.0));
         }
         lastKnownEntityDirectionsFromUser.setValue(defaultDirections);
     }
 
-    public List<CoordinateEntity> getCoordinateEntities(){
+    public LiveData<List<CoordinateEntity>> getCoordinateEntities(){
         return this.coordinateEntities;
     }
 
-    public void setCoordinateEntities(List<CoordinateEntity> coordinateEntities) {this.coordinateEntities = coordinateEntities;}
+    public void setCoordinateEntities(LiveData<List<CoordinateEntity>> coordinateEntities) {this.coordinateEntities = coordinateEntities;}
 
     public LiveData<List<Degrees>> getLastKnownEntityDirectionsFromUser(){
         return this.lastKnownEntityDirectionsFromUser;
@@ -55,22 +53,23 @@ public class RelativeDirectionUpdater {
         if(userCoordinates == null) return;
 
         List<Degrees> curDirections = getLastKnownEntityDirectionsFromUser().getValue();
-        List<Degrees> newDirections = new ArrayList<>(coordinateEntities.size());
+        List<Degrees> newDirections = new ArrayList<>(curDirections.size());
+        List<CoordinateEntity> curEntities = coordinateEntities.getValue();
         assert curDirections != null;
 
-        for(int i = 0; i < coordinateEntities.size(); i++){
+        for(int i = 0; i < newDirections.size(); i++){
 
             newDirections.add(Degrees.addDegrees(Converters.RadiansToDegrees(userDirection),
                     getEntityDirectionFromUser(userCoordinates,
-                    coordinateEntities.get(i),curDirections.get(i))));
+                    curEntities.get(i),curDirections.get(i))));
         }
         lastKnownEntityDirectionsFromUser.postValue(newDirections);
     }
     public Degrees getEntityDirectionFromUser(Coordinates userCoordinates, CoordinateEntity entity, Degrees lastKnown){
-        if (entity.getCoordinates().getValue() == null)
+        if (entity.getCoordinates() == null)
             if(lastKnown == null) userCoordinates.bearingTo(new Coordinates(0,0));
             else return lastKnown;
-        return userCoordinates.bearingTo(entity.getCoordinates().getValue());
+        return userCoordinates.bearingTo(entity.getCoordinates());
     }
 
     public Future<Void>  getFuture() { return future; }

@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,9 +21,10 @@ import android.view.View;
 
 import com.example.cse110_team16_project.classes.CompassUIManager;
 import com.example.cse110_team16_project.classes.CoordinateEntity;
+import com.example.cse110_team16_project.classes.Coordinates;
 import com.example.cse110_team16_project.classes.Degrees;
 import com.example.cse110_team16_project.classes.RelativeDirectionUpdater;
-import com.example.cse110_team16_project.classes.User;
+import com.example.cse110_team16_project.classes.SCLocation;
 import com.example.cse110_team16_project.classes.DeviceTracker;
 
 
@@ -32,8 +35,8 @@ import java.util.concurrent.Executors;
 
 public class CompassActivity extends AppCompatActivity {
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
-    private List<CoordinateEntity> coordinateEntities;
-    private User user;
+    private LiveData<List<CoordinateEntity>> coordinateEntities;
+    private SCLocation user;
     private DeviceTracker deviceTracker;
     private RelativeDirectionUpdater relativeDirectionUpdater;
     private CompassUIManager compassUIManager;
@@ -50,7 +53,13 @@ public class CompassActivity extends AppCompatActivity {
 
     private void finishOnCreate(){
         loadEntities();
-        this.user = new User();
+
+        //TODO
+        Coordinates userCoordinates = new Coordinates(0,0);
+        String userLabel = "User";
+        String publicCode = "";
+
+        this.user = new SCLocation(userCoordinates,userLabel,publicCode);
         runOnUiThread(() -> {
             deviceTracker = new DeviceTracker(this);
             relativeDirectionUpdater = new RelativeDirectionUpdater(this, coordinateEntities, deviceTracker.getCoordinates(), deviceTracker.getOrientation());
@@ -59,10 +68,12 @@ public class CompassActivity extends AppCompatActivity {
     }
 
     private void loadEntities(){
-        coordinateEntities = new ArrayList<>();
+        //TODO
+        coordinateEntities = new MutableLiveData<>(new ArrayList<>());
+        //sus
     }
 
-    public List<CoordinateEntity> getCoordinateEntities(){
+    public LiveData<List<CoordinateEntity>> getCoordinateEntities(){
         return coordinateEntities;
     }
 
@@ -95,7 +106,8 @@ public class CompassActivity extends AppCompatActivity {
         // permissions this app might request.
     }
 
-    public User getUser(){return user;}
+    public SCLocation getUser(){return user;}
+
     @Override
     protected void onPause(){
         super.onPause();

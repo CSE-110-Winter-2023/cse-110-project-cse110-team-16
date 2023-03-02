@@ -3,11 +3,8 @@ package com.example.cse110_team16_project.classes;
 import android.app.Activity;
 import android.location.Location;
 
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-
-import com.example.cse110_team16_project.Room.Converters;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

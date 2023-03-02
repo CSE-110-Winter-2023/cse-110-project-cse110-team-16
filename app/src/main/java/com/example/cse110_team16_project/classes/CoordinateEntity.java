@@ -3,19 +3,29 @@ package com.example.cse110_team16_project.classes;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.gson.annotations.SerializedName;
+
 public abstract class CoordinateEntity {
-    private final MutableLiveData<Coordinates> coordinates = new MutableLiveData<>(new Coordinates(0.0,0.0));
+
+    @SerializedName("latitude")
+    private double latitude;
+
+    @SerializedName("longitude")
+    private double longitude;
 
     public CoordinateEntity(Coordinates coordinates) {
         setCoordinates(coordinates);
     }
 
     public void setCoordinates(Coordinates coordinates) {
-        if(coordinates != null) this.coordinates.postValue(coordinates);
+        if(coordinates != null) {
+            this.latitude = coordinates.getLatitude();
+            this.longitude = coordinates.getLongitude();
+        }
     }
 
-    public LiveData<Coordinates> getCoordinates() {
-        return coordinates;
+    public Coordinates getCoordinates() {
+        return new Coordinates(latitude, longitude);
     }
 
 }

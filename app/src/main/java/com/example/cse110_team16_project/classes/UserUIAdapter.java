@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class UserUIManager {
+public class UserUIAdapter{
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
     private Future<Void> future;
     //private static final float SCREEN_PERCENTAGE = .475f;
@@ -26,7 +26,7 @@ public class UserUIManager {
             R.color.kashmir_green, R.color.midnight_blue};
     //Initial colors of the text/icons for the first three users
 
-    public UserUIManager(Activity activity, LiveData<Degrees> userDirection, @NonNull LiveData<List<Degrees>> lastKnownEntityDirectionsFromUser){
+    public UserUIAdapter(Activity activity, LiveData<Degrees> userDirection, @NonNull LiveData<List<Degrees>> lastKnownEntityDirectionsFromUser){
         this.activity = activity;
 
         lastKnownEntityDirectionsFromUser.observe((LifecycleOwner) activity,

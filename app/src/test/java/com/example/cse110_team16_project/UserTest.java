@@ -7,8 +7,7 @@ import static org.junit.Assert.assertTrue;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
 import com.example.cse110_team16_project.classes.Coordinates;
-import com.example.cse110_team16_project.classes.Degrees;
-import com.example.cse110_team16_project.classes.User;
+import com.example.cse110_team16_project.classes.SCLocation;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -29,19 +28,19 @@ public class UserTest {
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
     @Test
     public void UserGeneralTest(){
-        User user = new User(new Coordinates(0, 0), "Calvin");
-        assertEquals(new Coordinates(0, 0), user.getCoordinates().getValue());
-        assertEquals("Calvin", user.getName());
+        SCLocation user = new SCLocation(new Coordinates(0, 0), "Calvin", "A123456789");
+        assertEquals(new Coordinates(0, 0), user.getCoordinates());
+        assertEquals("Calvin", user.getLabel());
         user.setCoordinates(new Coordinates(1.1, 2.2));
-        assertEquals(new Coordinates(1.1, 2.2), user.getCoordinates().getValue());
+        assertEquals(new Coordinates(1.1, 2.2), user.getCoordinates());
     }
     @Test
     public void testCoordinatesNotNull(){
-        User user = new User();
-        assertEquals(new Coordinates(0, 0),user.getCoordinates().getValue());
+        SCLocation user = new SCLocation(new Coordinates(0,0),"Person","A123456789");
+        assertEquals(new Coordinates(0, 0),user.getCoordinates());
         try {
             user.setCoordinates(null);
-            assertNotNull(user.getCoordinates().getValue());
+            assertNotNull(user.getCoordinates());
         }
         catch(Exception e){
             assertTrue(true);

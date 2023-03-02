@@ -44,6 +44,12 @@ dependencies {
     implementation 'androidx.test:rules:1.5.0'
     def room_version = "2.5.0"
 
+    def okhttp_version = "4.10.0"
+    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
+
+    def gson_version = "2.10.1"
+    implementation "com.google.code.gson:gson:$gson_version"
+
     implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'

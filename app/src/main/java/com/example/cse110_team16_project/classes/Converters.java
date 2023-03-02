@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project.Room;
+package com.example.cse110_team16_project.classes;
 
 import android.location.Location;
 

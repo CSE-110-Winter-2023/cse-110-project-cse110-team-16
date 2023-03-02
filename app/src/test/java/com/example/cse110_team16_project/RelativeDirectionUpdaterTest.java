@@ -9,6 +9,7 @@ import static org.junit.Assert.*;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -18,7 +19,7 @@ import com.example.cse110_team16_project.classes.Coordinates;
 import com.example.cse110_team16_project.classes.Degrees;
 import com.example.cse110_team16_project.classes.Radians;
 import com.example.cse110_team16_project.classes.RelativeDirectionUpdater;
-import com.example.cse110_team16_project.classes.User;
+import com.example.cse110_team16_project.classes.SCLocation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,8 +47,9 @@ public class RelativeDirectionUpdaterTest {
         String friendLabel1 = "Victor";
         Coordinates friendCoordinates2 = new Coordinates(2,0);
         String friendLabel2 = "David";
-        List<CoordinateEntity> friends = new ArrayList<>(Arrays.asList(new User(friendCoordinates1,friendLabel1),
-                new User(friendCoordinates2,friendLabel2)));
+        LiveData<List<CoordinateEntity>> friends = new MutableLiveData<>(new ArrayList<>(Arrays.asList(new SCLocation(friendCoordinates1,friendLabel1, "A123456788"),
+                new SCLocation(friendCoordinates2,friendLabel2, "A123456789"))));
+
         scenario.moveToState(Lifecycle.State.CREATED);
         scenario.onActivity(activity ->
         {
@@ -59,9 +61,9 @@ public class RelativeDirectionUpdaterTest {
             assertEquals(0.0, friendDirections.get(1).getDegrees(),0.0001);
             friendDirectionUpdater.updateAllEntityDirectionsFromUser(userCoordinates.getValue(), userDirection.getValue());
             ArrayList<Degrees> expected = new ArrayList<>(Arrays.asList(friendDirectionUpdater.
-                            getEntityDirectionFromUser(Objects.requireNonNull(userCoordinates.getValue()),friends.get(0), new Degrees(0.0)),
+                            getEntityDirectionFromUser(Objects.requireNonNull(userCoordinates.getValue()),friends.getValue().get(0), new Degrees(0.0)),
                     friendDirectionUpdater.
-                            getEntityDirectionFromUser(userCoordinates.getValue(),friends.get(1),new Degrees(0.0))));
+                            getEntityDirectionFromUser(userCoordinates.getValue(),friends.getValue().get(1),new Degrees(0.0))));
             assertEquals(49,expected.get(0).getDegrees(),.1);
             assertEquals(0,expected.get(1).getDegrees(),.1);
             friendDirections = friendDirectionUpdater.getLastKnownEntityDirectionsFromUser().getValue();
