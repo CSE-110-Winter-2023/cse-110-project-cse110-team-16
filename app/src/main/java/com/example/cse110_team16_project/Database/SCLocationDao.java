@@ -23,6 +23,9 @@ public abstract class SCLocationDao {
     @Query("SELECT * FROM location ORDER BY public_code")
     public abstract LiveData<List<SCLocation>> getAll();
 
+    @Query("SELECT public_code FROM location ORDER BY public_code")
+    public abstract List<String> getAllPublicCodes();
+
     @Delete
     public abstract int delete(SCLocation scLocation);
 }
