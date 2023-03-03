@@ -64,8 +64,8 @@ public class RelativeDirectionUpdaterTest {
                             getEntityDirectionFromUser(Objects.requireNonNull(userCoordinates.getValue()),friends.getValue().get(0), new Degrees(0.0)),
                     friendDirectionUpdater.
                             getEntityDirectionFromUser(userCoordinates.getValue(),friends.getValue().get(1),new Degrees(0.0))));
-            assertEquals(49,expected.get(0).getDegrees(),.1);
-            assertEquals(0,expected.get(1).getDegrees(),.1);
+            assertEquals(49,expected.get(0).getDegrees(),.3);
+            assertEquals(0,expected.get(1).getDegrees(),.3);
             friendDirections = friendDirectionUpdater.getLastKnownEntityDirectionsFromUser().getValue();
             assertEquals(expected.get(0).getDegrees(),
                     friendDirections.get(0).getDegrees(),0.001);

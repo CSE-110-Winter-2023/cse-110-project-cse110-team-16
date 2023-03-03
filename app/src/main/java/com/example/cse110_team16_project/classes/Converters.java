@@ -8,6 +8,8 @@ import com.example.cse110_team16_project.classes.Coordinates;
 import com.example.cse110_team16_project.classes.Degrees;
 import com.example.cse110_team16_project.classes.Radians;
 
+import java.time.Instant;
+
 public class Converters {
     @TypeConverter
     public static Coordinates StringToCoordinates(String str){
@@ -19,6 +21,16 @@ public class Converters {
     @TypeConverter
     public static String CoordinatesToString(Coordinates c){
         return c == null ? null : c.first + "," + c.second;
+    }
+
+    @TypeConverter
+    public static String InstantToString(Instant instant){
+        return instant.toString();
+    }
+
+    @TypeConverter
+    public static Instant StringToInstant(String str){
+        return Instant.parse(str);
     }
 
     public static Coordinates LocationToCoordinates(Location location){

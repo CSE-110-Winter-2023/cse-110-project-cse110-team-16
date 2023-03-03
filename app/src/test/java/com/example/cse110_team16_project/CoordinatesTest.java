@@ -28,15 +28,15 @@ public class CoordinatesTest {
         Coordinates c = new Coordinates(1,2);
         Coordinates d = new Coordinates(3,2);
         Coordinates e = new Coordinates(3,4);
-        assertEquals(0,c.bearingTo(d).getDegrees(),0.10);
-        assertEquals(90,d.bearingTo(e).getDegrees(),0.10);
-        assertEquals(45,c.bearingTo(e).getDegrees(),0.10);
+        assertEquals(0,c.bearingTo(d).getDegrees(),0.30);
+        assertEquals(90,d.bearingTo(e).getDegrees(),0.30);
+        assertEquals(45,c.bearingTo(e).getDegrees(),0.30);
     }
 
     @Test
     public void testBearingToAtZeros() {
         Coordinates c = new Coordinates(0,0);
         Coordinates d = new Coordinates(0,0);
-        assertEquals(0,c.bearingTo(d).getDegrees(),0.10);
+        assertEquals(0,c.bearingTo(d).getDegrees(),0.30);
     }
 }

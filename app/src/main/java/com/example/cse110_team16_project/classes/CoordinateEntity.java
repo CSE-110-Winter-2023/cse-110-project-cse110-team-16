@@ -16,6 +16,10 @@ public abstract class CoordinateEntity {
     public CoordinateEntity(Coordinates coordinates) {
         setCoordinates(coordinates);
     }
+    public CoordinateEntity(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 
     public void setCoordinates(Coordinates coordinates) {
         if(coordinates != null) {
@@ -26,6 +30,14 @@ public abstract class CoordinateEntity {
 
     public Coordinates getCoordinates() {
         return new Coordinates(latitude, longitude);
+    }
+
+    public double getLatitude(){
+        return this.latitude;
+    }
+
+    public double getLongitude(){
+        return this.longitude;
     }
 
     public Degrees bearingTo(Coordinates c){

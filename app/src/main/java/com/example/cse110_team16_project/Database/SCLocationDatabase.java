@@ -5,10 +5,13 @@ import androidx.annotation.VisibleForTesting;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 
+import com.example.cse110_team16_project.classes.Converters;
 import com.example.cse110_team16_project.classes.SCLocation;
 
 @Database(entities = {SCLocation.class}, version = 1, exportSchema = false)
+@TypeConverters({Converters.class})
 public abstract class SCLocationDatabase extends RoomDatabase {
     private volatile static SCLocationDatabase instance = null;
 

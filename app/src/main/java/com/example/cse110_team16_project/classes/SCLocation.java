@@ -19,7 +19,6 @@ import java.time.Instant;
 SCLocation class is responsible for storing information about the SCLocation's location and name.
 It is NOT responsible for updating the SCLocation position, this is currently handled in DeviceTracker.
 
-coordinates is not allowed to be null and if a null is passed to setCoordinates, user will not update
  */
 
 @Entity(tableName = "location")
@@ -32,14 +31,19 @@ public class SCLocation extends CoordinateEntity {
     @PrimaryKey
     @SerializedName("public_code")
     @NonNull
-    private final String public_code;
+    public final String public_code;
 
-    @SerializedName("updated_at")
-    @NonNull
-    private Instant lastUpdated = Instant.EPOCH;
+    @Ignore
+    private Instant updated_at = Instant.EPOCH;
 
     public SCLocation(Coordinates coordinates, String label, String public_code){
         super(coordinates);
+        this.label = label;
+        this.public_code = public_code;
+    }
+
+    public SCLocation(double latitude, double longitude, String label, String public_code){
+        super(latitude, longitude);
         this.label = label;
         this.public_code = public_code;
     }
@@ -62,11 +66,11 @@ public class SCLocation extends CoordinateEntity {
     }
 
     public void setLastUpdated(Instant lastUpdated){
-        this.lastUpdated = lastUpdated;
+        this.updated_at = lastUpdated;
     }
 
     @NonNull
     public Instant getLastUpdated() {
-        return lastUpdated;
+        return updated_at;
     }
 }

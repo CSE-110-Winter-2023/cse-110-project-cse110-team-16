@@ -33,8 +33,9 @@ public class RelativeDirectionUpdater {
 
     }
     public void setAllDirectionsDefault(){
-        List<Degrees> defaultDirections = new ArrayList<>(coordinateEntities.getValue().size());
-        for(int i = 0; i < defaultDirections.size(); i++){
+        List<CoordinateEntity> entities = coordinateEntities.getValue();
+        List<Degrees> defaultDirections = new ArrayList<>(entities.size());
+        for(int i = 0; i < entities.size(); i++){
             defaultDirections.add(new Degrees(0.0));
         }
         lastKnownEntityDirectionsFromUser.setValue(defaultDirections);
@@ -57,7 +58,7 @@ public class RelativeDirectionUpdater {
         List<CoordinateEntity> curEntities = coordinateEntities.getValue();
         assert curDirections != null;
 
-        for(int i = 0; i < newDirections.size(); i++){
+        for(int i = 0; i < curDirections.size(); i++){
 
             newDirections.add(Degrees.addDegrees(Converters.RadiansToDegrees(userDirection),
                     getEntityDirectionFromUser(userCoordinates,
