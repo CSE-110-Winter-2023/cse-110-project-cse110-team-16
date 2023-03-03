@@ -40,7 +40,7 @@ public class SCLocationRepository {
         Observer<SCLocation> updateFromRemote = theirSCLocation -> {
             var ourSCLocation = scLocation.getValue();
             if(theirSCLocation == null) return;
-            if (ourSCLocation == null || ourSCLocation.getLastUpdated().compareTo(theirSCLocation.getLastUpdated()) < 0) {
+            if (ourSCLocation == null) {
                 upsertLocal(theirSCLocation);
             }
         };
@@ -62,17 +62,15 @@ public class SCLocationRepository {
     // =============
 
     public LiveData<SCLocation> getLocal(String public_code) {
-        return dao.get(public_code);
+        return dao.getLive(public_code);
     }
 
     public List<String> getLocalPublicCodes() { return dao.getAllPublicCodes();}
-    public LiveData<List<SCLocation>> getAllLocal() {
-        return dao.getAll();
-    }
 
+    //TODO: Reminder that dao.insert is used here and not dao.upsert
     public void upsertLocal(SCLocation scLocation) {
         //SCLocation.updatedAt = System.currentTimeMillis()/1000;
-        dao.upsert(scLocation);
+        dao.insert(scLocation);
     }
 
     public void deleteLocal(SCLocation scLocation) {

@@ -57,7 +57,6 @@ public class CompassActivity extends AppCompatActivity {
         loadUserInfo();
         viewModel = setupViewModel();
         deviceTracker = new DeviceTracker(this);
-        relativeDirectionUpdater = new RelativeDirectionUpdater(this, viewModel.getSCLocations(), deviceTracker.getCoordinates(), deviceTracker.getOrientation());
         compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
     }
 
@@ -115,7 +114,7 @@ public class CompassActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
 
-        viewModel.updateSCLocations();
+        relativeDirectionUpdater = new RelativeDirectionUpdater(this, viewModel.updateSCLocations(), deviceTracker.getCoordinates(), deviceTracker.getOrientation());
 
         if(deviceTracker != null) {
             deviceTracker.registerListeners();
