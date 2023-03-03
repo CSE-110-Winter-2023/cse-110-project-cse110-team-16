@@ -29,6 +29,8 @@ public class SCLocationAPI {
         this.client = new OkHttpClient();
     }
 
+    private String url = "https://socialcompass.goto.ucsd.edu/location/";
+
     public static SCLocationAPI provide() {
         if (instance == null) {
             instance = new SCLocationAPI();
@@ -40,7 +42,7 @@ public class SCLocationAPI {
     public SCLocation getSCLocation(String public_code) {
 
         var request = new Request.Builder()
-                .url("https://socialcompass.goto.ucsd.edu/location/" + public_code)
+                .url(url + public_code)
                 .method("GET", null)
                 .build();
 
@@ -68,7 +70,7 @@ public class SCLocationAPI {
                 (json, JSON);
 
         var request = new Request.Builder()
-                .url("https://socialcompass.goto.ucsd.edu/location/" + public_code)
+                .url(url + public_code)
                 .method("PUT", requestBody)
                 .build();
 
@@ -87,7 +89,7 @@ public class SCLocationAPI {
                 (json, JSON);
 
         var request = new Request.Builder()
-                .url("https://socialcompass.goto.ucsd.edu/location/" + public_code)
+                .url(url + public_code)
                 .method("PUT", requestBody)
                 .build();
 
@@ -111,7 +113,7 @@ public class SCLocationAPI {
                 (json, JSON);
 
         var request = new Request.Builder()
-                .url("https://socialcompass.goto.ucsd.edu/location/" + public_code)
+                .url(url + public_code)
                 .method("PUT", requestBody)
                 .build();
 
@@ -123,4 +125,6 @@ public class SCLocationAPI {
             e.printStackTrace();
         }
     }
+
+    public void setUrl(String url) {this.url = url;}
 }
