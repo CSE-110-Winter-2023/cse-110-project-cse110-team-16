@@ -28,7 +28,7 @@ public class SCLocation extends CoordinateEntity {
     @NonNull
     public final String public_code;
 
-
+@Ignore
     public SCLocation(Coordinates coordinates, String label, String public_code){
         super(coordinates);
         this.label = label;
@@ -42,6 +42,7 @@ public class SCLocation extends CoordinateEntity {
     }
 
     //most useful for storing user inputs
+    @Ignore
     public SCLocation(String label, String public_code){
         super(0,0);
         this.label = label;
