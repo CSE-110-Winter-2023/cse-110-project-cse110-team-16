@@ -58,7 +58,7 @@ public class CompassActivity extends AppCompatActivity {
 
 
     private void loadUserInfo(){
-        //TODO
+        //TODO: Integrate loading User Info
         Coordinates userCoordinates = new Coordinates(0,0);
         String userLabel = "User";
         String publicCode = "";
