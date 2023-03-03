@@ -2,16 +2,11 @@ package com.example.cse110_team16_project.classes;
 
 import android.app.Activity;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
 
-import com.example.cse110_team16_project.R;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -23,75 +18,26 @@ public class CompassUIManager {
     //private static final float SCREEN_PERCENTAGE = .475f;
 
     Activity activity;
-    private List<TextView> homeLabels;
-    private final int[] defaultColors = {R.color.black,
-            R.color.kashmir_green, R.color.midnight_blue};
-    //Initial colors of the text/icons for the first three homes
     private final ImageView compass;
-    private final TextView sampleHome;
 
-    public CompassUIManager(Activity activity, @NonNull User user, @NonNull HomeDirectionUpdater homeDirectionUpdater,
-                            ImageView compass, TextView sampleHome){
+    public CompassUIManager(Activity activity, @NonNull LiveData<Radians> userDirection,
+                            ImageView compass){
         this.activity = activity;
         this.compass = compass;
-        this.sampleHome = sampleHome;
 
-        populateHomeIcons(homeDirectionUpdater.getHomes());
-
-        user.getDirection().observe((LifecycleOwner) activity, direction ->
+        userDirection.observe((LifecycleOwner) activity, direction ->
                 this.future = backgroundThreadExecutor.submit(() -> {
-                    updateUI(direction, homeDirectionUpdater.
-                            getLastKnownHomeDirectionsFromUser().getValue());
+                    updateUI(Converters.RadiansToDegrees(direction));
                     return null;
                 })
         );
-
-        homeDirectionUpdater.getLastKnownHomeDirectionsFromUser().observe((LifecycleOwner) activity,
-                directions -> this.future = backgroundThreadExecutor.submit(() -> {
-                    if (user.getDirection().getValue() != null) {
-                        updateUI(user.getDirection().getValue(), directions);
-                    }
-                    return null;
-                })
-        );
-    }
-
-    //create views on the UI for each home
-    public void populateHomeIcons(List<Home> homes) {
-        if(homes.size() == 0) return;
-        sampleHome.setText(homes.get(0).getLabel());
-    }
-
-    public void updateUI(float userDirection, List<Float> homeDirections) {
-        updateCompassDirection(userDirection);
-        updateHomeIconDirections(userDirection, homeDirections);
-    }
-
-    public void updateHomeIconDirections( float userDirection, List<Float> homeDirections) {
-            // Set direction for sample home
-            if(homeDirections.size() == 0) return;
-            updateIconDirection(sampleHome, homeDirections.get(0) - userDirection);
-    }
-
-    //update the position of the view representing a home on the compass to the correct direction
-    //params View to update, direction the home is from user in degrees from absolute north
-    public void updateIconDirection(TextView tv, Float homeDirection) {
-        ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) tv.getLayoutParams();
-        layoutParams.circleAngle = homeDirection;
-        activity.runOnUiThread(() -> tv.setLayoutParams(layoutParams));
-        // Deprecated label setting
-        //tv.setText("Best Friend's House");
-    }
-
-    public void updateIconLabel(TextView tv, String label){
-        tv.setText(label);
     }
 
     //given userDirection in degrees, changes compass to face correct direction
-    public void updateCompassDirection(float userDirection) {
+    public void updateUI(Degrees userDirection) {
         activity.runOnUiThread(() -> {
             //compass.startAnimation(ra);
-            compass.setRotation(-userDirection);
+            compass.setRotation((float)-userDirection.getDegrees());
             //Log.d(TAG,Float.toString(compass.getRotation()));
         });
     }

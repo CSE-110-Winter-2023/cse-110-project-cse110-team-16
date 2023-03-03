@@ -10,37 +10,34 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.room.Room;
+import androidx.lifecycle.ViewModelProvider;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.cse110_team16_project.Room.AppDatabase;
 import com.example.cse110_team16_project.classes.CompassUIManager;
+import com.example.cse110_team16_project.classes.CompassViewModel;
 import com.example.cse110_team16_project.classes.Coordinates;
-import com.example.cse110_team16_project.classes.Home;
-import com.example.cse110_team16_project.classes.HomeDirectionUpdater;
-import com.example.cse110_team16_project.classes.User;
-import com.example.cse110_team16_project.classes.UserTracker;
+import com.example.cse110_team16_project.classes.Degrees;
+import com.example.cse110_team16_project.classes.RelativeDirectionUpdater;
+import com.example.cse110_team16_project.classes.SCLocation;
+import com.example.cse110_team16_project.classes.DeviceTracker;
 
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class CompassActivity extends AppCompatActivity {
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
-    private List<Home> homes;
-    private User user;
-    private UserTracker userTracker;
-    private HomeDirectionUpdater homeDirectionUpdater;
-    private CompassUIManager manager;
+
+    private SCLocation user;
+    private DeviceTracker deviceTracker;
+    private RelativeDirectionUpdater relativeDirectionUpdater;
+    private CompassUIManager compassUIManager;
+    private CompassViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,48 +50,24 @@ public class CompassActivity extends AppCompatActivity {
     }
 
     private void finishOnCreate(){
-        loadHomes();
-        this.user = new User();
-        runOnUiThread(() -> {
-            userTracker = new UserTracker(this, user);
-            homeDirectionUpdater = new HomeDirectionUpdater(this, homes, user);
-            manager = new CompassUIManager(this, user, homeDirectionUpdater, findViewById(R.id.compassRing),
-                    findViewById(R.id.sampleHome));
-        });
+
+        loadUserInfo();
+        viewModel = setupViewModel();
+        deviceTracker = new DeviceTracker(this);
+        compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
     }
 
-    private void loadHomes(){
-        /*
-        AppDatabase appDatabase = Room.databaseBuilder(this,AppDatabase.class,AppDatabase.NAME)
-                .fallbackToDestructiveMigration().build();
-        homes = appDatabase.homeDao().loadAllHomes();
-         */
 
-        //TODO: Verify correct name parameter
-        SharedPreferences labelPreferences = getSharedPreferences("FamHomeLabel",Context.MODE_PRIVATE);
-        SharedPreferences locationPreferences = getSharedPreferences("HomeLoc", Context.MODE_PRIVATE);
-
-        homes = new ArrayList<>();
-
-        //TODO: Verify correct prefs
-        //all arrays should be same length
-        String[] prefLabelStrings = new String[]{"famLabel"};
-        String[] prefLatStrings = new String[]{"yourFamX"};
-        String[] prefLongStrings = new String[]{"yourFamY"};
-
-        for (int i = 0; i < prefLabelStrings.length; i++) {
-            String label = labelPreferences.getString(prefLabelStrings[i], "Parents' Home");
-            double lat = locationPreferences.getFloat(prefLatStrings[i], 0.0f);
-            double longitude = locationPreferences.getFloat(prefLongStrings[i], 0.0f);
-            Coordinates parentCoordinates = new Coordinates(lat,longitude);
-
-            Home home = new Home(parentCoordinates, label);
-            homes.add(home);
-        }
+    private void loadUserInfo(){
+        //TODO
+        Coordinates userCoordinates = new Coordinates(0,0);
+        String userLabel = "User";
+        String publicCode = "";
+        this.user = new SCLocation(userCoordinates,userLabel,publicCode);
     }
 
-    public List<Home> getHomes(){
-        return homes;
+    private CompassViewModel setupViewModel() {
+        return new ViewModelProvider(this).get(CompassViewModel.class);
     }
 
     private void handleLocationPermission(){
@@ -118,7 +91,7 @@ public class CompassActivity extends AppCompatActivity {
         if (requestCode == APP_REQUEST_CODE) {// If request is cancelled, the result arrays are empty.
             if (grantResults.length > 0 &&
                     grantResults[0] == PERMISSION_GRANTED) {
-                backgroundThreadExecutor.submit(this::finishOnCreate);
+                finishOnCreate();
 
             }
         }
@@ -126,21 +99,26 @@ public class CompassActivity extends AppCompatActivity {
         // permissions this app might request.
     }
 
-    public User getUser(){return user;}
+    public SCLocation getUser(){return user;}
+
     @Override
     protected void onPause(){
         super.onPause();
-        if(userTracker != null) userTracker.unregisterListeners();
+        if(deviceTracker != null) deviceTracker.unregisterListeners();
     }
 
     @Override
     protected void onResume(){
         super.onResume();
-        if(userTracker != null) {
-            userTracker.registerListeners();
+
+        relativeDirectionUpdater = new RelativeDirectionUpdater(this, viewModel.refreshSCLocations(), deviceTracker.getCoordinates(), deviceTracker.getOrientation());
+
+        if(deviceTracker != null) {
+            deviceTracker.registerListeners();
             SharedPreferences preferences = getSharedPreferences("HomeLoc", MODE_PRIVATE);
-            float mockDir = preferences.getFloat("mockDirection", -1.0F);
-            userTracker.mockUserDirection(mockDir);
+            Degrees mockDir = new Degrees(preferences.getFloat("mockDirection", -1.0F));
+            if(mockDir.getDegrees() < 0) deviceTracker.disableMockUserDirection();
+            else deviceTracker.mockUserDirection(mockDir);
         }
     }
 
@@ -150,11 +128,13 @@ public class CompassActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
     }
 
-    public CompassUIManager getManager() {
-        return manager;
+    public CompassUIManager getCompassUIManager() {
+        return compassUIManager;
     }
 
-    public HomeDirectionUpdater getHomeDirectionUpdater() { return homeDirectionUpdater; }
+    public RelativeDirectionUpdater getRelativeDirectionUpdater() { return relativeDirectionUpdater; }
+
+    public DeviceTracker getDeviceTracker() { return this.deviceTracker; }
 
     public void onBackClicked(View view) {
         startActivity(new Intent(this, AddHomeLocations.class));

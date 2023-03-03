@@ -4,34 +4,22 @@ import static org.junit.Assert.*;
 import static org.robolectric.Shadows.shadowOf;
 import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Looper;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.rule.GrantPermissionRule;
 
-import com.example.cse110_team16_project.classes.CompassUIManager;
-import com.example.cse110_team16_project.classes.Coordinates;
-import com.example.cse110_team16_project.classes.Home;
-import com.example.cse110_team16_project.classes.HomeDirectionUpdater;
-import com.example.cse110_team16_project.classes.User;
+import com.example.cse110_team16_project.classes.Degrees;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.LooperMode;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 @RunWith(RobolectricTestRunner.class)
 @LooperMode(PAUSED)
@@ -47,24 +35,13 @@ public class CompassUIManagerTest {
     @Test
     public void testUpdateCompassDirection() {
         ActivityScenario<CompassActivity> scenario = ActivityScenario.launch(CompassActivity.class);
-        SharedPreferences labelPreferences = RuntimeEnvironment.getApplication().
-                getSharedPreferences("FamHomeLabel", Context.MODE_PRIVATE);
-        labelPreferences.edit().putString("famLabel", "Parents' Home").commit();
-
-        SharedPreferences locationPreferences = RuntimeEnvironment.getApplication().
-                getSharedPreferences("famHomeLoc", Context.MODE_PRIVATE);
-        locationPreferences.edit().putFloat("yourFamX", 32.13164f).commit();
-        locationPreferences.edit().putFloat("yourFamY", 22.13144f).commit();
 
         scenario.moveToState(Lifecycle.State.RESUMED);
         scenario.onActivity(activity -> {
-            activity.getUser().setDirection(30);
-            assertEquals(30f,activity.getUser().getDirection().getValue(),0.5f);
+            activity.getDeviceTracker().mockUserDirection(new Degrees(30));
             try {
-                activity.getManager().getFuture().get();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
+                activity.getCompassUIManager().getFuture().get();
+            } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
             shadowOf(Looper.getMainLooper()).idle();
