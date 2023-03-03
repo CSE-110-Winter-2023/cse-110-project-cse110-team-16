@@ -34,6 +34,8 @@ public class SCLocationRepository {
      * @param public_code the public_code of the SCLocation
      * @return a LiveData object that will be updated when the SCLocation is updated locally or remotely.
      */
+
+    //likely unecessary for this MS, just use getRemote
     public LiveData<SCLocation> getSynced(String public_code) {
         var scLocation = new MediatorLiveData<SCLocation>();
 
@@ -69,7 +71,6 @@ public class SCLocationRepository {
 
     //TODO: Reminder that dao.insert is used here and not dao.upsert
     public void upsertLocal(SCLocation scLocation) {
-        //SCLocation.updatedAt = System.currentTimeMillis()/1000;
         dao.insert(scLocation);
     }
 
@@ -81,6 +82,9 @@ public class SCLocationRepository {
         return dao.exists(public_code);
     }
 
+    public boolean existsRemote(String public_code) {
+        return(api.getSCLocation(public_code) != null);
+    }
     // Remote Methods
     // ==============
 
@@ -100,8 +104,6 @@ public class SCLocationRepository {
         return locations;
     }
     public LiveData<SCLocation> getRemote(String public_code) {
-        // TODO: Implement getRemote!
-        // TODO: Set up polling background thread (MutableLiveData?)
         // TODO: Refer to TimerService from https://github.com/DylanLukes/CSE-110-WI23-Demo5-V2.
 
         // Start by fetching the SCLocation from the server _once_ and feeding it into MutableLiveData.

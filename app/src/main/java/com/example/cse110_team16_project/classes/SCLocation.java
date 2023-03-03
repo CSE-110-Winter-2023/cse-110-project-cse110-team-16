@@ -41,6 +41,12 @@ public class SCLocation extends CoordinateEntity {
         this.public_code = public_code;
     }
 
+    //most useful for storing user inputs
+    public SCLocation(String label, String public_code){
+        super(0,0);
+        this.label = label;
+        this.public_code = public_code;
+    }
 
     public String getLabel() { return this.label;}
     public void setLabel(String label) { this.label = label;}

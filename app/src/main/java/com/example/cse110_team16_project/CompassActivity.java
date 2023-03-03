@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
@@ -21,7 +20,6 @@ import android.view.View;
 
 import com.example.cse110_team16_project.classes.CompassUIManager;
 import com.example.cse110_team16_project.classes.CompassViewModel;
-import com.example.cse110_team16_project.classes.CoordinateEntity;
 import com.example.cse110_team16_project.classes.Coordinates;
 import com.example.cse110_team16_project.classes.Degrees;
 import com.example.cse110_team16_project.classes.RelativeDirectionUpdater;
@@ -29,7 +27,6 @@ import com.example.cse110_team16_project.classes.SCLocation;
 import com.example.cse110_team16_project.classes.DeviceTracker;
 
 
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -114,7 +111,7 @@ public class CompassActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
 
-        relativeDirectionUpdater = new RelativeDirectionUpdater(this, viewModel.updateSCLocations(), deviceTracker.getCoordinates(), deviceTracker.getOrientation());
+        relativeDirectionUpdater = new RelativeDirectionUpdater(this, viewModel.refreshSCLocations(), deviceTracker.getCoordinates(), deviceTracker.getOrientation());
 
         if(deviceTracker != null) {
             deviceTracker.registerListeners();
