@@ -59,6 +59,7 @@ public class SCLocation extends CoordinateEntity {
     }
 
     public static SCLocation fromJSON(String json) {
+        if(!json.contains("public_code")) return null;
         return new Gson().fromJson(json,SCLocation.class);
     }
 

@@ -22,6 +22,7 @@ public class DistanceUpdater {
     public DistanceUpdater(Activity activity, @NonNull LiveData<List<SCLocation>> coordinateEntities,
                            @NonNull LiveData<Coordinates> userCoordinates) {
         coordinateEntities.observe((LifecycleOwner) activity, locations -> {
+            //TODO: Might (probably) conflict with AbsoluteDirectionUpdater removeObservers
             coordinateEntities.removeObservers((LifecycleOwner) activity);
             setAllDistancesDefault(locations);
 
@@ -67,8 +68,7 @@ public class DistanceUpdater {
     }
     public Double getEntityDistanceFromUser(Coordinates userCoordinates, SCLocation entity, Double lastKnown){
         if (entity.getCoordinates() == null)
-            if(lastKnown == null) userCoordinates.bearingTo(new Coordinates(0,0)); //TODO: probably doesn't fully close GPS connection issues
-            else return lastKnown;
+            return lastKnown;
         return userCoordinates.distanceTo(entity.getCoordinates());
     }
 

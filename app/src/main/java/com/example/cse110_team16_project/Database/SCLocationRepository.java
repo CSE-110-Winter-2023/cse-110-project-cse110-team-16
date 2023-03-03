@@ -104,7 +104,6 @@ public class SCLocationRepository {
         return locations;
     }
     public LiveData<SCLocation> getRemote(String public_code) {
-        // TODO: Refer to TimerService from https://github.com/DylanLukes/CSE-110-WI23-Demo5-V2.
 
         // Start by fetching the SCLocation from the server _once_ and feeding it into MutableLiveData.
         // Then, set up a background thread that will poll the server every 3 seconds.
@@ -125,7 +124,6 @@ public class SCLocationRepository {
     }
 
     public void upsertRemote(SCLocation scLocation, String private_code) {
-        // TODO: Implement upsertRemote!
         Executors.newSingleThreadExecutor().submit(() -> api.putSCLocation(scLocation, private_code));
     }
 }

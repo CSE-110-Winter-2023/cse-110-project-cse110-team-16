@@ -48,10 +48,8 @@ public class SCLocationAPI {
 
         try (var response = client.newCall(request).execute()) {
             var body = response.body().string();
-            assert body != null;
-            SCLocation newSCLocation = SCLocation.fromJSON(body);
-            if(newSCLocation.getPublicCode() != null) return newSCLocation;
             Log.i("getSCLocation",body);
+            return SCLocation.fromJSON(body);
         } catch (Exception e) {
             e.printStackTrace();
         }

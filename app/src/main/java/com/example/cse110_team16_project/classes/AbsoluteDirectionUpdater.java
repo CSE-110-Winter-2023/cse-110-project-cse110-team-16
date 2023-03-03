@@ -75,8 +75,7 @@ public class AbsoluteDirectionUpdater {
     }
     public Degrees getEntityDirectionFromUser(Coordinates userCoordinates, SCLocation entity, Degrees lastKnown){
         if (entity.getCoordinates() == null)
-            if(lastKnown == null) userCoordinates.bearingTo(new Coordinates(0,0)); //TODO: probably doesn't fully close GPS connection issues
-            else return lastKnown;
+            return lastKnown;
         return userCoordinates.bearingTo(entity.getCoordinates());
     }
 

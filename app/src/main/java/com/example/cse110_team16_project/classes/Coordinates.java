@@ -19,9 +19,6 @@ public class Coordinates extends Pair<Double,Double>{
         return this.first;
     }
 
-    //https://www.movable-type.co.uk/scripts/latlong.html
-    //initial bearing
-    //currently returns 0 if both coordinates are the same
     //TODO: maybe move to Utilities
     public Degrees bearingTo(@NonNull Coordinates c){
         Location a = Converters.CoordinatesToLocation(this);
