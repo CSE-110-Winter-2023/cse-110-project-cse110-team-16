@@ -13,6 +13,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.rule.GrantPermissionRule;
 
 import com.example.cse110_team16_project.classes.CoordinateEntity;
 import com.example.cse110_team16_project.classes.Coordinates;
@@ -35,13 +36,17 @@ import java.util.Objects;
 public class RelativeDirectionUpdaterTest {
     //Tests do not test methods in isolation which is bad practice, but it's a small
     //class so what could possibly go wrong.
-    @Rule
-    public ActivityScenarioRule<CompassActivity> rule = new ActivityScenarioRule<>(CompassActivity.class);
+
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
+
+    @Rule
+    public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule
+            .grant(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION);
     @Test
-    public void testFriendDirectionUpdater(){
-        ActivityScenario<CompassActivity> scenario = rule.getScenario();
+    public void testRelativeDirectionUpdater(){
+        ActivityScenario<CompassActivity> scenario = ActivityScenario.launch(CompassActivity.class);
+
 
         Coordinates friendCoordinates1 = new Coordinates(1,1.15056);
         String friendLabel1 = "Victor";
@@ -50,7 +55,7 @@ public class RelativeDirectionUpdaterTest {
         LiveData<List<SCLocation>> friends = new MutableLiveData<>(new ArrayList<>(Arrays.asList(new SCLocation(friendCoordinates1,friendLabel1, "A123456788"),
                 new SCLocation(friendCoordinates2,friendLabel2, "A123456789"))));
 
-        scenario.moveToState(Lifecycle.State.CREATED);
+        scenario.moveToState(Lifecycle.State.RESUMED);
         scenario.onActivity(activity ->
         {
             MutableLiveData<Coordinates> userCoordinates = new MutableLiveData<>(new Coordinates(0.0,0.0));

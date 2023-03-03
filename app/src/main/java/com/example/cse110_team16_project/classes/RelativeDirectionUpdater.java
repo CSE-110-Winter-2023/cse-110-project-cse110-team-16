@@ -22,14 +22,21 @@ public class RelativeDirectionUpdater{
     public RelativeDirectionUpdater(Activity activity, @NonNull LiveData<List<SCLocation>>  coordinateEntities,
                                     @NonNull LiveData<Coordinates> userCoordinates, @NonNull LiveData<Radians> userOrientation){
         this.scLocations =  coordinateEntities;
-        setAllDirectionsDefault();
 
-        userCoordinates.observe((LifecycleOwner) activity, coordinates ->
-                this.future = backgroundThreadExecutor.submit(() -> {
-                    updateAllEntityDirectionsFromUser(coordinates,userOrientation.getValue());
-                    return null;
-                })
-        );
+        scLocations.observe((LifecycleOwner) activity, locations -> {
+            scLocations.removeObservers((LifecycleOwner) activity);
+            setAllDirectionsDefault(locations);
+
+            userCoordinates.observe((LifecycleOwner) activity, coordinates ->
+                    this.future = backgroundThreadExecutor.submit(() -> {
+                        updateAllEntityDirectionsFromUser(coordinates,userOrientation.getValue());
+                        return null;
+                    })
+            );
+        });
+
+
+
     }
 
     public RelativeDirectionUpdater(Activity activity,
@@ -37,8 +44,7 @@ public class RelativeDirectionUpdater{
         this(activity, new MutableLiveData<>(),userCoordinates,userOrientation);
     }
 
-    public void setAllDirectionsDefault(){
-        List<SCLocation> entities = scLocations.getValue();
+    public void setAllDirectionsDefault(List<SCLocation> entities){
         List<Degrees> defaultDirections = new ArrayList<>(entities.size());
         for(int i = 0; i < entities.size(); i++){
             defaultDirections.add(new Degrees(0.0));

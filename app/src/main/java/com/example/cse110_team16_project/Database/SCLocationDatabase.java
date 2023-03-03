@@ -26,7 +26,7 @@ public abstract class SCLocationDatabase extends RoomDatabase {
 
     private static SCLocationDatabase make(Context context) {
         return Room.databaseBuilder(context, SCLocationDatabase.class, "SC_app.db")
-                //.allowMainThreadQueries()
+                .allowMainThreadQueries()
                 .build();
     }
 
