@@ -40,7 +40,7 @@ public class UserUIAdapter{
     }
 
 
-    public void updateUI( Degrees userDirection, List<Degrees> entityDirections) {
+    public void updateUI(Degrees userDirection, List<Degrees> entityDirections) {
     }
 
     //update the position of the view representing a entity on the compass to the correct direction

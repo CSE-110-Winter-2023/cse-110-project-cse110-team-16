@@ -29,14 +29,16 @@ public class CompassViewModel extends AndroidViewModel {
      * @return a LiveData object that will be updated when any location changes.
      */
     public LiveData<List<SCLocation>> getSCLocations() {
-        if (scLocations == null) {
-            scLocations = new MutableLiveData<>();
-            List<String> public_codes = repo.getLocalPublicCodes();
-            scLocations = repo.getRemote(public_codes);
-        }
+        if(scLocations == null) return updateSCLocations();
         return scLocations;
     }
 
+    public LiveData<List<SCLocation>> updateSCLocations(){
+            scLocations = new MutableLiveData<>();
+            List<String> public_codes = repo.getLocalPublicCodes();
+            scLocations = repo.getRemote(public_codes);
+        return scLocations;
+    }
 
 
 }

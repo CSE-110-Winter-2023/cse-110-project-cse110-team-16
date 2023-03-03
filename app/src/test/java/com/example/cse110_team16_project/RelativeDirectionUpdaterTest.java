@@ -47,7 +47,7 @@ public class RelativeDirectionUpdaterTest {
         String friendLabel1 = "Victor";
         Coordinates friendCoordinates2 = new Coordinates(2,0);
         String friendLabel2 = "David";
-        LiveData<List<CoordinateEntity>> friends = new MutableLiveData<>(new ArrayList<>(Arrays.asList(new SCLocation(friendCoordinates1,friendLabel1, "A123456788"),
+        LiveData<List<SCLocation>> friends = new MutableLiveData<>(new ArrayList<>(Arrays.asList(new SCLocation(friendCoordinates1,friendLabel1, "A123456788"),
                 new SCLocation(friendCoordinates2,friendLabel2, "A123456789"))));
 
         scenario.moveToState(Lifecycle.State.CREATED);

@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.cse110_team16_project.classes.CompassUIManager;
+import com.example.cse110_team16_project.classes.CompassViewModel;
 import com.example.cse110_team16_project.classes.CoordinateEntity;
 import com.example.cse110_team16_project.classes.Coordinates;
 import com.example.cse110_team16_project.classes.Degrees;
@@ -28,18 +29,18 @@ import com.example.cse110_team16_project.classes.SCLocation;
 import com.example.cse110_team16_project.classes.DeviceTracker;
 
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class CompassActivity extends AppCompatActivity {
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
-    private MutableLiveData<List<CoordinateEntity>> coordinateEntities = new MutableLiveData<>();;
+
     private SCLocation user;
     private DeviceTracker deviceTracker;
     private RelativeDirectionUpdater relativeDirectionUpdater;
     private CompassUIManager compassUIManager;
+    private CompassViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,19 +53,14 @@ public class CompassActivity extends AppCompatActivity {
     }
 
     private void finishOnCreate(){
-        loadEntities();
+
         loadUserInfo();
-
-            deviceTracker = new DeviceTracker(this);
-            relativeDirectionUpdater = new RelativeDirectionUpdater(this, coordinateEntities, deviceTracker.getCoordinates(), deviceTracker.getOrientation());
-            compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
+        viewModel = setupViewModel();
+        deviceTracker = new DeviceTracker(this);
+        relativeDirectionUpdater = new RelativeDirectionUpdater(this, viewModel.getSCLocations(), deviceTracker.getCoordinates(), deviceTracker.getOrientation());
+        compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
     }
 
-    private void loadEntities(){
-        //TODO
-        coordinateEntities.postValue(new ArrayList<>());
-
-    }
 
     private void loadUserInfo(){
         //TODO
@@ -73,8 +69,9 @@ public class CompassActivity extends AppCompatActivity {
         String publicCode = "";
         this.user = new SCLocation(userCoordinates,userLabel,publicCode);
     }
-    public LiveData<List<CoordinateEntity>> getCoordinateEntities(){
-        return coordinateEntities;
+
+    private CompassViewModel setupViewModel() {
+        return new ViewModelProvider(this).get(CompassViewModel.class);
     }
 
     private void handleLocationPermission(){
@@ -117,6 +114,9 @@ public class CompassActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
+
+        viewModel.updateSCLocations();
+
         if(deviceTracker != null) {
             deviceTracker.registerListeners();
             SharedPreferences preferences = getSharedPreferences("HomeLoc", MODE_PRIVATE);

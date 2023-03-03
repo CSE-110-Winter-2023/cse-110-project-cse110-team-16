@@ -1,8 +1,5 @@
 package com.example.cse110_team16_project.classes;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
 import com.google.gson.annotations.SerializedName;
 
 public abstract class CoordinateEntity {
