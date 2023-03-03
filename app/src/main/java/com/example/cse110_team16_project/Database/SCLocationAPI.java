@@ -11,6 +11,8 @@ import com.google.gson.JsonPrimitive;
 
 import org.json.JSONObject;
 
+import java.util.Map;
+
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -54,10 +56,14 @@ public class SCLocationAPI {
         return null;
     }
 
-    public void putSCLocation(SCLocation scLocation) {
+    public void putSCLocation(SCLocation scLocation, String private_code) {
         // URLs cannot contain spaces, so we replace them with %20.
         String public_code = scLocation.getPublicCode();
-        String json = scLocation.toJSON();
+        Gson gson = new Gson();
+        JsonElement jsonElement = gson.toJsonTree(scLocation,SCLocation.class);
+        jsonElement.getAsJsonObject().addProperty("private_code",private_code);
+        String json = gson.toJson(jsonElement);
+
         RequestBody requestBody = RequestBody.create
                 (json, JSON);
 
@@ -76,9 +82,7 @@ public class SCLocationAPI {
     }
 
     public void deleteSCLocation(String public_code, String private_code) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.add("private_code", new JsonPrimitive(private_code));
-        String json = jsonObject.toString();
+        String json = new Gson().toJson(Map.of("private_code", private_code));
         RequestBody requestBody = RequestBody.create
                 (json, JSON);
 
@@ -96,11 +100,12 @@ public class SCLocationAPI {
         }
     }
 
-    public void patchSCLocation(SCLocation scLocation, String private_code){
+    public void patchSCLocation(SCLocation scLocation, String private_code, boolean listed_publicly){
         String public_code = scLocation.getPublicCode();
         Gson gson = new Gson();
         JsonElement jsonElement = gson.toJsonTree(scLocation,SCLocation.class);
         jsonElement.getAsJsonObject().addProperty("private_code",private_code);
+        jsonElement.getAsJsonObject().addProperty("is_listed_publicly",String.valueOf(listed_publicly));
         String json = gson.toJson(jsonElement);
         RequestBody requestBody = RequestBody.create
                 (json, JSON);

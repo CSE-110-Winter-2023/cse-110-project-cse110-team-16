@@ -53,9 +53,9 @@ public class SCLocationRepository {
         return scLocation;
     }
 
-    public void upsertSynced(SCLocation scLocation) {
+    public void upsertSynced(SCLocation scLocation, String private_code) {
         upsertLocal(scLocation);
-        upsertRemote(scLocation);
+        upsertRemote(scLocation, private_code);
     }
 
     // Local Methods
@@ -124,8 +124,8 @@ public class SCLocationRepository {
         return scLocation;
     }
 
-    public void upsertRemote(SCLocation scLocation) {
+    public void upsertRemote(SCLocation scLocation, String private_code) {
         // TODO: Implement upsertRemote!
-        Executors.newSingleThreadExecutor().submit(() -> api.putSCLocation(scLocation));
+        Executors.newSingleThreadExecutor().submit(() -> api.putSCLocation(scLocation, private_code));
     }
 }
