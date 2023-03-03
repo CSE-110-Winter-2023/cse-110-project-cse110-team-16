@@ -29,13 +29,13 @@ public class SCLocation extends CoordinateEntity {
     public final String public_code;
 
 @Ignore
-    public SCLocation(Coordinates coordinates, String label, String public_code){
+    public SCLocation(Coordinates coordinates, @NonNull String label, @NonNull String public_code){
         super(coordinates);
         this.label = label;
         this.public_code = public_code;
     }
 
-    public SCLocation(double latitude, double longitude, String label, String public_code){
+    public SCLocation(double latitude, double longitude, @NonNull String label, @NonNull String public_code){
         super(latitude, longitude);
         this.label = label;
         this.public_code = public_code;
@@ -43,14 +43,15 @@ public class SCLocation extends CoordinateEntity {
 
     //most useful for storing user inputs
     @Ignore
-    public SCLocation(String label, String public_code){
+    public SCLocation(@NonNull String label, @NonNull String public_code){
         super(0,0);
         this.label = label;
         this.public_code = public_code;
     }
 
+    @NonNull
     public String getLabel() { return this.label;}
-    public void setLabel(String label) { this.label = label;}
+    public void setLabel(@NonNull String label) { this.label = label;}
 
     @NonNull
     public String getPublicCode() {

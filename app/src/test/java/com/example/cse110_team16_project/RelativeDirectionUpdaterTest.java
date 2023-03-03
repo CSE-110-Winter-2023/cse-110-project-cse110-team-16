@@ -12,14 +12,12 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.rule.GrantPermissionRule;
 
-import com.example.cse110_team16_project.classes.CoordinateEntity;
 import com.example.cse110_team16_project.classes.Coordinates;
 import com.example.cse110_team16_project.classes.Degrees;
 import com.example.cse110_team16_project.classes.Radians;
-import com.example.cse110_team16_project.classes.RelativeDirectionUpdater;
+import com.example.cse110_team16_project.classes.AbsoluteDirectionUpdater;
 import com.example.cse110_team16_project.classes.SCLocation;
 
 import java.util.ArrayList;
@@ -60,11 +58,11 @@ public class RelativeDirectionUpdaterTest {
         {
             MutableLiveData<Coordinates> userCoordinates = new MutableLiveData<>(new Coordinates(0.0,0.0));
             MutableLiveData<Radians> userDirection = new MutableLiveData<>(new Radians(0.0));
-            RelativeDirectionUpdater friendDirectionUpdater = new RelativeDirectionUpdater(activity, friends, userCoordinates, userDirection);
+            AbsoluteDirectionUpdater friendDirectionUpdater = new AbsoluteDirectionUpdater(activity, friends, userCoordinates);
             List<Degrees> friendDirections = friendDirectionUpdater.getLastKnownEntityDirectionsFromUser().getValue();
             assertEquals(0.0, friendDirections.get(0).getDegrees(),0.0001);
             assertEquals(0.0, friendDirections.get(1).getDegrees(),0.0001);
-            friendDirectionUpdater.updateAllEntityDirectionsFromUser(userCoordinates.getValue(), userDirection.getValue());
+            friendDirectionUpdater.updateAllEntityDirectionsFromUser(friends.getValue(),userCoordinates.getValue());
             ArrayList<Degrees> expected = new ArrayList<>(Arrays.asList(friendDirectionUpdater.
                             getEntityDirectionFromUser(Objects.requireNonNull(userCoordinates.getValue()),friends.getValue().get(0), new Degrees(0.0)),
                     friendDirectionUpdater.

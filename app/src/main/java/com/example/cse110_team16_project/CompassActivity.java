@@ -22,7 +22,7 @@ import com.example.cse110_team16_project.classes.CompassUIManager;
 import com.example.cse110_team16_project.classes.CompassViewModel;
 import com.example.cse110_team16_project.classes.Coordinates;
 import com.example.cse110_team16_project.classes.Degrees;
-import com.example.cse110_team16_project.classes.RelativeDirectionUpdater;
+import com.example.cse110_team16_project.classes.AbsoluteDirectionUpdater;
 import com.example.cse110_team16_project.classes.SCLocation;
 import com.example.cse110_team16_project.classes.DeviceTracker;
 
@@ -35,7 +35,6 @@ public class CompassActivity extends AppCompatActivity {
 
     private SCLocation user;
     private DeviceTracker deviceTracker;
-    private RelativeDirectionUpdater relativeDirectionUpdater;
     private CompassUIManager compassUIManager;
     private CompassViewModel viewModel;
 
@@ -111,8 +110,6 @@ public class CompassActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
 
-        relativeDirectionUpdater = new RelativeDirectionUpdater(this, viewModel.refreshSCLocations(), deviceTracker.getCoordinates(), deviceTracker.getOrientation());
-
         if(deviceTracker != null) {
             deviceTracker.registerListeners();
             SharedPreferences preferences = getSharedPreferences("HomeLoc", MODE_PRIVATE);
@@ -131,8 +128,6 @@ public class CompassActivity extends AppCompatActivity {
     public CompassUIManager getCompassUIManager() {
         return compassUIManager;
     }
-
-    public RelativeDirectionUpdater getRelativeDirectionUpdater() { return relativeDirectionUpdater; }
 
     public DeviceTracker getDeviceTracker() { return this.deviceTracker; }
 
