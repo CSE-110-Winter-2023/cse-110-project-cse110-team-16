@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/oneToTenMileRing"
+        android:id="@+id/oneToTenMilesRing"
         android:layout_width="359dp"
         android:layout_height="399dp"
         android:layout_marginStart="75dp"
@@ -20,7 +20,7 @@
         app:srcCompat="@drawable/ms2_map_ring" />
 
     <ImageView
-        android:id="@+id/zeroToOneMileRing"
+        android:id="@+id/zeroToOneMilesRing"
         android:layout_width="220dp"
         android:layout_height="240dp"
         android:layout_marginStart="135dp"
