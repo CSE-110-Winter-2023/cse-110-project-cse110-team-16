@@ -3,6 +3,7 @@ package com.example.cse110_team16_project;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -22,7 +23,7 @@ public class AddNameActivity extends AppCompatActivity {
         String private_code = UUID.randomUUID().toString();
         String public_code = UUID.randomUUID().toString();
 
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = this.getSharedPreferences("user_info", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
 
         editor.putString("label", name);
@@ -30,5 +31,7 @@ public class AddNameActivity extends AppCompatActivity {
         editor.putString("public_code", public_code);
 
         editor.apply();
+
+        startActivity(new Intent(this, CompassActivity.class));
     }
 }
