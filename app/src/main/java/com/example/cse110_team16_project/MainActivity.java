@@ -14,13 +14,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SharedPreferences preferences = getSharedPreferences("HomeLoc", Context.MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences("user_info", Context.MODE_PRIVATE);
         Intent intent;
-        if(preferences.contains("yourFamX")) {
+        if(preferences.contains("private_code")) {
             intent = new Intent(this, CompassActivity.class);
         }
         else {
-            intent = new Intent(this, AddHomeLocations.class);
+            intent = new Intent(this, AddNameActivity.class);
             intent.putExtra("isNewUser",true);
         }
         finish();
