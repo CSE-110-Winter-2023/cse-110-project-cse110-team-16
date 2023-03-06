@@ -1,6 +1,7 @@
 package com.example.cse110_team16_project;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import android.content.Context;
 import android.widget.Button;
@@ -37,7 +38,11 @@ public class AddNameTest {
                                                 .getSharedPreferences("user_info", Context.MODE_PRIVATE);
 
             String SP_name = preferences.getString("label", "");
+            String public_code = preferences.getString("public_code", "");
+            String private_code = preferences.getString("private_code", "");
             assertEquals(testName, SP_name);
+            assertNotEquals("", public_code);
+            assertNotEquals("", private_code);
         });
     }
 }
