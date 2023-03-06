@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 
 import java.util.UUID;
 
@@ -19,7 +21,8 @@ public class AddNameActivity extends AppCompatActivity {
     }
 
     public void onSubmitClicked(View view) {
-        String name = findViewById(R.id.YourNameField).toString();
+        EditText editName = findViewById(R.id.YourNameField);
+        String name = editName.getText().toString();
         String private_code = UUID.randomUUID().toString();
         String public_code = UUID.randomUUID().toString();
 
@@ -31,6 +34,9 @@ public class AddNameActivity extends AppCompatActivity {
         editor.putString("public_code", public_code);
 
         editor.apply();
+
+        Log.d("ADDNAME", "name is " + name + ".");
+        Log.d("ADDNAME", "private code is " + private_code + ".");
 
         startActivity(new Intent(this, CompassActivity.class));
     }
