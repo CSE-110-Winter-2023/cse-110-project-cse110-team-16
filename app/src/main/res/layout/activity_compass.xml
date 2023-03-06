@@ -60,23 +60,48 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/sampleHome"
-        android:layout_width="64dp"
-        android:layout_height="96dp"
-        android:text="Sample Text"
-        android:ellipsize="end"
-        android:textSize="12sp"
-        android:textColor="#097969"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintCircle="@id/CompassLayout"
-        app:layout_constraintCircleRadius="170dp"
-        app:layout_constraintCircleAngle="0"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintStart_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="parent"
-        android:drawableTop="@drawable/homeicon_32"/>
+    <ImageView
+        android:id="@+id/oneToTenMilesRing"
+        android:layout_width="359dp"
+        android:layout_height="399dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="232dp"
+        android:layout_marginEnd="75dp"
+        android:layout_marginBottom="233dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ms2_map_ring" />
+
+    <ImageView
+        android:id="@+id/zeroToOneMilesRing"
+        android:layout_width="220dp"
+        android:layout_height="240dp"
+        android:layout_marginStart="135dp"
+        android:layout_marginTop="286dp"
+        android:layout_marginEnd="136dp"
+        android:layout_marginBottom="287dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ms2_map_ring" />
+
+    <ImageView
+        android:id="@+id/userPosition"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="195dp"
+        android:layout_marginTop="355dp"
+        android:layout_marginEnd="196dp"
+        android:layout_marginBottom="356dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ms2_user_dot" />
 
     <Button
         android:id="@+id/backButton"
