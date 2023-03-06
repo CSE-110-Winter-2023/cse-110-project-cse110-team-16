@@ -7,6 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 
+import com.example.cse110_team16_project.Units.Degrees;
+import com.example.cse110_team16_project.Units.Radians;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;

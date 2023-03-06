@@ -10,11 +10,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.rule.GrantPermissionRule;
 
-import com.example.cse110_team16_project.classes.AbsoluteDirectionUpdater;
+import com.example.cse110_team16_project.Units.Meters;
 import com.example.cse110_team16_project.classes.Coordinates;
-import com.example.cse110_team16_project.classes.Degrees;
 import com.example.cse110_team16_project.classes.DistanceUpdater;
-import com.example.cse110_team16_project.classes.Radians;
+import com.example.cse110_team16_project.Units.Radians;
 import com.example.cse110_team16_project.classes.SCLocation;
 
 import org.junit.Rule;
@@ -54,7 +53,7 @@ public class DistanceUpdaterTest {
             MutableLiveData<Coordinates> userCoordinates = new MutableLiveData<>(new Coordinates(0.0,0.0));
             MutableLiveData<Radians> userDirection = new MutableLiveData<>(new Radians(0.0));
             DistanceUpdater friendDistanceUpdater = new DistanceUpdater(activity, friends, userCoordinates);
-            List<Double> friendDirections = friendDistanceUpdater.getLastKnownEntityDistancesFromUser().getValue();
+            List<Meters> friendDirections = friendDistanceUpdater.getLastKnownEntityDistancesFromUser().getValue();
             assertNull(friendDirections);
             friendDistanceUpdater.updateAllEntityDistancesFromUser(friends.getValue(),userCoordinates.getValue());
             ArrayList<Double> expected = new ArrayList<>(Arrays.asList(friendDistanceUpdater.
@@ -65,9 +64,9 @@ public class DistanceUpdaterTest {
             assertEquals(222000,expected.get(1),1000);
             friendDirections = friendDistanceUpdater.getLastKnownEntityDistancesFromUser().getValue();
             assertEquals(expected.get(0),
-                    friendDirections.get(0),0.001);
+                    friendDirections.get(0).getMeters(),0.001);
             assertEquals(expected.get(1),
-                    friendDirections.get(1),0.001);
+                    friendDirections.get(1).getMeters(),0.001);
         });
 
 

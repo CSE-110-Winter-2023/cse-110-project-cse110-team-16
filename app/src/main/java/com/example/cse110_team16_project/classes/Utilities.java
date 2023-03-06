@@ -4,6 +4,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.util.DisplayMetrics;
 
+import com.example.cse110_team16_project.Units.Meters;
+import com.example.cse110_team16_project.Units.Miles;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class Utilities {
@@ -47,4 +52,17 @@ public class Utilities {
         }
     }
 
+    public static Miles metersToMiles(Meters meters) {
+        return new Miles(meters.getMeters()*.0006213712);
+    }
+
+    public static List<Miles> listMetersToMiles(List<Meters> meters) {
+        if(meters == null) return null;
+        List<Miles> inMiles = new ArrayList<>(meters.size());
+        for(Meters meter: meters){
+            if(meter == null) inMiles.add(null);
+            else inMiles.add(metersToMiles(meter));
+        }
+        return inMiles;
+    }
 }

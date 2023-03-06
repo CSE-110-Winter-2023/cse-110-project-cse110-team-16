@@ -1,5 +1,6 @@
 package com.example.cse110_team16_project.classes;
 
+import com.example.cse110_team16_project.Units.Degrees;
 import com.google.gson.annotations.SerializedName;
 
 public abstract class CoordinateEntity {

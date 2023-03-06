@@ -7,6 +7,9 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.cse110_team16_project.Units.Meters;
+import com.example.cse110_team16_project.Units.Miles;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -19,7 +22,7 @@ public class DistanceUpdater {
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
     private Future<Void> future;
 
-    private final MutableLiveData<List<Double>> lastKnownDistancesFromUser = new MutableLiveData<>(); //in meters
+    private final MutableLiveData<List<Meters>> lastKnownDistancesFromUser = new MutableLiveData<>(); //in meters
 
     public DistanceUpdater(Activity activity, @NonNull LiveData<List<SCLocation>> coordinateEntities,
                            @NonNull LiveData<Coordinates> userCoordinates) {
@@ -37,24 +40,31 @@ public class DistanceUpdater {
                         return null;
                     })
             );
+
     }
 
-    public LiveData<List<Double>> getLastKnownEntityDistancesFromUser(){
+    public LiveData<List<Meters>> getLastKnownEntityDistancesFromUser(){
         return this.lastKnownDistancesFromUser;
     }
+
     public void updateAllEntityDistancesFromUser(List<SCLocation> scLocations, Coordinates userCoordinates){
         if(userCoordinates == null ||  scLocations == null) return;
 
-        List<Double> curDistances = getLastKnownEntityDistancesFromUser().getValue();
-        List<Double> newDistances = new ArrayList<>(scLocations.size());
+        List<Meters> curDistances = getLastKnownEntityDistancesFromUser().getValue();
+        List<Meters> newDistances = new ArrayList<>(scLocations.size());
 
         for(int i = 0; i < scLocations.size(); i++){
-            Double newDistance = getEntityDistanceFromUser(userCoordinates,
-                    scLocations.get(i));
-            if(curDistances != null && newDistance == null){
-                newDistances.add(curDistances.get(i));
+            try {
+                Meters newDistance = new Meters(getEntityDistanceFromUser(userCoordinates,
+                        scLocations.get(i)));
+                newDistances.add(newDistance);
             }
-            else newDistances.add(newDistance);
+            catch (Exception e) {
+                if(curDistances != null){
+                    newDistances.add(curDistances.get(i));
+                }
+                else newDistances.add(null);
+            }
         }
         lastKnownDistancesFromUser.postValue(newDistances);
     }

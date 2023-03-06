@@ -15,8 +15,8 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.rule.GrantPermissionRule;
 
 import com.example.cse110_team16_project.classes.Coordinates;
-import com.example.cse110_team16_project.classes.Degrees;
-import com.example.cse110_team16_project.classes.Radians;
+import com.example.cse110_team16_project.Units.Degrees;
+import com.example.cse110_team16_project.Units.Radians;
 import com.example.cse110_team16_project.classes.AbsoluteDirectionUpdater;
 import com.example.cse110_team16_project.classes.SCLocation;
 

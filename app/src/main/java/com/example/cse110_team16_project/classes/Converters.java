@@ -4,9 +4,8 @@ import android.location.Location;
 
 import androidx.room.TypeConverter;
 
-import com.example.cse110_team16_project.classes.Coordinates;
-import com.example.cse110_team16_project.classes.Degrees;
-import com.example.cse110_team16_project.classes.Radians;
+import com.example.cse110_team16_project.Units.Degrees;
+import com.example.cse110_team16_project.Units.Radians;
 
 import java.time.Instant;
 

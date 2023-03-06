@@ -21,8 +21,7 @@ import android.view.View;
 import com.example.cse110_team16_project.classes.CompassUIManager;
 import com.example.cse110_team16_project.classes.CompassViewModel;
 import com.example.cse110_team16_project.classes.Coordinates;
-import com.example.cse110_team16_project.classes.Degrees;
-import com.example.cse110_team16_project.classes.AbsoluteDirectionUpdater;
+import com.example.cse110_team16_project.Units.Degrees;
 import com.example.cse110_team16_project.classes.SCLocation;
 import com.example.cse110_team16_project.classes.DeviceTracker;
 
