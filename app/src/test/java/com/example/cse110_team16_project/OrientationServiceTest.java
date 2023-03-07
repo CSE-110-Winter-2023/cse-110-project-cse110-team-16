@@ -30,7 +30,6 @@ public class OrientationServiceTest {
 
             var mockOrientation = new Degrees(180);
             orientationService.setMockOrientationSource(mockOrientation);
-            // We don't want to have to do this! It's not our job to tell the activity!
 
             assertEquals(orientationService.getOrientation().getValue().getRadians(),Math.PI,0.1);
         });

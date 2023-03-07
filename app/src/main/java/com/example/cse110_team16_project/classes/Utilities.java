@@ -52,17 +52,4 @@ public class Utilities {
         }
     }
 
-    public static Miles metersToMiles(Meters meters) {
-        return new Miles(meters.getMeters()*.0006213712);
-    }
-
-    public static List<Miles> listMetersToMiles(List<Meters> meters) {
-        if(meters == null) return null;
-        List<Miles> inMiles = new ArrayList<>(meters.size());
-        for(Meters meter: meters){
-            if(meter == null) inMiles.add(null);
-            else inMiles.add(metersToMiles(meter));
-        }
-        return inMiles;
-    }
 }
