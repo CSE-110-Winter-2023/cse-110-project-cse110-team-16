@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CompassViewModel extends AndroidViewModel {
-    private static final double SECTOR_RADIUS = 45;
-    private static int[] MILES_DISTANCES = new int[]{1, 10, 500};
+    public static final double SECTOR_RADIUS = 45;
+    public static final int[] MILES_DISTANCES = new int[]{0, 1, 10, 500}; //first index is zero for calculations
     private LiveData<List<SCLocation>> scLocations;
     private final SCLocationRepository repo;
 
@@ -54,9 +54,9 @@ public class CompassViewModel extends AndroidViewModel {
                 screenDistances.add(numZones*SECTOR_RADIUS);
                 continue;
             }
-            for(int i = 0; i < numZones; i++){
+            for(int i = 1; i <= numZones; i++){
                 if (mile.getMiles() < MILES_DISTANCES[i]){
-                    screenDistances.add(((mile.getMiles()/MILES_DISTANCES[i]) + i)*SECTOR_RADIUS);
+                    screenDistances.add(((mile.getMiles()/(MILES_DISTANCES[i]-MILES_DISTANCES[i-1])) + i-1)*SECTOR_RADIUS);
                     break;
                 }
             }
