@@ -38,6 +38,6 @@ public class AddNameActivity extends AppCompatActivity {
         Log.d("ADDNAME", "name is " + name + ".");
         Log.d("ADDNAME", "private code is " + private_code + ".");
 
-        startActivity(new Intent(this, CompassActivity.class));
+        startActivity(new Intent(this, UIDActivity.class));
     }
 }
