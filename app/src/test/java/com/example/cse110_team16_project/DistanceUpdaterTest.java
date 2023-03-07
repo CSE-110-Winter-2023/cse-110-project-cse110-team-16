@@ -69,6 +69,5 @@ public class DistanceUpdaterTest {
                     friendDirections.get(1).getMeters(),0.001);
         });
 
-
     }
 }

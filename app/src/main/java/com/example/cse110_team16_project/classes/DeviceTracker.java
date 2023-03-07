@@ -3,6 +3,7 @@ package com.example.cse110_team16_project.classes;
 import android.app.Activity;
 import android.location.Location;
 
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -36,6 +37,10 @@ public class DeviceTracker {
         this.activity = activity;
         this.locationService = locationService;
         this.orientationService = orientationService;
+
+        getLocation().observe((LifecycleOwner) activity, location -> {
+            coordinates.postValue(Converters.LocationToCoordinates(location));
+        });
     }
 
     public void registerListeners(){
@@ -51,6 +56,10 @@ public class DeviceTracker {
     public void mockUserDirection(Degrees mockDirection){
         if(mockDirection.getDegrees() < 0) orientationService.disableMockMode();
         else orientationService.setMockOrientationSource(mockDirection);
+    }
+
+    public void mockUserLocation(Location loc){
+        locationService.setMockLocationSource(loc);
     }
     public void disableMockUserDirection(){
         orientationService.disableMockMode();
