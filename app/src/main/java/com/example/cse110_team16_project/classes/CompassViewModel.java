@@ -9,10 +9,15 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
+import com.example.cse110_team16_project.Units.Meters;
+import com.example.cse110_team16_project.Units.Miles;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CompassViewModel extends AndroidViewModel {
+    private static final double SECTOR_RADIUS = 45;
+    private static int[] MILES_DISTANCES = new int[]{1, 10, 500};
     private LiveData<List<SCLocation>> scLocations;
     private final SCLocationRepository repo;
 
@@ -40,6 +45,23 @@ public class CompassViewModel extends AndroidViewModel {
         return scLocations;
     }
 
-
+    public List<Double> findScreenDistance(List<Meters> meters, int numZones) {
+        List<Miles> miles = Converters.listMetersToMiles(meters);
+        if(miles == null) return null;
+        List<Double> screenDistances = new ArrayList<>();
+        for(Miles mile: miles){
+            if(mile.getMiles() > MILES_DISTANCES[numZones]) {
+                screenDistances.add(numZones*SECTOR_RADIUS);
+                continue;
+            }
+            for(int i = 0; i < numZones; i++){
+                if (mile.getMiles() < MILES_DISTANCES[i]){
+                    screenDistances.add(((mile.getMiles()/MILES_DISTANCES[i]) + i)*SECTOR_RADIUS);
+                    break;
+                }
+            }
+        }
+        return screenDistances;
+    }
 }
 
