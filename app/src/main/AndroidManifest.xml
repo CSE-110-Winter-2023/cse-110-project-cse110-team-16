@@ -18,6 +18,9 @@
         android:theme="@style/Theme.CSE110_Team16_Project"
         tools:targetApi="31">
         <activity
+            android:name=".UIDActivity"
+            android:exported="false" />
+        <activity
             android:name=".AddNameActivity"
             android:exported="false" />
         <activity

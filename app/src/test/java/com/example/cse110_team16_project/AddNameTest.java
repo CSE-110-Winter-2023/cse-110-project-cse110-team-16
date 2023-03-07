@@ -24,7 +24,6 @@ public class AddNameTest {
         var scenario = ActivityScenario.launch(AddNameActivity.class);
         scenario.moveToState(Lifecycle.State.CREATED);
         scenario.moveToState(Lifecycle.State.STARTED);
-        //scenario.moveToState(Lifecycle.State.RESUMED);
 
         scenario.onActivity(activity -> {
             String testName = "Dave";
