@@ -13,7 +13,7 @@ public class Coordinates extends Pair<Double,Double>{
         super(latitude,longitude);
     }
 
-    public Coordinates() { this(0,0); }
+    public static Coordinates getNullIsland() { return new Coordinates(0,0); }
     public double getLongitude(){
         return this.second;
     }

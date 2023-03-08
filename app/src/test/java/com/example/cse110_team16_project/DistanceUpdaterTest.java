@@ -51,7 +51,7 @@ public class DistanceUpdaterTest {
         scenario.moveToState(Lifecycle.State.RESUMED);
         scenario.onActivity(activity ->
         {
-            MutableLiveData<Coordinates> userCoordinates = new MutableLiveData<>(new Coordinates());
+            MutableLiveData<Coordinates> userCoordinates = new MutableLiveData<>(Coordinates.getNullIsland());
             MutableLiveData<Radians> userDirection = new MutableLiveData<>(new Radians(0.0));
             DistanceUpdater friendDistanceUpdater = new DistanceUpdater(activity, friends, userCoordinates);
             List<Meters> friendDirections = friendDistanceUpdater.getLastKnownEntityDistancesFromUser().getValue();

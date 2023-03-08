@@ -37,7 +37,7 @@ public class UserTest {
     }
     @Test
     public void testCoordinatesNotNull(){
-        SCLocation user = new SCLocation(new Coordinates(),"Person","A123456789");
+        SCLocation user = new SCLocation(Coordinates.getNullIsland(),"Person","A123456789");
         assertEquals(new Coordinates(0, 0),user.getCoordinates());
         try {
             user.setCoordinates(null);

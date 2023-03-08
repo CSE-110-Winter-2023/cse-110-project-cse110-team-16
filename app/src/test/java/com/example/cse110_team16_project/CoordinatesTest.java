@@ -36,8 +36,8 @@ public class CoordinatesTest {
 
     @Test
     public void testBearingToAtZeros() {
-        Coordinates c = new Coordinates();
-        Coordinates d = new Coordinates();
+        Coordinates c = Coordinates.getNullIsland();
+        Coordinates d = Coordinates.getNullIsland();
         assertEquals(0,c.bearingTo(d).getDegrees(),0.30);
     }
 }

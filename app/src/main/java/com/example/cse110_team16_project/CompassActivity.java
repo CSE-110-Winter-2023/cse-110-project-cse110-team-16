@@ -65,10 +65,10 @@ public class CompassActivity extends AppCompatActivity {
         SharedPreferences sharedPref = this.getSharedPreferences(Constants.SharedPreferences.user_info, Context.MODE_PRIVATE);
         String userLabel = sharedPref.getString(Constants.SharedPreferences.label, "");
         String publicCode = sharedPref.getString(Constants.SharedPreferences.public_code, "");
-        this.user = new SCLocation(new Coordinates(),userLabel,publicCode);
+        this.user = new SCLocation(Coordinates.getNullIsland(),userLabel,publicCode);
 
         private_code = sharedPref.getString(Constants.SharedPreferences.private_code, "");
-        this.user = new SCLocation(new Coordinates(),userLabel,publicCode);
+        this.user = new SCLocation(Coordinates.getNullIsland(),userLabel,publicCode);
     }
 
     private CompassViewModel setupViewModel() {

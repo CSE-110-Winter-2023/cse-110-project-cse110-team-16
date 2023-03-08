@@ -57,7 +57,7 @@ public class AbsoluteDirectionUpdaterTest {
         scenario.moveToState(Lifecycle.State.RESUMED);
         scenario.onActivity(activity ->
         {
-            MutableLiveData<Coordinates> userCoordinates = new MutableLiveData<>(new Coordinates());
+            MutableLiveData<Coordinates> userCoordinates = new MutableLiveData<>(Coordinates.getNullIsland());
             MutableLiveData<Radians> userDirection = new MutableLiveData<>(new Radians(0.0));
             AbsoluteDirectionUpdater friendDirectionUpdater = new AbsoluteDirectionUpdater(activity, friends, userCoordinates);
             List<Degrees> friendDirections = friendDirectionUpdater.getLastKnownEntityDirectionsFromUser().getValue();
