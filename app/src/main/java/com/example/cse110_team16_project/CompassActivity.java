@@ -34,9 +34,9 @@ import java.util.concurrent.Executors;
 public class CompassActivity extends AppCompatActivity {
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
 
-    private SCLocation user;
-
+    private String public_code;
     private String private_code;
+    private String userLabel;
     private DeviceTracker deviceTracker;
     private CompassUIManager compassUIManager;
     private CompassViewModel viewModel;
@@ -63,12 +63,9 @@ public class CompassActivity extends AppCompatActivity {
     private void loadUserInfo(){
 
         SharedPreferences sharedPref = this.getSharedPreferences(Constants.SharedPreferences.user_info, Context.MODE_PRIVATE);
-        String userLabel = sharedPref.getString(Constants.SharedPreferences.label, "");
-        String publicCode = sharedPref.getString(Constants.SharedPreferences.public_code, "");
-        this.user = new SCLocation(Coordinates.getNullIsland(),userLabel,publicCode);
-
+        userLabel = sharedPref.getString(Constants.SharedPreferences.label, "");
+        public_code = sharedPref.getString(Constants.SharedPreferences.public_code, "");
         private_code = sharedPref.getString(Constants.SharedPreferences.private_code, "");
-        this.user = new SCLocation(Coordinates.getNullIsland(),userLabel,publicCode);
     }
 
     private CompassViewModel setupViewModel() {
@@ -103,8 +100,6 @@ public class CompassActivity extends AppCompatActivity {
         // Other 'case' lines to check for other
         // permissions this app might request.
     }
-
-    public SCLocation getUser(){return user;}
 
     @Override
     protected void onPause(){
