@@ -58,7 +58,7 @@ public class DistanceUpdaterTest {
             assertNull(friendDirections);
             friendDistanceUpdater.updateAllEntityDistancesFromUser(friends.getValue(),userCoordinates.getValue());
             ArrayList<Double> expected = new ArrayList<>(Arrays.asList(friendDistanceUpdater.
-                            getEntityDistanceFromUser(Objects.requireNonNull(userCoordinates.getValue()),friends.getValue().get(0)),
+                            getEntityDistanceFromUser(userCoordinates.getValue(),friends.getValue().get(0)),
                     friendDistanceUpdater.
                             getEntityDistanceFromUser(userCoordinates.getValue(),friends.getValue().get(1))));
             assertEquals(169500,expected.get(0),1000);  //good enough estimate
