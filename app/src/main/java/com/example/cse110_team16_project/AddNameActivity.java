@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.cse110_team16_project.classes.Constants;
+
 import java.util.UUID;
 
 public class AddNameActivity extends AppCompatActivity {
@@ -26,12 +28,12 @@ public class AddNameActivity extends AppCompatActivity {
         String private_code = UUID.randomUUID().toString();
         String public_code = UUID.randomUUID().toString();
 
-        SharedPreferences sharedPref = this.getSharedPreferences("user_info", Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = this.getSharedPreferences(Constants.SharedPreferences.user_info, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
 
-        editor.putString("label", name);
-        editor.putString("private_code", private_code);
-        editor.putString("public_code", public_code);
+        editor.putString(Constants.SharedPreferences.label, name);
+        editor.putString(Constants.SharedPreferences.private_code, private_code);
+        editor.putString(Constants.SharedPreferences.public_code, public_code);
 
         editor.apply();
 

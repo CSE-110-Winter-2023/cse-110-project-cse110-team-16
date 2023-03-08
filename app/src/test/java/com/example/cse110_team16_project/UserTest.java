@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
+import com.example.cse110_team16_project.classes.Constants;
 import com.example.cse110_team16_project.classes.Coordinates;
 import com.example.cse110_team16_project.classes.SCLocation;
 
@@ -36,7 +37,7 @@ public class UserTest {
     }
     @Test
     public void testCoordinatesNotNull(){
-        SCLocation user = new SCLocation(new Coordinates(0,0),"Person","A123456789");
+        SCLocation user = new SCLocation(new Coordinates(),"Person","A123456789");
         assertEquals(new Coordinates(0, 0),user.getCoordinates());
         try {
             user.setCoordinates(null);

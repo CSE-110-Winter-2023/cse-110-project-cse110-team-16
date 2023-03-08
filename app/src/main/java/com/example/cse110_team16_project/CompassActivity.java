@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -20,6 +21,7 @@ import android.view.View;
 
 import com.example.cse110_team16_project.classes.CompassUIManager;
 import com.example.cse110_team16_project.classes.CompassViewModel;
+import com.example.cse110_team16_project.classes.Constants;
 import com.example.cse110_team16_project.classes.Coordinates;
 import com.example.cse110_team16_project.Units.Degrees;
 import com.example.cse110_team16_project.classes.SCLocation;
@@ -33,6 +35,8 @@ public class CompassActivity extends AppCompatActivity {
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
 
     private SCLocation user;
+
+    private String private_code;
     private DeviceTracker deviceTracker;
     private CompassUIManager compassUIManager;
     private CompassViewModel viewModel;
@@ -57,11 +61,14 @@ public class CompassActivity extends AppCompatActivity {
 
 
     private void loadUserInfo(){
-        //TODO: Integrate loading User Info
-        Coordinates userCoordinates = new Coordinates(0,0);
-        String userLabel = "User";
-        String publicCode = "";
-        this.user = new SCLocation(userCoordinates,userLabel,publicCode);
+
+        SharedPreferences sharedPref = this.getSharedPreferences(Constants.SharedPreferences.user_info, Context.MODE_PRIVATE);
+        String userLabel = sharedPref.getString(Constants.SharedPreferences.label, "");
+        String publicCode = sharedPref.getString(Constants.SharedPreferences.public_code, "");
+        this.user = new SCLocation(new Coordinates(),userLabel,publicCode);
+
+        private_code = sharedPref.getString(Constants.SharedPreferences.private_code, "");
+        this.user = new SCLocation(new Coordinates(),userLabel,publicCode);
     }
 
     private CompassViewModel setupViewModel() {

@@ -14,6 +14,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.rule.GrantPermissionRule;
 
+import com.example.cse110_team16_project.classes.Constants;
 import com.example.cse110_team16_project.classes.Coordinates;
 import com.example.cse110_team16_project.Units.Degrees;
 import com.example.cse110_team16_project.Units.Radians;
@@ -56,7 +57,7 @@ public class AbsoluteDirectionUpdaterTest {
         scenario.moveToState(Lifecycle.State.RESUMED);
         scenario.onActivity(activity ->
         {
-            MutableLiveData<Coordinates> userCoordinates = new MutableLiveData<>(new Coordinates(0.0,0.0));
+            MutableLiveData<Coordinates> userCoordinates = new MutableLiveData<>(new Coordinates());
             MutableLiveData<Radians> userDirection = new MutableLiveData<>(new Radians(0.0));
             AbsoluteDirectionUpdater friendDirectionUpdater = new AbsoluteDirectionUpdater(activity, friends, userCoordinates);
             List<Degrees> friendDirections = friendDirectionUpdater.getLastKnownEntityDirectionsFromUser().getValue();
