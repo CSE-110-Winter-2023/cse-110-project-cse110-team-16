@@ -8,6 +8,7 @@ import static org.junit.Assert.*;
 
 import android.location.Location;
 
+import com.example.cse110_team16_project.classes.Constants;
 import com.example.cse110_team16_project.classes.Coordinates;
 
 /**
@@ -35,8 +36,8 @@ public class CoordinatesTest {
 
     @Test
     public void testBearingToAtZeros() {
-        Coordinates c = new Coordinates(0,0);
-        Coordinates d = new Coordinates(0,0);
+        Coordinates c = Coordinates.getNullIsland();
+        Coordinates d = Coordinates.getNullIsland();
         assertEquals(0,c.bearingTo(d).getDegrees(),0.30);
     }
 }

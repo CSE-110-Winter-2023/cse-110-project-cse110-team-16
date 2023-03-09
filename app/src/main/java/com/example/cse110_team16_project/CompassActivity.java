@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -20,9 +21,9 @@ import android.view.View;
 
 import com.example.cse110_team16_project.classes.CompassUIManager;
 import com.example.cse110_team16_project.classes.CompassViewModel;
+import com.example.cse110_team16_project.classes.Constants;
 import com.example.cse110_team16_project.classes.Coordinates;
-import com.example.cse110_team16_project.classes.Degrees;
-import com.example.cse110_team16_project.classes.RelativeDirectionUpdater;
+import com.example.cse110_team16_project.Units.Degrees;
 import com.example.cse110_team16_project.classes.SCLocation;
 import com.example.cse110_team16_project.classes.DeviceTracker;
 
@@ -33,9 +34,10 @@ import java.util.concurrent.Executors;
 public class CompassActivity extends AppCompatActivity {
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
 
-    private SCLocation user;
+    private String public_code;
+    private String private_code;
+    private String userLabel;
     private DeviceTracker deviceTracker;
-    private RelativeDirectionUpdater relativeDirectionUpdater;
     private CompassUIManager compassUIManager;
     private CompassViewModel viewModel;
 
@@ -59,11 +61,11 @@ public class CompassActivity extends AppCompatActivity {
 
 
     private void loadUserInfo(){
-        //TODO
-        Coordinates userCoordinates = new Coordinates(0,0);
-        String userLabel = "User";
-        String publicCode = "";
-        this.user = new SCLocation(userCoordinates,userLabel,publicCode);
+
+        SharedPreferences sharedPref = this.getSharedPreferences(Constants.SharedPreferences.user_info, Context.MODE_PRIVATE);
+        userLabel = sharedPref.getString(Constants.SharedPreferences.label, "");
+        public_code = sharedPref.getString(Constants.SharedPreferences.public_code, "");
+        private_code = sharedPref.getString(Constants.SharedPreferences.private_code, "");
     }
 
     private CompassViewModel setupViewModel() {
@@ -99,8 +101,6 @@ public class CompassActivity extends AppCompatActivity {
         // permissions this app might request.
     }
 
-    public SCLocation getUser(){return user;}
-
     @Override
     protected void onPause(){
         super.onPause();
@@ -110,8 +110,6 @@ public class CompassActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-
-        relativeDirectionUpdater = new RelativeDirectionUpdater(this, viewModel.refreshSCLocations(), deviceTracker.getCoordinates(), deviceTracker.getOrientation());
 
         if(deviceTracker != null) {
             deviceTracker.registerListeners();
@@ -131,8 +129,6 @@ public class CompassActivity extends AppCompatActivity {
     public CompassUIManager getCompassUIManager() {
         return compassUIManager;
     }
-
-    public RelativeDirectionUpdater getRelativeDirectionUpdater() { return relativeDirectionUpdater; }
 
     public DeviceTracker getDeviceTracker() { return this.deviceTracker; }
 

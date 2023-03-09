@@ -35,7 +35,7 @@ public class SCLocationRepository {
      * @return a LiveData object that will be updated when the SCLocation is updated locally or remotely.
      */
 
-    //likely unecessary for this MS, just use getRemote
+    //likely unnecessary for this MS, just use getRemote
     public LiveData<SCLocation> getSynced(String public_code) {
         var scLocation = new MediatorLiveData<SCLocation>();
 
@@ -50,7 +50,7 @@ public class SCLocationRepository {
         // If we get a local update, pass it on.
         scLocation.addSource(getLocal(public_code), scLocation::postValue);
         // If we get a remote update, update the local version (triggering the above observer)
-        scLocation.addSource(getRemote(public_code), updateFromRemote);
+        scLocation.addSource(getRemoteLive(public_code), updateFromRemote);
 
         return scLocation;
     }
@@ -87,8 +87,11 @@ public class SCLocationRepository {
     }
     // Remote Methods
     // ==============
+    public SCLocation getRemote(String public_code){
+        return api.getSCLocation(public_code); //TODO: null check?
+    }
 
-    public LiveData<List<SCLocation>> getRemote(List<String> public_codes){
+    public LiveData<List<SCLocation>> getRemoteLive(List<String> public_codes){
         MutableLiveData<List<SCLocation>> locations = new MutableLiveData<>();
 
         var executor = Executors.newSingleThreadScheduledExecutor();
@@ -103,8 +106,7 @@ public class SCLocationRepository {
 
         return locations;
     }
-    public LiveData<SCLocation> getRemote(String public_code) {
-        // TODO: Refer to TimerService from https://github.com/DylanLukes/CSE-110-WI23-Demo5-V2.
+    public LiveData<SCLocation> getRemoteLive(String public_code) {
 
         // Start by fetching the SCLocation from the server _once_ and feeding it into MutableLiveData.
         // Then, set up a background thread that will poll the server every 3 seconds.
@@ -117,15 +119,13 @@ public class SCLocationRepository {
         MutableLiveData<SCLocation> scLocation = new MutableLiveData<>(null);
 
         var executor = Executors.newSingleThreadScheduledExecutor();
-        executor.scheduleAtFixedRate(() -> {
-           scLocation.postValue(api.getSCLocation(public_code));
-        },0,3, TimeUnit.SECONDS);
+        executor.scheduleAtFixedRate(() -> scLocation.postValue(api.getSCLocation(public_code)),
+                0,3, TimeUnit.SECONDS);
 
         return scLocation;
     }
 
     public void upsertRemote(SCLocation scLocation, String private_code) {
-        // TODO: Implement upsertRemote!
         Executors.newSingleThreadExecutor().submit(() -> api.putSCLocation(scLocation, private_code));
     }
 }

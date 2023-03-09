@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.cse110_team16_project.classes.Constants;
+
 import org.w3c.dom.Text;
 
 public class UIDActivity extends AppCompatActivity {
@@ -20,9 +22,9 @@ public class UIDActivity extends AppCompatActivity {
         setContentView(R.layout.activity_uidactivity);
 
         // Set text for UID_display
-        SharedPreferences sharedPref = this.getSharedPreferences("user_info", Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = this.getSharedPreferences(Constants.SharedPreferences.user_info, Context.MODE_PRIVATE);
         TextView UID_display = findViewById(R.id.UID_display);
-        UID_display.setText(sharedPref.getString("public_code", ""));
+        UID_display.setText(sharedPref.getString(Constants.SharedPreferences.public_code, ""));
 
         // Set text for UID_Btn
         Button UID_Btn = findViewById(R.id.UID_Btn);

@@ -4,11 +4,14 @@ import android.location.Location;
 
 import androidx.room.TypeConverter;
 
-import com.example.cse110_team16_project.classes.Coordinates;
-import com.example.cse110_team16_project.classes.Degrees;
-import com.example.cse110_team16_project.classes.Radians;
+import com.example.cse110_team16_project.Units.Degrees;
+import com.example.cse110_team16_project.Units.Meters;
+import com.example.cse110_team16_project.Units.Miles;
+import com.example.cse110_team16_project.Units.Radians;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Converters {
     @TypeConverter
@@ -50,5 +53,19 @@ public class Converters {
 
     public static Radians DegreesToRadians(Degrees degrees){
         return new Radians(Math.toRadians(degrees.getDegrees()));
+    }
+
+    public static Miles metersToMiles(Meters meters) {
+        return new Miles(meters.getMeters()*.0006213712);
+    }
+
+    public static List<Miles> listMetersToMiles(List<Meters> meters) {
+        if(meters == null) return null;
+        List<Miles> inMiles = new ArrayList<>(meters.size());
+        for(Meters meter: meters){
+            if(meter == null) inMiles.add(null);
+            else inMiles.add(metersToMiles(meter));
+        }
+        return inMiles;
     }
 }

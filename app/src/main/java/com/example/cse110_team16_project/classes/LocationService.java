@@ -13,6 +13,8 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.cse110_team16_project.Units.Degrees;
+
 public class LocationService implements LocationListener {
 
     private static LocationService instance;
@@ -22,7 +24,7 @@ public class LocationService implements LocationListener {
     private final LocationManager locationManager;
 
     public static LocationService singleton(Activity activity, int minTime, int minDistance) {
-        if(instance == null){
+        if (instance == null) {
             instance = new LocationService(activity, minTime, minDistance);
         }
         return instance;
@@ -35,16 +37,16 @@ public class LocationService implements LocationListener {
     }
 
     protected void registerLocationListener(Activity activity, int minTime, int minDistance) {
-        if(ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PERMISSION_GRANTED) {
             throw new IllegalStateException("App needs location permission to get latest location");
         }
 
         this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                minTime,minDistance,this);
+                minTime, minDistance, this);
     }
 
     @Override
-    public void onLocationChanged(@NonNull Location location){
+    public void onLocationChanged(@NonNull Location location) {
         this.location.postValue(location);
     }
 
@@ -56,4 +58,8 @@ public class LocationService implements LocationListener {
         return this.location;
     }
 
+    public void setMockLocationSource(Location loc) {
+        unregisterLocationListener();
+        location.postValue(loc);
+    }
 }

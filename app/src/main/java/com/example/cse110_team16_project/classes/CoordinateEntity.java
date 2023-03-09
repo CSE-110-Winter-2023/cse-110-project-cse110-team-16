@@ -1,7 +1,11 @@
 package com.example.cse110_team16_project.classes;
 
+import com.example.cse110_team16_project.Units.Degrees;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Sort of a quasi adapter for the Coordinates class to make it easy to store and retrieve from databases
+ */
 public abstract class CoordinateEntity {
 
     @SerializedName("latitude")

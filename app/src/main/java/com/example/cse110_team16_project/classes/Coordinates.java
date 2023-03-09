@@ -5,12 +5,15 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
+import com.example.cse110_team16_project.Units.Degrees;
+
 public class Coordinates extends Pair<Double,Double>{
 
     public Coordinates(double latitude, double longitude){
         super(latitude,longitude);
     }
 
+    public static Coordinates getNullIsland() { return new Coordinates(0,0); }
     public double getLongitude(){
         return this.second;
     }
@@ -19,9 +22,6 @@ public class Coordinates extends Pair<Double,Double>{
         return this.first;
     }
 
-    //https://www.movable-type.co.uk/scripts/latlong.html
-    //initial bearing
-    //currently returns 0 if both coordinates are the same
     //TODO: maybe move to Utilities
     public Degrees bearingTo(@NonNull Coordinates c){
         Location a = Converters.CoordinatesToLocation(this);

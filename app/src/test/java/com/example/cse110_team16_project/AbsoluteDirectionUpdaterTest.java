@@ -12,14 +12,13 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.rule.GrantPermissionRule;
 
-import com.example.cse110_team16_project.classes.CoordinateEntity;
+import com.example.cse110_team16_project.classes.Constants;
 import com.example.cse110_team16_project.classes.Coordinates;
-import com.example.cse110_team16_project.classes.Degrees;
-import com.example.cse110_team16_project.classes.Radians;
-import com.example.cse110_team16_project.classes.RelativeDirectionUpdater;
+import com.example.cse110_team16_project.Units.Degrees;
+import com.example.cse110_team16_project.Units.Radians;
+import com.example.cse110_team16_project.classes.AbsoluteDirectionUpdater;
 import com.example.cse110_team16_project.classes.SCLocation;
 
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ import java.util.Objects;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(RobolectricTestRunner.class)
-public class RelativeDirectionUpdaterTest {
+public class AbsoluteDirectionUpdaterTest {
     //Tests do not test methods in isolation which is bad practice, but it's a small
     //class so what could possibly go wrong.
 
@@ -44,7 +43,7 @@ public class RelativeDirectionUpdaterTest {
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule
             .grant(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION);
     @Test
-    public void testRelativeDirectionUpdater(){
+    public void testAbsoluteDirectionUpdater(){
         ActivityScenario<CompassActivity> scenario = ActivityScenario.launch(CompassActivity.class);
 
 
@@ -58,17 +57,16 @@ public class RelativeDirectionUpdaterTest {
         scenario.moveToState(Lifecycle.State.RESUMED);
         scenario.onActivity(activity ->
         {
-            MutableLiveData<Coordinates> userCoordinates = new MutableLiveData<>(new Coordinates(0.0,0.0));
+            MutableLiveData<Coordinates> userCoordinates = new MutableLiveData<>(Coordinates.getNullIsland());
             MutableLiveData<Radians> userDirection = new MutableLiveData<>(new Radians(0.0));
-            RelativeDirectionUpdater friendDirectionUpdater = new RelativeDirectionUpdater(activity, friends, userCoordinates, userDirection);
+            AbsoluteDirectionUpdater friendDirectionUpdater = new AbsoluteDirectionUpdater(activity, friends, userCoordinates);
             List<Degrees> friendDirections = friendDirectionUpdater.getLastKnownEntityDirectionsFromUser().getValue();
-            assertEquals(0.0, friendDirections.get(0).getDegrees(),0.0001);
-            assertEquals(0.0, friendDirections.get(1).getDegrees(),0.0001);
-            friendDirectionUpdater.updateAllEntityDirectionsFromUser(userCoordinates.getValue(), userDirection.getValue());
+            assertNull(friendDirections);
+            friendDirectionUpdater.updateAllEntityDirectionsFromUser(friends.getValue(),userCoordinates.getValue());
             ArrayList<Degrees> expected = new ArrayList<>(Arrays.asList(friendDirectionUpdater.
-                            getEntityDirectionFromUser(Objects.requireNonNull(userCoordinates.getValue()),friends.getValue().get(0), new Degrees(0.0)),
+                            getEntityDirectionFromUser(Objects.requireNonNull(userCoordinates.getValue()),friends.getValue().get(0)),
                     friendDirectionUpdater.
-                            getEntityDirectionFromUser(userCoordinates.getValue(),friends.getValue().get(1),new Degrees(0.0))));
+                            getEntityDirectionFromUser(userCoordinates.getValue(),friends.getValue().get(1))));
             assertEquals(49,expected.get(0).getDegrees(),.3);
             assertEquals(0,expected.get(1).getDegrees(),.3);
             friendDirections = friendDirectionUpdater.getLastKnownEntityDirectionsFromUser().getValue();

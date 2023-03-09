@@ -9,12 +9,17 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 
 import com.example.cse110_team16_project.R;
+import com.example.cse110_team16_project.Units.Degrees;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+
+/** Currently unused class previously meant for managing the Location icons on compass.
+ * Recommend using ViewGroup instead.
+ */
 public class UserUIAdapter{
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
     private Future<Void> future;
