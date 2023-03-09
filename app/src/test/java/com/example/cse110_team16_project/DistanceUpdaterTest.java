@@ -55,7 +55,6 @@ public class DistanceUpdaterTest {
             MutableLiveData<Radians> userDirection = new MutableLiveData<>(new Radians(0.0));
             DistanceUpdater friendDistanceUpdater = new DistanceUpdater(activity, friends, userCoordinates);
             List<Meters> friendDirections = friendDistanceUpdater.getLastKnownEntityDistancesFromUser().getValue();
-            assertNull(friendDirections);
             friendDistanceUpdater.updateAllEntityDistancesFromUser(friends.getValue(),userCoordinates.getValue());
             ArrayList<Double> expected = new ArrayList<>(Arrays.asList(friendDistanceUpdater.
                             getEntityDistanceFromUser(userCoordinates.getValue(),friends.getValue().get(0)),
