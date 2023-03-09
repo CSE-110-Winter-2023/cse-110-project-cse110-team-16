@@ -41,7 +41,7 @@ public class CompassViewModel extends AndroidViewModel {
     public LiveData<List<SCLocation>> refreshSCLocations(){
             scLocations = new MutableLiveData<>();
             List<String> public_codes = repo.getLocalPublicCodes();
-            scLocations = repo.getRemote(public_codes);
+            scLocations = repo.getRemoteLive(public_codes);
         return scLocations;
     }
 
