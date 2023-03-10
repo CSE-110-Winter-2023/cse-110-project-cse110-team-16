@@ -7,6 +7,7 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -22,6 +23,8 @@ public class LocationService implements LocationListener {
     private final MutableLiveData<Location> location;
 
     private final LocationManager locationManager;
+
+    private boolean GPS_enabled;
 
     public static LocationService singleton(Activity activity, int minTime, int minDistance) {
         if (instance == null) {
@@ -61,5 +64,10 @@ public class LocationService implements LocationListener {
     public void setMockLocationSource(Location loc) {
         unregisterLocationListener();
         location.postValue(loc);
+    }
+
+    @Override
+    public void onProviderDisabled (String provider){
+        Log.d("GPS", "GPS disabled");
     }
 }
