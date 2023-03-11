@@ -15,7 +15,7 @@ import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class GPSstatus {
+public class GPSstatus{
     private LiveData<Location> location;
 
     private View view;
@@ -27,27 +27,32 @@ public class GPSstatus {
 
     private long getLocationAge(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            return Objects.requireNonNull(this.location.getValue()).getElapsedRealtimeAgeMillis(0);
+            return Objects.requireNonNull(this.location.getValue()).getElapsedRealtimeAgeMillis();
         }
         return 0;
     }
 
     public boolean isLocationLive(){
         Log.d("GPS", Long.toString(getLocationAge()));
-       return getLocationAge() < 200;
+       return getLocationAge() < 1000;
     }
 
     public void trackGPSStatus(){
         var executor = Executors.newSingleThreadScheduledExecutor();
         executor.scheduleAtFixedRate(() -> {
-            if (isLocationLive()){
-                this.setGreen();
-                Log.d("GPS", "GPS status set to green");
-            } else {
-                this.setRed();
-//                Log.d("GPS", "GPS status set to red");
+            try{
+                if (isLocationLive()){
+                    this.setGreen();
+                    Log.d("GPS", "GPS status set to green");
+                } else {
+                    this.setRed();
+//              Log.d("GPS", "GPS status set to red");
+                }
+            } catch (Exception e){
+                e.printStackTrace();
             }
-        },0,10, TimeUnit.SECONDS);
+
+        },0,3, TimeUnit.SECONDS);
     }
 
     private void setGreen(){

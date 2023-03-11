@@ -29,6 +29,7 @@ import com.example.cse110_team16_project.classes.SCLocation;
 import com.example.cse110_team16_project.classes.DeviceTracker;
 
 
+import java.security.spec.ECField;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -61,7 +62,12 @@ public class CompassActivity extends AppCompatActivity {
         deviceTracker = new DeviceTracker(this);
         compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
         gpsstatus = new GPSstatus(deviceTracker.getLocation(), findViewById(R.id.gpsLight));
-        gpsstatus.trackGPSStatus();
+        try{
+            gpsstatus.trackGPSStatus();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
 
