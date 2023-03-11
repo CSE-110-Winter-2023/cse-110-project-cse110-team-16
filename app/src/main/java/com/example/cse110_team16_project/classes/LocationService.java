@@ -24,8 +24,6 @@ public class LocationService implements LocationListener {
 
     private final LocationManager locationManager;
 
-    private boolean GPS_enabled;
-
     public static LocationService singleton(Activity activity, int minTime, int minDistance) {
         if (instance == null) {
             instance = new LocationService(activity, minTime, minDistance);
@@ -46,6 +44,7 @@ public class LocationService implements LocationListener {
 
         this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                 minTime, minDistance, this);
+
     }
 
     @Override
@@ -64,10 +63,5 @@ public class LocationService implements LocationListener {
     public void setMockLocationSource(Location loc) {
         unregisterLocationListener();
         location.postValue(loc);
-    }
-
-    @Override
-    public void onProviderDisabled (String provider){
-        Log.d("GPS", "GPS disabled");
     }
 }

@@ -68,4 +68,8 @@ public class Converters {
         }
         return inMiles;
     }
+
+    public static long milisecToMins(long ms){
+        return ms/60000;
+    }
 }
