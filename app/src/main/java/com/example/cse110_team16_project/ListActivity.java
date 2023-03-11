@@ -92,10 +92,9 @@ public class ListActivity extends AppCompatActivity {
 
 
             var code = input.getText().toString();
-            if(viewModel.getOrCreateSCLocation(code) == null){
-                Utilities.showAlert(this,"Invalid UID");
+            if(viewModel.getOrCreateSCLocation(code,this) != null){
+                input.setText("");
             }
-            else input.setText("");
             return true;
         });
     }
