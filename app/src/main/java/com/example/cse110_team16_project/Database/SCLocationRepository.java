@@ -1,5 +1,7 @@
 package com.example.cse110_team16_project.Database;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -60,10 +62,12 @@ public class SCLocationRepository {
         return scLocation;
     }
 
+    /*
     public void upsertSynced(SCLocation scLocation, String private_code) {
         upsertLocal(scLocation);
         upsertRemote(scLocation, private_code);
     }
+    */
 
     // Local Methods
     // =============
@@ -110,14 +114,18 @@ public class SCLocationRepository {
 
         var executor = Executors.newSingleThreadScheduledExecutor();
         remoteUpdateThreads.add(
-            executor.scheduleAtFixedRate(() -> scLocation.postValue(api.getSCLocation(public_code)),
+            executor.scheduleAtFixedRate(() -> {
+                        scLocation.postValue(api.getSCLocation(public_code));},
                     0,3, TimeUnit.SECONDS)
         );
         return scLocation;
     }
 
-    public void upsertRemote(SCLocation scLocation, String private_code) {
-        Executors.newSingleThreadExecutor().submit(() -> api.putSCLocation(scLocation, private_code));
+    public Future<Void> upsertRemote(SCLocation scLocation, String private_code) {
+        return Executors.newSingleThreadExecutor().submit(() -> {
+            api.putSCLocation(scLocation, private_code);
+            return null;
+        });
     }
 
     public void updateSCLocationLive(LiveData<SCLocation> scLocation, String private_code){
@@ -136,4 +144,5 @@ public class SCLocationRepository {
         }
         remoteUpdateThreads.clear();
     }
+
 }
