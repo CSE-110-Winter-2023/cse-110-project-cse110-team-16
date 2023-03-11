@@ -24,6 +24,7 @@ import com.example.cse110_team16_project.classes.CompassViewModel;
 import com.example.cse110_team16_project.classes.Constants;
 import com.example.cse110_team16_project.classes.Coordinates;
 import com.example.cse110_team16_project.Units.Degrees;
+import com.example.cse110_team16_project.classes.GPSstatus;
 import com.example.cse110_team16_project.classes.SCLocation;
 import com.example.cse110_team16_project.classes.DeviceTracker;
 
@@ -41,6 +42,8 @@ public class CompassActivity extends AppCompatActivity {
     private CompassUIManager compassUIManager;
     private CompassViewModel viewModel;
 
+    private GPSstatus gpsstatus;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +60,8 @@ public class CompassActivity extends AppCompatActivity {
         viewModel = setupViewModel();
         deviceTracker = new DeviceTracker(this);
         compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
+        gpsstatus = new GPSstatus(deviceTracker.getLocation(), findViewById(R.id.gpsLight));
+        gpsstatus.trackGPSStatus();
     }
 
 

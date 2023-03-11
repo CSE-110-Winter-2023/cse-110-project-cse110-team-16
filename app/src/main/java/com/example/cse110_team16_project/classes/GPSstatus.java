@@ -7,8 +7,11 @@ import android.view.View;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.cse110_team16_project.R;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -24,8 +27,9 @@ public class GPSstatus {
 
     private long getLocationAge(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            return this.location.getValue().getElapsedRealtimeAgeMillis();
+            return Objects.requireNonNull(this.location.getValue()).getElapsedRealtimeAgeMillis();
         }
+        return 0;
     }
 
     public boolean isLocationLive(){
@@ -45,11 +49,11 @@ public class GPSstatus {
         },0,10, TimeUnit.SECONDS);
     }
 
-    public void setGreen(){
-        this.view.setBackgroundColor(0x00FF00);
+    private void setGreen(){
+        this.view.setBackgroundResource(R.drawable.gps_green);
     }
 
-    public void setRed(){
-        this.view.setBackgroundColor(0xFF0000);
+    private void setRed(){
+        this.view.setBackgroundResource(R.drawable.gps_red);
     }
 }
