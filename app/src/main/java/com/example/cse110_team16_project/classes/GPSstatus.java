@@ -27,12 +27,13 @@ public class GPSstatus {
 
     private long getLocationAge(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            return Objects.requireNonNull(this.location.getValue()).getElapsedRealtimeAgeMillis();
+            return Objects.requireNonNull(this.location.getValue()).getElapsedRealtimeAgeMillis(0);
         }
         return 0;
     }
 
     public boolean isLocationLive(){
+        Log.d("GPS", Long.toString(getLocationAge()));
        return getLocationAge() < 200;
     }
 
@@ -44,7 +45,7 @@ public class GPSstatus {
                 Log.d("GPS", "GPS status set to green");
             } else {
                 this.setRed();
-                Log.d("GPS", "GPS status set to red");
+//                Log.d("GPS", "GPS status set to red");
             }
         },0,10, TimeUnit.SECONDS);
     }
