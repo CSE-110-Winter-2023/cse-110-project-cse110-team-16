@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("user_info", Context.MODE_PRIVATE);
         Intent intent;
         if(preferences.contains("private_code")) {
-            intent = new Intent(this, UIDActivity.class);
+            intent = new Intent(this, CompassActivity.class);
         }
         else {
             intent = new Intent(this, AddNameActivity.class);

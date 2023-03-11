@@ -17,8 +17,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
+import com.example.cse110_team16_project.Database.SCLocationDatabase;
+import com.example.cse110_team16_project.Database.SCLocationRepository;
 import com.example.cse110_team16_project.classes.UI.CompassUIManager;
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
@@ -60,9 +63,15 @@ public class CompassActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_compass);
         handleLocationPermission();
+
+
     }
 
     private void finishOnCreate(){
+        var db = SCLocationDatabase.provide(this);
+        var dao = db.getDao();
+        this.repo = new SCLocationRepository(dao);
+
         repo = new SCLocationRepository(SCLocationDatabase.
                 provide(this).getDao());
         loadUserInfo();
@@ -134,7 +143,7 @@ public class CompassActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-
+        Log.d("Number of locations:","" + repo.getLocalPublicCodes().size());
         if(deviceTracker != null) {
             deviceTracker.registerListeners();
             SharedPreferences preferences = getSharedPreferences("HomeLoc", MODE_PRIVATE);
@@ -156,7 +165,11 @@ public class CompassActivity extends AppCompatActivity {
 
     public DeviceTracker getDeviceTracker() { return this.deviceTracker; }
 
-    public void onBackClicked(View view) {
+    public void onUIDClicked(View view) {
+        startActivity(new Intent(this, UIDActivity.class));
+    }
+
+    public void ontoListClicked(View view) {
         startActivity(new Intent(this, ListActivity.class));
     }
 
