@@ -8,6 +8,8 @@ import android.Manifest;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
@@ -41,6 +43,9 @@ public class CompassActivity extends AppCompatActivity {
     private CompassUIManager compassUIManager;
     private CompassViewModel viewModel;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +62,8 @@ public class CompassActivity extends AppCompatActivity {
         viewModel = setupViewModel();
         deviceTracker = new DeviceTracker(this);
         compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
+
+
     }
 
 
@@ -135,4 +142,7 @@ public class CompassActivity extends AppCompatActivity {
     public void onBackClicked(View view) {
         startActivity(new Intent(this, AddHomeLocations.class));
     }
+
+
+
 }

@@ -1,10 +1,12 @@
 package com.example.cse110_team16_project.classes;
 
 import android.app.Activity;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 
@@ -21,31 +23,42 @@ import java.util.concurrent.Future;
  * Recommend using ViewGroup instead.
  */
 public class UserUIAdapter{
-    private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
-    private Future<Void> future;
-    //private static final float SCREEN_PERCENTAGE = .475f;
+
+
+
 
     Activity activity;
-    private List<TextView> entityLabels;
-    private final int[] defaultColors = {R.color.black,
-            R.color.kashmir_green, R.color.midnight_blue};
-    //Initial colors of the text/icons for the first three users
+    private List<String> friendLabels;
+    private LiveData<List<Double>> friendDistances;
+    private LiveData<List<Degrees>> friendOrientation;
+    private List<TextView> friends;
+    public UserUIAdapter(Activity activity, @NonNull LiveData<List<Double>> friendDistances,
+                         @NonNull LiveData<List<Degrees>> friendOrientation, List<String> friendLabels,
+                         DistanceUpdater distanceUpdater, AbsoluteDirectionUpdater absoluteDirectionUpdater){
 
-    public UserUIAdapter(Activity activity, LiveData<Degrees> userDirection, @NonNull LiveData<List<Degrees>> lastKnownEntityDirectionsFromUser){
         this.activity = activity;
+        this.friendDistances = friendDistances;
+        this.friendOrientation = friendOrientation;
+        this.friendLabels = friendLabels;
 
-        lastKnownEntityDirectionsFromUser.observe((LifecycleOwner) activity,
-                directions -> this.future = backgroundThreadExecutor.submit(() -> {
-                    if (userDirection.getValue() != null) {
-                        updateUI(userDirection.getValue(), directions);
-                    }
-                    return null;
-                })
-        );
+
     }
 
 
-    public void updateUI(Degrees userDirection, List<Degrees> entityDirections) {
+    public void populateFriendLabels(List<String> friendLabels, List<TextView> friends) {
+
+        if(friendLabels.size() == 0){
+            return;
+        }
+        for(int i = 0 ; i < friendLabels.size() ; i++) {
+            TextView addFriend = new TextView(activity);
+            addFriend.setText(friendLabels.get(i));
+            friends.add(addFriend);
+        }
+    }
+
+    public void updateUI(){
+
     }
 
     //update the position of the view representing a entity on the compass to the correct direction
@@ -56,7 +69,9 @@ public class UserUIAdapter{
         activity.runOnUiThread(() -> tv.setLayoutParams(layoutParams));
     }
 
-    public void updateIconLabel(TextView tv, String label){
-        tv.setText(label);
+    public void updateIconDistance(){
+
     }
+
+
 }
