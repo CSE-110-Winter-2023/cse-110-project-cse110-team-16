@@ -2,7 +2,7 @@ package com.example.cse110_team16_project;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
-import static com.example.cse110_team16_project.classes.Constants.APP_REQUEST_CODE;
+import static com.example.cse110_team16_project.classes.Misc.Constants.APP_REQUEST_CODE;
 
 import android.Manifest;
 
@@ -19,12 +19,12 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.cse110_team16_project.classes.UI.CompassUIManager;
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
 import com.example.cse110_team16_project.classes.CompassUIManager;
 import com.example.cse110_team16_project.classes.CompassViewModel;
-import com.example.cse110_team16_project.classes.Constants;
-import com.example.cse110_team16_project.classes.Coordinates;
+import com.example.cse110_team16_project.classes.Misc.Constants;
 import com.example.cse110_team16_project.Units.Degrees;
 import com.example.cse110_team16_project.classes.GPSstatus;
 import com.example.cse110_team16_project.classes.SCLocation;
@@ -77,7 +77,7 @@ public class CompassActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-locationSyncer = new UserLocationSynch(deviceTracker.getCoordinates(),
+        locationSyncer = new UserLocationSynch(deviceTracker.getCoordinates(),
                 new SCLocation(userLabel,public_code),private_code, this, repo);
         compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(),
                 findViewById(R.id.compassRing));
@@ -157,7 +157,7 @@ locationSyncer = new UserLocationSynch(deviceTracker.getCoordinates(),
     public DeviceTracker getDeviceTracker() { return this.deviceTracker; }
 
     public void onBackClicked(View view) {
-        startActivity(new Intent(this, AddHomeLocations.class));
+        startActivity(new Intent(this, ListActivity.class));
     }
 
     public void setGpsstatus(GPSstatus gpsstatus) {

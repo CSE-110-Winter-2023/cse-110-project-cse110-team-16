@@ -10,9 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.cse110_team16_project.classes.Constants;
-
-import org.w3c.dom.Text;
+import com.example.cse110_team16_project.classes.Misc.Constants;
 
 public class UIDActivity extends AppCompatActivity {
 

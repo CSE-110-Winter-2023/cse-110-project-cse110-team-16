@@ -1,20 +1,17 @@
 package com.example.cse110_team16_project.Database;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import com.example.cse110_team16_project.classes.Coordinates;
-import com.example.cse110_team16_project.classes.SCLocation;
+import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -55,7 +52,7 @@ public class SCLocationRepository {
         };
 
         // If we get a local update, pass it on.
-        scLocation.addSource(getLocal(public_code), scLocation::postValue);
+        scLocation.addSource(getLocalLive(public_code), scLocation::postValue);
         // If we get a remote update, update the local version (triggering the above observer)
         scLocation.addSource(getRemoteLive(public_code), updateFromRemote);
 
@@ -72,8 +69,12 @@ public class SCLocationRepository {
     // Local Methods
     // =============
 
-    public LiveData<SCLocation> getLocal(String public_code) {
+    public LiveData<SCLocation> getLocalLive(String public_code) {
         return dao.getLive(public_code);
+    }
+
+    public LiveData<List<SCLocation>> getAllLocalLive() {
+        return dao.getAllLive();
     }
 
     public List<String> getLocalPublicCodes() { return dao.getAllPublicCodes();}
@@ -91,15 +92,30 @@ public class SCLocationRepository {
         return dao.exists(public_code);
     }
     public void deleteRemote(String public_code, String private_code) {
-        api.deleteSCLocation(public_code, private_code);
+        Executors.newSingleThreadExecutor().submit(() -> {
+            api.deleteSCLocation(public_code, private_code);
+        });
+
     }
     public boolean existsRemote(String public_code) {
-        return(api.getSCLocation(public_code) != null);
+        try {
+            return Executors.newSingleThreadExecutor().submit(() -> {
+                return(api.getSCLocation(public_code) != null);
+            }).get();
+        } catch (ExecutionException | InterruptedException e) {
+            return false;
+        }
     }
     // Remote Methods
     // ==============
     public SCLocation getRemote(String public_code){
-        return api.getSCLocation(public_code); //TODO: null check?
+        try {
+            return Executors.newSingleThreadExecutor().submit(() -> {
+                return(api.getSCLocation(public_code));
+            }).get();
+        } catch (ExecutionException | InterruptedException e) {
+            return null;
+        }
     }
 
     public LiveData<SCLocation> getRemoteLive(String public_code) {
@@ -146,5 +162,6 @@ public class SCLocationRepository {
         }
         remoteUpdateThreads.clear();
     }
+
 
 }

@@ -6,9 +6,8 @@ import static org.junit.Assert.assertTrue;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
-import com.example.cse110_team16_project.classes.Constants;
-import com.example.cse110_team16_project.classes.Coordinates;
-import com.example.cse110_team16_project.classes.SCLocation;
+import com.example.cse110_team16_project.classes.CoordinateClasses.Coordinates;
+import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -21,14 +20,14 @@ import org.robolectric.RobolectricTestRunner;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(RobolectricTestRunner.class)
-public class UserTest {
+public class SCLocationTest {
     //Tests do not test methods in isolation which is bad practice, but it's a small
     //class so what could possibly go wrong.
 
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
     @Test
-    public void UserGeneralTest(){
+    public void SCLocationGeneralTest(){
         SCLocation user = new SCLocation(new Coordinates(0, 0), "Calvin", "A123456789");
         assertEquals(new Coordinates(0, 0), user.getCoordinates());
         assertEquals("Calvin", user.getLabel());

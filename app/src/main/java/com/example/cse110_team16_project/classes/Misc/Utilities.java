@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project.classes;
+package com.example.cse110_team16_project.classes.Misc;
 
 import android.app.Activity;
 import android.app.AlertDialog;

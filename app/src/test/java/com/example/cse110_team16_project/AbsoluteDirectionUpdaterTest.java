@@ -14,12 +14,11 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.rule.GrantPermissionRule;
 
-import com.example.cse110_team16_project.classes.Constants;
-import com.example.cse110_team16_project.classes.Coordinates;
+import com.example.cse110_team16_project.classes.CoordinateClasses.Coordinates;
 import com.example.cse110_team16_project.Units.Degrees;
 import com.example.cse110_team16_project.Units.Radians;
 import com.example.cse110_team16_project.classes.AbsoluteDirectionUpdater;
-import com.example.cse110_team16_project.classes.SCLocation;
+import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 
 import java.util.ArrayList;
 import java.util.Arrays;

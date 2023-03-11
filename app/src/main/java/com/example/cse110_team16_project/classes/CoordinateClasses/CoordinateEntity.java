@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project.classes;
+package com.example.cse110_team16_project.classes.CoordinateClasses;
 
 import com.example.cse110_team16_project.Units.Degrees;
 import com.google.gson.annotations.SerializedName;

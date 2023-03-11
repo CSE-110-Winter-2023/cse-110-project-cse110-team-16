@@ -9,6 +9,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.cse110_team16_project.Units.Degrees;
 import com.example.cse110_team16_project.Units.Radians;
+import com.example.cse110_team16_project.classes.Misc.Converters;
+import com.example.cse110_team16_project.classes.CoordinateClasses.Coordinates;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

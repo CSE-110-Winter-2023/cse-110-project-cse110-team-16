@@ -10,10 +10,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.cse110_team16_project.classes.Misc.Constants;
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
-import com.example.cse110_team16_project.classes.Constants;
-import com.example.cse110_team16_project.classes.SCLocation;
 
 import java.util.UUID;
 
@@ -46,6 +45,6 @@ public class AddNameActivity extends AppCompatActivity {
                 provide(this).getDao());
         SCLocation newUser = new SCLocation(name,public_code);
         repo.upsertRemote(newUser,private_code);
-        startActivity(new Intent(this, UIDActivity.class));
+        startActivity(new Intent(this, ListActivity.class));
     }
 }

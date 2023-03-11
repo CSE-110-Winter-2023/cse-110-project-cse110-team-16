@@ -8,7 +8,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.cse110_team16_project.Units.Meters;
-import com.example.cse110_team16_project.Units.Miles;
+import com.example.cse110_team16_project.classes.CoordinateClasses.Coordinates;
+import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 
 import java.util.ArrayList;
 import java.util.List;
