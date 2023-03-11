@@ -19,6 +19,8 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.cse110_team16_project.Database.SCLocationDatabase;
+import com.example.cse110_team16_project.Database.SCLocationRepository;
 import com.example.cse110_team16_project.classes.CompassUIManager;
 import com.example.cse110_team16_project.classes.CompassViewModel;
 import com.example.cse110_team16_project.classes.Constants;
@@ -26,6 +28,7 @@ import com.example.cse110_team16_project.classes.Coordinates;
 import com.example.cse110_team16_project.Units.Degrees;
 import com.example.cse110_team16_project.classes.SCLocation;
 import com.example.cse110_team16_project.classes.DeviceTracker;
+import com.example.cse110_team16_project.classes.UserLocationSynch;
 
 
 import java.util.concurrent.ExecutorService;
@@ -41,6 +44,10 @@ public class CompassActivity extends AppCompatActivity {
     private CompassUIManager compassUIManager;
     private CompassViewModel viewModel;
 
+    private UserLocationSynch locationSyncer;
+
+    private SCLocationRepository repo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,11 +59,16 @@ public class CompassActivity extends AppCompatActivity {
     }
 
     private void finishOnCreate(){
-
+        repo = new SCLocationRepository(SCLocationDatabase.
+                provide(this).getDao());
         loadUserInfo();
+
         viewModel = setupViewModel();
         deviceTracker = new DeviceTracker(this);
-        compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
+        locationSyncer = new UserLocationSynch(deviceTracker.getCoordinates(),
+                new SCLocation(userLabel,public_code),private_code, this, repo);
+        compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(),
+                findViewById(R.id.compassRing));
     }
 
 
