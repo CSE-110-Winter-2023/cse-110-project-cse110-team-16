@@ -118,14 +118,27 @@
     <LinearLayout
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/gpsLight"
-            android:layout_width="50dp"
-            android:layout_height="50dp" />
+            android:layout_marginTop="15dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/gps_red"/>
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:id="@+id/gpsText"
+            android:layout_marginTop="15dp"
+            android:layout_width="120dp"
+            android:layout_height="20dp"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:text=""/>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

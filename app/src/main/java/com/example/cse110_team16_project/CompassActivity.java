@@ -61,7 +61,7 @@ public class CompassActivity extends AppCompatActivity {
         viewModel = setupViewModel();
         deviceTracker = new DeviceTracker(this);
         compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
-        gpsstatus = new GPSstatus(deviceTracker.getLocation(), findViewById(R.id.gpsLight));
+        gpsstatus = new GPSstatus(deviceTracker.getLocation(), findViewById(R.id.gpsLight), findViewById(R.id.gpsText));
         try{
             gpsstatus.trackGPSStatus();
         } catch (Exception e){

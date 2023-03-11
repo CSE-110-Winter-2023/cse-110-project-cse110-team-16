@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Converters {
+
+    private static final int ONE_MIN = 60000;
+    private static final int ONE_HOUR = 3600000;
     @TypeConverter
     public static Coordinates StringToCoordinates(String str){
         if (str == null) return null;
@@ -70,6 +73,8 @@ public class Converters {
     }
 
     public static long milisecToMins(long ms){
-        return ms/60000;
+        return ms/ONE_MIN;
     }
+
+    public static long milisecToHours(long ms) {return ms/ONE_HOUR;}
 }
