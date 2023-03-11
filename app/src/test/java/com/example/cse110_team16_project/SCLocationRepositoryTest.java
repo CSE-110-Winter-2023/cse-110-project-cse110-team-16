@@ -66,6 +66,11 @@ public class SCLocationRepositoryTest {
             SCLocation location = new SCLocation(3,3,"testlabel","6969696969696");
             repository.upsertRemote(location,private_code);
             SCLocation retrievedLocation = repository.getRemote(location.getPublicCode());
+            try {
+                Thread.sleep(1000); //ew
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             assertEquals(retrievedLocation.getLabel(),location.getLabel());
             assertEquals(retrievedLocation.getLatitude(),location.getLatitude(),0.01);
             assertEquals(retrievedLocation.getLongitude(),location.getLongitude(),0.01);
@@ -86,6 +91,11 @@ public class SCLocationRepositoryTest {
             repository.upsertLocal(scLocation1);
             repository.upsertLocal(scLocation3);
             repository.deleteRemote(scLocation3.getPublicCode(), scLocation3.getPublicCode());
+                try {
+                    Thread.sleep(1000); //ew
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             assertTrue(repository.existsLocal(scLocation1.getPublicCode()));
             assertFalse(repository.existsRemote(scLocation1.getPublicCode()));
         });
@@ -128,6 +138,11 @@ public class SCLocationRepositoryTest {
             retrievedLocationLive.observe(activity,(retrievedNull) -> {
                 retrievedLocationLive.removeObservers(activity);
                 retrievedLocationLive.observe(activity,(retrievedLocation) -> {
+                    try {
+                        Thread.sleep(1000); //ew
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                     assertEquals(retrievedLocation.getLabel(), location.getLabel());
                     assertEquals(retrievedLocation.getLatitude(), location.getLatitude(), 0.01);
                     assertEquals(retrievedLocation.getLongitude(), location.getLongitude(), 0.01);
@@ -160,6 +175,11 @@ public class SCLocationRepositoryTest {
             retrievedLocationLive.observe(activity,(retrievedNull) -> {
                 retrievedLocationLive.removeObservers(activity);
                 retrievedLocationLive.observe(activity,(retrievedLocation) -> {
+                    try {
+                        Thread.sleep(1000); //ew
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                     assertEquals(retrievedLocation.getLabel(), location.getLabel());
                     assertEquals(retrievedLocation.getLatitude(), location.getLatitude(), 0.01);
                     assertEquals(retrievedLocation.getLongitude(), location.getLongitude(), 0.01);
@@ -187,6 +207,11 @@ public class SCLocationRepositoryTest {
             }
 
             SCLocation retrievedLocation = repository.getRemote(location.getPublicCode());
+            try {
+                Thread.sleep(1000); //ew
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             assertEquals(retrievedLocation.getLabel(), location.getLabel());
             assertEquals(retrievedLocation.getLatitude(), location.getLatitude(), 0.01);
             assertEquals(retrievedLocation.getLongitude(), location.getLongitude(), 0.01);
