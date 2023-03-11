@@ -88,7 +88,7 @@ public class SCLocationAPI {
 
         var request = new Request.Builder()
                 .url(url + public_code)
-                .method("PUT", requestBody)
+                .method("DELETE", requestBody)
                 .build();
 
         try (var response = client.newCall(request).execute()) {

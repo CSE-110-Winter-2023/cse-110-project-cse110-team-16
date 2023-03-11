@@ -88,6 +88,7 @@ public class SCLocationRepositoryTest {
 
             repository.upsertLocal(scLocation1);
             repository.upsertLocal(scLocation3);
+            repository.deleteRemote(scLocation3.getPublicCode(), scLocation3.getPublicCode());
             assertTrue(repository.existsLocal(scLocation1.getPublicCode()));
             assertFalse(repository.existsRemote(scLocation1.getPublicCode()));
         });

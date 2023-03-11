@@ -90,7 +90,9 @@ public class SCLocationRepository {
     public boolean existsLocal(String public_code) {
         return dao.exists(public_code);
     }
-
+    public void deleteRemote(String public_code, String private_code) {
+        api.deleteSCLocation(public_code, private_code);
+    }
     public boolean existsRemote(String public_code) {
         return(api.getSCLocation(public_code) != null);
     }
