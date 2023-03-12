@@ -37,6 +37,7 @@ public class Converters {
     }
 
     public static Coordinates LocationToCoordinates(Location location){
+        if (location == null) return null;
         return new Coordinates(location.getLatitude(),location.getLongitude());
     }
 

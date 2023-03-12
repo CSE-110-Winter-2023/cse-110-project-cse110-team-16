@@ -25,7 +25,7 @@ public class DeviceTracker {
     private final LocationService locationService;
     private final OrientationService orientationService;
 
-    private final MutableLiveData<Coordinates> coordinates = new MutableLiveData<>();
+    private final MutableLiveData<Coordinates> coordinates = new MutableLiveData<>(null);
 
     public DeviceTracker(Activity activity){
         this(activity, LocationService.singleton(activity,UPDATE_TIME, UPDATE_MIN_METERS),
@@ -39,7 +39,8 @@ public class DeviceTracker {
         this.orientationService = orientationService;
 
         getLocation().observe((LifecycleOwner) activity, location -> {
-            coordinates.postValue(Converters.LocationToCoordinates(location));
+            Coordinates newCoords = Converters.LocationToCoordinates(location);
+            if(newCoords != null) coordinates.postValue(newCoords);
         });
     }
 
