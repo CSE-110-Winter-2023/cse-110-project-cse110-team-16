@@ -87,9 +87,11 @@ public class GPSstatus {
 
     private void setGreen() {
         this.statusDot.setBackgroundResource(R.drawable.gps_green);
+        this.statusDot.setTag(R.drawable.gps_green);
     }
 
     private void setRed() {
         this.statusDot.setBackgroundResource(R.drawable.gps_red);
+        this.statusDot.setTag(R.drawable.gps_red);
     }
 }
