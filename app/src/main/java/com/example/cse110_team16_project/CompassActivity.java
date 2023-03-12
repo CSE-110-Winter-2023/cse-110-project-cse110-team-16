@@ -24,10 +24,10 @@ import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 import com.example.cse110_team16_project.classes.UI.CompassUIManager;
-import com.example.cse110_team16_project.ViewModels.CompassViewModel;
+import com.example.cse110_team16_project.classes.CompassViewModel;
 import com.example.cse110_team16_project.classes.Misc.Constants;
-import com.example.cse110_team16_project.classes.GPSStatus;
-import com.example.cse110_team16_project.DeviceInfo.DeviceTracker;
+import com.example.cse110_team16_project.Units.Degrees;
+import com.example.cse110_team16_project.classes.DeviceTracker;
 import com.example.cse110_team16_project.classes.UserLocationSynch;
 
 
@@ -44,11 +44,9 @@ public class CompassActivity extends AppCompatActivity {
     private CompassUIManager compassUIManager;
     private CompassViewModel viewModel;
 
-
-    private GPSStatus gpsstatus;
     private UserLocationSynch locationSyncer;
-    private SCLocationRepository repo;
 
+    private SCLocationRepository repo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,14 +71,6 @@ public class CompassActivity extends AppCompatActivity {
 
         viewModel = setupViewModel();
         deviceTracker = new DeviceTracker(this);
-        compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
-        gpsstatus = new GPSStatus(deviceTracker.getLocation(), findViewById(R.id.gpsLight), findViewById(R.id.gpsText));
-        try{
-            gpsstatus.trackGPSStatus();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-
         locationSyncer = new UserLocationSynch(deviceTracker.getCoordinates(),
                 new SCLocation(userLabel,public_code),private_code, this, repo);
         compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(),
@@ -138,9 +128,13 @@ public class CompassActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        if (this.repo != null) Log.d("Number of locations","" + repo.getLocalPublicCodes().size());
+        if (this.repo != null) Log.d("Number of locations:","" + repo.getLocalPublicCodes().size());
         if(deviceTracker != null) {
             deviceTracker.registerListeners();
+            SharedPreferences preferences = getSharedPreferences("HomeLoc", MODE_PRIVATE);
+            Degrees mockDir = new Degrees(preferences.getFloat("mockDirection", -1.0F));
+            if(mockDir.getDegrees() < 0) deviceTracker.disableMockUserDirection();
+            else deviceTracker.mockUserDirection(mockDir);
         }
     }
 
@@ -162,9 +156,5 @@ public class CompassActivity extends AppCompatActivity {
 
     public void ontoListClicked(View view) {
         startActivity(new Intent(this, ListActivity.class));
-    }
-
-    public void setGpsstatus(GPSStatus gpsstatus) {
-        this.gpsstatus = gpsstatus;
     }
 }
