@@ -34,7 +34,7 @@ public class GPSstatus {
         this.initTime = -REFRESH_PERIOD;
     }
 
-    private long getLocationAge() {
+    public long getLocationAge() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             Location currLoc = this.location.getValue();
             if (currLoc != null) {
@@ -91,5 +91,9 @@ public class GPSstatus {
 
     private void setRed() {
         this.statusDot.setBackgroundResource(R.drawable.gps_red);
+    }
+
+    public void setMockLocation(LiveData<Location> mockLoc) {
+        this.location = mockLoc;
     }
 }
