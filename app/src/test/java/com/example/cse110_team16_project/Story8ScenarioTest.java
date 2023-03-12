@@ -68,8 +68,7 @@ public class Story8ScenarioTest {
             mockGPSstatus.updateGPSStatus();
             assertEquals("2m", gpsText.getText().toString());
             // turn gps back on for 30s
-            mockLoc.setTime(30000);
-            //System.out.println("mockLoc time in ms: " + mockLoc.getTime());
+            mockLoc.setElapsedRealtimeNanos(1000000L * 90 * 1000);
             mockGPSstatus.setMockLocation(mockLoc);
             SystemClock.setCurrentTimeMillis(30000);
             mockGPSstatus.updateGPSStatus();
