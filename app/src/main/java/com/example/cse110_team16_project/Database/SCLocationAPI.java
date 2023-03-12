@@ -88,7 +88,7 @@ public class SCLocationAPI {
         try (var response = client.newCall(request).execute()) {
             //assert response.body() != null;
             var body = response.body().string();
-            Log.i("putSCLocation",body);
+            Log.i("deleteSCLocation",body);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -112,7 +112,7 @@ public class SCLocationAPI {
         try (var response = client.newCall(request).execute()) {
             //assert response.body() != null;
             var body = response.body().string();
-            Log.i("putSCLocation",body);
+            Log.i("patchSCLocation",body);
         } catch (Exception e) {
             e.printStackTrace();
         }

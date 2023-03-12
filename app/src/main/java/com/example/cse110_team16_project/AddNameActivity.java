@@ -45,6 +45,6 @@ public class AddNameActivity extends AppCompatActivity {
                 provide(this).getDao());
         SCLocation newUser = new SCLocation(name,public_code);
         repo.upsertRemote(newUser,private_code);
-        startActivity(new Intent(this, ListActivity.class));
+        startActivity(new Intent(this, CompassActivity.class));
     }
 }
