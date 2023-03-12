@@ -146,10 +146,6 @@ public class CompassActivity extends AppCompatActivity {
         if (this.repo != null) Log.d("Number of locations","" + repo.getLocalPublicCodes().size());
         if(deviceTracker != null) {
             deviceTracker.registerListeners();
-            SharedPreferences preferences = getSharedPreferences("HomeLoc", MODE_PRIVATE);
-            Degrees mockDir = new Degrees(preferences.getFloat("mockDirection", -1.0F));
-            if(mockDir.getDegrees() < 0) deviceTracker.disableMockUserDirection();
-            else deviceTracker.mockUserDirection(mockDir);
         }
     }
 
