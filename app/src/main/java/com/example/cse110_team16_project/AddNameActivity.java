@@ -2,12 +2,16 @@ package com.example.cse110_team16_project;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.example.cse110_team16_project.classes.Misc.Constants;
@@ -22,6 +26,17 @@ public class AddNameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_name);
+
+        var input = (EditText) findViewById(R.id.YourNameField);
+        input.setOnEditorActionListener((view, actionId, event) -> {
+            // If the event isn't "done" or "enter", do nothing.
+            if (actionId == EditorInfo.IME_ACTION_DONE || event.getAction() == KeyEvent.ACTION_DOWN) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
+                input.clearFocus();
+            }
+            return false;
+        });
     }
 
     public void onSubmitClicked(View view) {
@@ -45,6 +60,7 @@ public class AddNameActivity extends AppCompatActivity {
                 provide(this).getDao());
         SCLocation newUser = new SCLocation(name,public_code);
         repo.upsertRemote(newUser,private_code);
+        finish();
         startActivity(new Intent(this, CompassActivity.class));
     }
 }

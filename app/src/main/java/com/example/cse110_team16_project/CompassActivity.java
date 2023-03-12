@@ -143,7 +143,7 @@ public class CompassActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        if (this.repo != null) Log.d("Number of locations:","" + repo.getLocalPublicCodes().size());
+        if (this.repo != null) Log.d("Number of locations","" + repo.getLocalPublicCodes().size());
         if(deviceTracker != null) {
             deviceTracker.registerListeners();
             SharedPreferences preferences = getSharedPreferences("HomeLoc", MODE_PRIVATE);
