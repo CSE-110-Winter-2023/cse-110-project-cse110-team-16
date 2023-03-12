@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.cse110_team16_project.R;
 
@@ -68,21 +69,25 @@ public class GPSstatus {
     public void trackGPSStatus() {
         var executor = Executors.newSingleThreadScheduledExecutor();
         executor.scheduleAtFixedRate(() -> {
-            try {
-                this.initTime += REFRESH_PERIOD;
-                if (isLocationLive() && this.location.getValue() != null) {
-                    this.setGreen();
-                    this.gpsText.setText("");
-                    Log.d("GPS", "GPS status set to green");
-                } else {
-                    this.setRed();
-                    updateGPSLostTime();
-                    Log.d("GPS", "GPS status set to red");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+           updateGPSStatus();
         }, 0, REFRESH_PERIOD, TimeUnit.MILLISECONDS);
+    }
+
+    public void updateGPSStatus(){
+        try {
+            this.initTime += REFRESH_PERIOD;
+            if (isLocationLive() && this.location.getValue() != null) {
+                this.setGreen();
+                this.gpsText.setText("");
+                Log.d("GPS", "GPS status set to green");
+            } else {
+                this.setRed();
+                updateGPSLostTime();
+                Log.d("GPS", "GPS status set to red");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setGreen() {
@@ -93,5 +98,11 @@ public class GPSstatus {
     private void setRed() {
         this.statusDot.setBackgroundResource(R.drawable.gps_red);
         this.statusDot.setTag(R.drawable.gps_red);
+    }
+
+    public void setMockLocation(Location location){
+        MutableLiveData<Location> newloc = new MutableLiveData<>();
+        newloc.setValue(location);
+        this.location = newloc;
     }
 }

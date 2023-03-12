@@ -29,6 +29,7 @@ public class Story7ScenarioTest {
     @Rule
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule
             .grant(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION);
+
     @Test
     public void story7Scenario1() {
         // on when enter app
@@ -37,25 +38,50 @@ public class Story7ScenarioTest {
         ActivityScenario<CompassActivity> scenario = ActivityScenario.launch(CompassActivity.class);
         scenario.moveToState(Lifecycle.State.RESUMED);
         scenario.onActivity(activity -> {
-            Context context = activity.getApplicationContext();
             TextView gpsLight = activity.findViewById(R.id.gpsLight);
-//            assertEquals(ResourcesCompat.getDrawable(context.getResources(), R.drawable.gps_green, null).getConstantState(),
-//                    gpsLight.getBackground().getConstantState());
-            try {
-                MutableLiveData<Location> mockLiveLoc = new MutableLiveData<>();
-                Location mockLoc = new Location("dummy provider");
-                mockLoc.setLatitude(100);
-                mockLoc.setLongitude(-100);
-                mockLiveLoc.setValue(mockLoc);
-                GPSstatus mockGPSstatus = new GPSstatus(mockLiveLoc, activity.findViewById(R.id.gpsLight),
-                        activity.findViewById(R.id.gpsText));
-                activity.setGpsstatus(mockGPSstatus);
-                System.out.println(activity.getDeviceTracker().getLocation().getValue().toString());
-                assertEquals(R.drawable.gps_green, gpsLight.getTag());
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
+
+            MutableLiveData<Location> mockLiveLoc = new MutableLiveData<>();
+            Location mockLoc = new Location("dummy provider");
+            mockLoc.setLatitude(100);
+            mockLoc.setLongitude(-100);
+            mockLiveLoc.setValue(mockLoc);
+            GPSstatus mockGPSstatus = new GPSstatus(mockLiveLoc, activity.findViewById(R.id.gpsLight),
+                    activity.findViewById(R.id.gpsText));
+            activity.setGpsstatus(mockGPSstatus);
+            mockGPSstatus.updateGPSStatus();
+            assertEquals(R.drawable.gps_green, gpsLight.getTag());
+            mockGPSstatus.setMockLocation(null);
+            mockGPSstatus.updateGPSStatus();
+            assertEquals(R.drawable.gps_red, gpsLight.getTag());
+            mockGPSstatus.setMockLocation(mockLoc);
+            mockGPSstatus.updateGPSStatus();
+            assertEquals(R.drawable.gps_green, gpsLight.getTag());
+        });
+    }
+
+    @Test
+    public void story7Scenario2() {
+        // on when enter app
+        // turn off gps
+        // red --> green
+        ActivityScenario<CompassActivity> scenario = ActivityScenario.launch(CompassActivity.class);
+        scenario.moveToState(Lifecycle.State.RESUMED);
+        scenario.onActivity(activity -> {
+            TextView gpsLight = activity.findViewById(R.id.gpsLight);
+
+            MutableLiveData<Location> mockLiveLoc = new MutableLiveData<>();
+            Location mockLoc = new Location("dummy provider");
+            mockLoc.setLatitude(100);
+            mockLoc.setLongitude(-100);
+            mockLiveLoc.setValue(null);
+            GPSstatus mockGPSstatus = new GPSstatus(mockLiveLoc, activity.findViewById(R.id.gpsLight),
+                    activity.findViewById(R.id.gpsText));
+            activity.setGpsstatus(mockGPSstatus);
+            mockGPSstatus.updateGPSStatus();
+            assertEquals(R.drawable.gps_red, gpsLight.getTag());
+            mockGPSstatus.setMockLocation(mockLoc);
+            mockGPSstatus.updateGPSStatus();
+            assertEquals(R.drawable.gps_green, gpsLight.getTag());
         });
     }
 }
