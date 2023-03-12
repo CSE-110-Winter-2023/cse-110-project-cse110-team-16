@@ -18,9 +18,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.shadow.api.Shadow;
+import org.robolectric.shadows.ShadowSystemClock;
 import org.w3c.dom.Text;
 
 import java.io.SyncFailedException;
+import java.util.concurrent.TimeUnit;
 
 @RunWith(RobolectricTestRunner.class)
 public class Story8ScenarioTest {
@@ -42,8 +45,6 @@ public class Story8ScenarioTest {
         ActivityScenario<CompassActivity> scenario = ActivityScenario.launch(CompassActivity.class);
         scenario.moveToState(Lifecycle.State.RESUMED);
         scenario.onActivity(activity -> {
-            TextView gpsLight = activity.findViewById(R.id.gpsLight);
-
             MutableLiveData<Location> mockLiveLoc = new MutableLiveData<>();
             Location mockLoc = new Location("dummy provider");
             long timeNow = System.currentTimeMillis();
@@ -78,27 +79,33 @@ public class Story8ScenarioTest {
 
     @Test
     public void story8Scenario2() {
-        // on when enter app
-        // turn off gps
-        // red --> green
+        // turn on gps
+        // turn off gps for 59m
+        // turn off gps for another 1m
         ActivityScenario<CompassActivity> scenario = ActivityScenario.launch(CompassActivity.class);
         scenario.moveToState(Lifecycle.State.RESUMED);
         scenario.onActivity(activity -> {
-            TextView gpsLight = activity.findViewById(R.id.gpsLight);
-
             MutableLiveData<Location> mockLiveLoc = new MutableLiveData<>();
             Location mockLoc = new Location("dummy provider");
+            long timeNow = System.currentTimeMillis();
+            mockLoc.setTime(timeNow);
             mockLoc.setLatitude(100);
             mockLoc.setLongitude(-100);
-            mockLiveLoc.setValue(null);
+            mockLiveLoc.setValue(mockLoc);
             GPSstatus mockGPSstatus = new GPSstatus(mockLiveLoc, activity.findViewById(R.id.gpsLight),
                     activity.findViewById(R.id.gpsText));
+
             activity.setGpsstatus(mockGPSstatus);
             mockGPSstatus.updateGPSStatus();
-            assertEquals(R.drawable.gps_red, gpsLight.getTag());
-            mockGPSstatus.setMockLocation(mockLoc);
+            // now turn gps off for 1 min
+            ShadowSystemClock.advanceBy(59, TimeUnit.MINUTES);
             mockGPSstatus.updateGPSStatus();
-            assertEquals(R.drawable.gps_green, gpsLight.getTag());
+            TextView gpsText = activity.findViewById(R.id.gpsText);
+            assertEquals("59m", gpsText.getText().toString());
+
+            ShadowSystemClock.advanceBy(1,TimeUnit.MINUTES);
+            mockGPSstatus.updateGPSStatus();
+            assertEquals("1h", gpsText.getText().toString());
         });
     }
 }
