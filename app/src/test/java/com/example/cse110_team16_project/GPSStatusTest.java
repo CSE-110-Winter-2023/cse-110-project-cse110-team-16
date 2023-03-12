@@ -4,9 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import android.location.Location;
 import android.os.SystemClock;
-import android.widget.TextView;
-
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.cse110_team16_project.classes.GPSstatus;
@@ -14,9 +11,6 @@ import com.example.cse110_team16_project.classes.GPSstatus;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.shadows.ShadowSystemClock;
-
-import javax.xml.datatype.Duration;
 
 @RunWith(RobolectricTestRunner.class)
 public class GPSStatusTest {
@@ -53,11 +47,8 @@ public class GPSStatusTest {
         mockLoc.setTime(currTime);
         mockLiveLoc.setValue(mockLoc);
         GPSstatus gpsStatus = new GPSstatus(mockLiveLoc, null, null);
-
-        // Location is live
         assertEquals(true, gpsStatus.isLocationLive());
 
-        // Location is old, not live
         try {
             long timeNow = System.currentTimeMillis();
             SystemClock.setCurrentTimeMillis(timeNow + 60000);
