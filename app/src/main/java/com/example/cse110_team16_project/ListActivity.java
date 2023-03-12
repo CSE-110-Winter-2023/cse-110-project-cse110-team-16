@@ -3,9 +3,7 @@ package com.example.cse110_team16_project;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,8 +16,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
-import com.example.cse110_team16_project.classes.ListViewModel;
-import com.example.cse110_team16_project.classes.Misc.Utilities;
+import com.example.cse110_team16_project.ViewModels.ListViewModel;
+import com.example.cse110_team16_project.classes.SCLocationsAdapter;
 
 public class ListActivity extends AppCompatActivity {
     // This annotation will cause an IDE error if you try to access recyclerView outside of a test.

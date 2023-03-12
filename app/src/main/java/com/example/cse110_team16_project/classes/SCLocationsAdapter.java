@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project;
+package com.example.cse110_team16_project.classes;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.core.util.Consumer;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cse110_team16_project.R;
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.function.BiConsumer;
 
 public class SCLocationsAdapter extends RecyclerView.Adapter<SCLocationsAdapter.ViewHolder> {
     private List<SCLocation> locations = Collections.emptyList();

@@ -2,20 +2,16 @@ package com.example.cse110_team16_project;
 
 import static org.junit.Assert.assertEquals;
 
-import android.content.Context;
 import android.location.Location;
-import android.os.SystemClock;
-import android.util.Log;
 import android.widget.TextView;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.MutableLiveData;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.rule.GrantPermissionRule;
 
-import com.example.cse110_team16_project.classes.GPSstatus;
+import com.example.cse110_team16_project.classes.GPSStatus;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -45,16 +41,16 @@ public class Story7ScenarioTest {
             mockLoc.setLatitude(100);
             mockLoc.setLongitude(-100);
             mockLiveLoc.setValue(mockLoc);
-            GPSstatus mockGPSstatus = new GPSstatus(mockLiveLoc, activity.findViewById(R.id.gpsLight),
+            GPSStatus mockGPSStatus = new GPSStatus(mockLiveLoc, activity.findViewById(R.id.gpsLight),
                     activity.findViewById(R.id.gpsText));
-            activity.setGpsstatus(mockGPSstatus);
-            mockGPSstatus.updateGPSStatus();
+            activity.setGpsstatus(mockGPSStatus);
+            mockGPSStatus.updateGPSStatus();
             assertEquals(R.drawable.gps_green, gpsLight.getTag());
-            mockGPSstatus.setMockLocation(null);
-            mockGPSstatus.updateGPSStatus();
+            mockGPSStatus.setMockLocation(null);
+            mockGPSStatus.updateGPSStatus();
             assertEquals(R.drawable.gps_red, gpsLight.getTag());
-            mockGPSstatus.setMockLocation(mockLoc);
-            mockGPSstatus.updateGPSStatus();
+            mockGPSStatus.setMockLocation(mockLoc);
+            mockGPSStatus.updateGPSStatus();
             assertEquals(R.drawable.gps_green, gpsLight.getTag());
         });
     }
@@ -74,13 +70,13 @@ public class Story7ScenarioTest {
             mockLoc.setLatitude(100);
             mockLoc.setLongitude(-100);
             mockLiveLoc.setValue(null);
-            GPSstatus mockGPSstatus = new GPSstatus(mockLiveLoc, activity.findViewById(R.id.gpsLight),
+            GPSStatus mockGPSStatus = new GPSStatus(mockLiveLoc, activity.findViewById(R.id.gpsLight),
                     activity.findViewById(R.id.gpsText));
-            activity.setGpsstatus(mockGPSstatus);
-            mockGPSstatus.updateGPSStatus();
+            activity.setGpsstatus(mockGPSStatus);
+            mockGPSStatus.updateGPSStatus();
             assertEquals(R.drawable.gps_red, gpsLight.getTag());
-            mockGPSstatus.setMockLocation(mockLoc);
-            mockGPSstatus.updateGPSStatus();
+            mockGPSStatus.setMockLocation(mockLoc);
+            mockGPSStatus.updateGPSStatus();
             assertEquals(R.drawable.gps_green, gpsLight.getTag());
         });
     }

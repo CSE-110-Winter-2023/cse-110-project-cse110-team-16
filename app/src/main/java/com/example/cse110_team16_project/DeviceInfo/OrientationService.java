@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project.classes;
+package com.example.cse110_team16_project.DeviceInfo;
 
 import android.app.Activity;
 import android.content.Context;

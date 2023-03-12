@@ -22,20 +22,15 @@ import android.view.View;
 
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
+import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 import com.example.cse110_team16_project.classes.UI.CompassUIManager;
-import com.example.cse110_team16_project.Database.SCLocationDatabase;
-import com.example.cse110_team16_project.Database.SCLocationRepository;
-import com.example.cse110_team16_project.classes.CompassUIManager;
-import com.example.cse110_team16_project.classes.CompassViewModel;
+import com.example.cse110_team16_project.ViewModels.CompassViewModel;
 import com.example.cse110_team16_project.classes.Misc.Constants;
-import com.example.cse110_team16_project.Units.Degrees;
-import com.example.cse110_team16_project.classes.GPSstatus;
-import com.example.cse110_team16_project.classes.SCLocation;
-import com.example.cse110_team16_project.classes.DeviceTracker;
+import com.example.cse110_team16_project.classes.GPSStatus;
+import com.example.cse110_team16_project.DeviceInfo.DeviceTracker;
 import com.example.cse110_team16_project.classes.UserLocationSynch;
 
 
-import java.security.spec.ECField;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -50,7 +45,7 @@ public class CompassActivity extends AppCompatActivity {
     private CompassViewModel viewModel;
 
 
-    private GPSstatus gpsstatus;
+    private GPSStatus gpsstatus;
     private UserLocationSynch locationSyncer;
     private SCLocationRepository repo;
 
@@ -79,7 +74,7 @@ public class CompassActivity extends AppCompatActivity {
         viewModel = setupViewModel();
         deviceTracker = new DeviceTracker(this);
         compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
-        gpsstatus = new GPSstatus(deviceTracker.getLocation(), findViewById(R.id.gpsLight), findViewById(R.id.gpsText));
+        gpsstatus = new GPSStatus(deviceTracker.getLocation(), findViewById(R.id.gpsLight), findViewById(R.id.gpsText));
         try{
             gpsstatus.trackGPSStatus();
         } catch (Exception e){
@@ -169,7 +164,7 @@ public class CompassActivity extends AppCompatActivity {
         startActivity(new Intent(this, ListActivity.class));
     }
 
-    public void setGpsstatus(GPSstatus gpsstatus) {
+    public void setGpsstatus(GPSStatus gpsstatus) {
         this.gpsstatus = gpsstatus;
     }
 }

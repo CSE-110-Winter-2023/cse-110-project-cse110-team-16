@@ -15,8 +15,8 @@ import androidx.test.core.app.ApplicationProvider;
 import com.example.cse110_team16_project.Database.SCLocationDao;
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
-import com.example.cse110_team16_project.classes.Coordinates;
-import com.example.cse110_team16_project.classes.SCLocation;
+import com.example.cse110_team16_project.classes.CoordinateClasses.Coordinates;
+import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 import com.example.cse110_team16_project.classes.UserLocationSynch;
 
 import org.junit.After;

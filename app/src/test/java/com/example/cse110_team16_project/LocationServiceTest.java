@@ -8,7 +8,7 @@ import androidx.test.core.app.ActivityScenario;
 
 import com.example.cse110_team16_project.classes.Misc.Converters;
 import com.example.cse110_team16_project.classes.CoordinateClasses.Coordinates;
-import com.example.cse110_team16_project.classes.LocationService;
+import com.example.cse110_team16_project.DeviceInfo.LocationService;
 
 import org.junit.Rule;
 import org.junit.Test;
