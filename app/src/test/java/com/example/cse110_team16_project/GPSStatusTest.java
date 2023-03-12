@@ -49,14 +49,8 @@ public class GPSStatusTest {
         GPSstatus gpsStatus = new GPSstatus(mockLiveLoc, null, null);
         assertEquals(true, gpsStatus.isLocationLive());
 
-        try {
-            long timeNow = System.currentTimeMillis();
-            SystemClock.setCurrentTimeMillis(timeNow + 60000);
-            assertEquals(false, gpsStatus.isLocationLive());
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        long timeNow = System.currentTimeMillis();
+        SystemClock.setCurrentTimeMillis(timeNow + 60000);
+        assertEquals(false, gpsStatus.isLocationLive());
     }
 }
