@@ -18,11 +18,13 @@ public class UserLocationSynch {
         location = user;
         repo.updateSCLocationLive(locationLive,private_code);
         userCoords.observe((LifecycleOwner) activity,(potentialNullCoords) -> {
-            userCoords.removeObservers((LifecycleOwner) activity);
-            userCoords.observe((LifecycleOwner) activity,(coords) -> {
-                location.setCoordinates(coords);
-                locationLive.postValue(location);
-            });
+            if(potentialNullCoords != null) {
+                userCoords.removeObservers((LifecycleOwner) activity);
+                userCoords.observe((LifecycleOwner) activity, (coords) -> {
+                    location.setCoordinates(coords);
+                    locationLive.postValue(location);
+                });
+            }
         });
     }
 }
