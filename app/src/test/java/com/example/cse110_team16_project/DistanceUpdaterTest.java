@@ -10,12 +10,11 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.rule.GrantPermissionRule;
 
-import com.example.cse110_team16_project.Units.Meters;
-import com.example.cse110_team16_project.classes.Constants;
-import com.example.cse110_team16_project.classes.Coordinates;
+import com.example.cse110_team16_project.classes.Units.Meters;
+import com.example.cse110_team16_project.classes.CoordinateClasses.Coordinates;
 import com.example.cse110_team16_project.classes.DistanceUpdater;
-import com.example.cse110_team16_project.Units.Radians;
-import com.example.cse110_team16_project.classes.SCLocation;
+import com.example.cse110_team16_project.classes.Units.Radians;
+import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -25,7 +24,6 @@ import org.robolectric.RobolectricTestRunner;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 @RunWith(RobolectricTestRunner.class)
 public class DistanceUpdaterTest {

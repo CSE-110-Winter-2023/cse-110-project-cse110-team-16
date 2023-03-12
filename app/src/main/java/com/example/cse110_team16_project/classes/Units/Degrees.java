@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project.Units;
+package com.example.cse110_team16_project.classes.Units;
 
 /* Class to reduce confusion about units used when talking about direction,
 so that we know we are always using degrees instead of radians

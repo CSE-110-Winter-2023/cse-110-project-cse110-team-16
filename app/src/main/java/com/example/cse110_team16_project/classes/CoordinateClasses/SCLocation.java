@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project.classes;
+package com.example.cse110_team16_project.classes.CoordinateClasses;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
@@ -7,8 +7,6 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
-
-import java.time.Instant;
 
 /*
 SCLocation class is responsible for storing information about the SCLocation's location and name.

@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project.classes;
+package com.example.cse110_team16_project.classes.Misc;
 
 public class Constants {
     public static final int APP_REQUEST_CODE = 110;

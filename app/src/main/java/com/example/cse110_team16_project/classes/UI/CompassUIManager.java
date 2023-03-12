@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project.classes;
+package com.example.cse110_team16_project.classes.UI;
 
 import android.app.Activity;
 import android.widget.ImageView;
@@ -7,8 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 
-import com.example.cse110_team16_project.Units.Degrees;
-import com.example.cse110_team16_project.Units.Radians;
+import com.example.cse110_team16_project.classes.Units.Degrees;
+import com.example.cse110_team16_project.classes.Units.Radians;
+import com.example.cse110_team16_project.classes.Misc.Converters;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

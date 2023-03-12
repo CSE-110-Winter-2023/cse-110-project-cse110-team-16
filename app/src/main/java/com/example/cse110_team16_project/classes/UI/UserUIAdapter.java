@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project.classes;
+package com.example.cse110_team16_project.classes.UI;
 
 import android.app.Activity;
 import android.view.View;
@@ -12,8 +12,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.cse110_team16_project.R;
-import com.example.cse110_team16_project.Units.Degrees;
-import com.example.cse110_team16_project.Units.Radians;
+import com.example.cse110_team16_project.classes.DeviceInfo.OrientationService;
+import com.example.cse110_team16_project.classes.Misc.Converters;
+import com.example.cse110_team16_project.classes.Units.Radians;
+import com.example.cse110_team16_project.classes.Units.Degrees;
+
 
 import java.util.List;
 import java.util.concurrent.AbstractExecutorService;

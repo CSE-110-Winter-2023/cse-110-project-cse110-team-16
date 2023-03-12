@@ -2,7 +2,7 @@ package com.example.cse110_team16_project;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
-import static com.example.cse110_team16_project.classes.Constants.APP_REQUEST_CODE;
+import static com.example.cse110_team16_project.classes.Misc.Constants.APP_REQUEST_CODE;
 
 import android.Manifest;
 
@@ -19,16 +19,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.cse110_team16_project.classes.CompassUIManager;
-import com.example.cse110_team16_project.classes.CompassViewModel;
-import com.example.cse110_team16_project.classes.Constants;
-import com.example.cse110_team16_project.classes.Coordinates;
-import com.example.cse110_team16_project.Units.Degrees;
-import com.example.cse110_team16_project.classes.SCLocation;
-import com.example.cse110_team16_project.classes.DeviceTracker;
+import com.example.cse110_team16_project.Database.SCLocationDatabase;
+import com.example.cse110_team16_project.Database.SCLocationRepository;
+import com.example.cse110_team16_project.classes.DeviceInfo.DeviceTracker;
+import com.example.cse110_team16_project.classes.ViewModels.CompassViewModel;
+import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
+import com.example.cse110_team16_project.classes.UI.CompassUIManager;
+import com.example.cse110_team16_project.classes.Misc.Constants;
+import com.example.cse110_team16_project.classes.GPSStatus;
+import com.example.cse110_team16_project.classes.UserLocationSynch;
 
 
 import java.util.concurrent.ExecutorService;
@@ -45,6 +48,10 @@ public class CompassActivity extends AppCompatActivity {
     private CompassViewModel viewModel;
 
 
+    private GPSStatus gpsstatus;
+    private UserLocationSynch locationSyncer;
+    private SCLocationRepository repo;
+
 
 
     @Override
@@ -55,15 +62,34 @@ public class CompassActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_compass);
         handleLocationPermission();
+
+
     }
 
     private void finishOnCreate(){
+        var db = SCLocationDatabase.provide(this);
+        var dao = db.getDao();
+        this.repo = new SCLocationRepository(dao);
 
+        repo = new SCLocationRepository(SCLocationDatabase.
+                provide(this).getDao());
         loadUserInfo();
+
         viewModel = setupViewModel();
         deviceTracker = new DeviceTracker(this);
         compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
 
+        gpsstatus = new GPSStatus(deviceTracker.getLocation(), findViewById(R.id.gpsLight), findViewById(R.id.gpsText));
+        try{
+            gpsstatus.trackGPSStatus();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        locationSyncer = new UserLocationSynch(deviceTracker.getCoordinates(),
+                new SCLocation(userLabel,public_code),private_code, this, repo);
+        compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(),
+                findViewById(R.id.compassRing));
 
     }
 
@@ -118,13 +144,9 @@ public class CompassActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-
+        if (this.repo != null) Log.d("Number of locations","" + repo.getLocalPublicCodes().size());
         if(deviceTracker != null) {
             deviceTracker.registerListeners();
-            SharedPreferences preferences = getSharedPreferences("HomeLoc", MODE_PRIVATE);
-            Degrees mockDir = new Degrees(preferences.getFloat("mockDirection", -1.0F));
-            if(mockDir.getDegrees() < 0) deviceTracker.disableMockUserDirection();
-            else deviceTracker.mockUserDirection(mockDir);
         }
     }
 
@@ -140,8 +162,16 @@ public class CompassActivity extends AppCompatActivity {
 
     public DeviceTracker getDeviceTracker() { return this.deviceTracker; }
 
-    public void onBackClicked(View view) {
-        startActivity(new Intent(this, AddHomeLocations.class));
+    public void onUIDClicked(View view) {
+        startActivity(new Intent(this, UIDActivity.class));
+    }
+
+    public void ontoListClicked(View view) {
+        startActivity(new Intent(this, ListActivity.class));
+    }
+
+    public void setGpsStatus(GPSStatus gpsstatus) {
+        this.gpsstatus = gpsstatus;
     }
 
 

@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project.classes;
+package com.example.cse110_team16_project.classes.DeviceInfo;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
@@ -12,8 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-
-import com.example.cse110_team16_project.Units.Degrees;
 
 public class LocationService implements LocationListener {
 
@@ -43,6 +41,7 @@ public class LocationService implements LocationListener {
 
         this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                 minTime, minDistance, this);
+
     }
 
     @Override

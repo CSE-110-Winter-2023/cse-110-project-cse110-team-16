@@ -19,18 +19,15 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.rule.GrantPermissionRule;
 
 
-import com.example.cse110_team16_project.Database.SCLocationAPI;
 import com.example.cse110_team16_project.Database.SCLocationDao;
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
-import com.example.cse110_team16_project.classes.Coordinates;
-import com.example.cse110_team16_project.classes.SCLocation;
+import com.example.cse110_team16_project.classes.CoordinateClasses.Coordinates;
+import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.concurrent.ExecutionException;
@@ -69,6 +66,11 @@ public class SCLocationRepositoryTest {
             SCLocation location = new SCLocation(3,3,"testlabel","6969696969696");
             repository.upsertRemote(location,private_code);
             SCLocation retrievedLocation = repository.getRemote(location.getPublicCode());
+            try {
+                Thread.sleep(1000); //ew
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             assertEquals(retrievedLocation.getLabel(),location.getLabel());
             assertEquals(retrievedLocation.getLatitude(),location.getLatitude(),0.01);
             assertEquals(retrievedLocation.getLongitude(),location.getLongitude(),0.01);
@@ -89,6 +91,11 @@ public class SCLocationRepositoryTest {
             repository.upsertLocal(scLocation1);
             repository.upsertLocal(scLocation3);
             repository.deleteRemote(scLocation3.getPublicCode(), scLocation3.getPublicCode());
+                try {
+                    Thread.sleep(1000); //ew
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             assertTrue(repository.existsLocal(scLocation1.getPublicCode()));
             assertFalse(repository.existsRemote(scLocation1.getPublicCode()));
         });
@@ -131,6 +138,11 @@ public class SCLocationRepositoryTest {
             retrievedLocationLive.observe(activity,(retrievedNull) -> {
                 retrievedLocationLive.removeObservers(activity);
                 retrievedLocationLive.observe(activity,(retrievedLocation) -> {
+                    try {
+                        Thread.sleep(1000); //ew
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                     assertEquals(retrievedLocation.getLabel(), location.getLabel());
                     assertEquals(retrievedLocation.getLatitude(), location.getLatitude(), 0.01);
                     assertEquals(retrievedLocation.getLongitude(), location.getLongitude(), 0.01);
@@ -163,6 +175,11 @@ public class SCLocationRepositoryTest {
             retrievedLocationLive.observe(activity,(retrievedNull) -> {
                 retrievedLocationLive.removeObservers(activity);
                 retrievedLocationLive.observe(activity,(retrievedLocation) -> {
+                    try {
+                        Thread.sleep(1000); //ew
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                     assertEquals(retrievedLocation.getLabel(), location.getLabel());
                     assertEquals(retrievedLocation.getLatitude(), location.getLatitude(), 0.01);
                     assertEquals(retrievedLocation.getLongitude(), location.getLongitude(), 0.01);
@@ -190,6 +207,11 @@ public class SCLocationRepositoryTest {
             }
 
             SCLocation retrievedLocation = repository.getRemote(location.getPublicCode());
+            try {
+                Thread.sleep(1000); //ew
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             assertEquals(retrievedLocation.getLabel(), location.getLabel());
             assertEquals(retrievedLocation.getLatitude(), location.getLatitude(), 0.01);
             assertEquals(retrievedLocation.getLongitude(), location.getLongitude(), 0.01);

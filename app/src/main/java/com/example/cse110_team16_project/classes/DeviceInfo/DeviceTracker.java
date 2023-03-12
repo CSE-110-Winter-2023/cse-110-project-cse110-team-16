@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project.classes;
+package com.example.cse110_team16_project.classes.DeviceInfo;
 
 import android.app.Activity;
 import android.location.Location;
@@ -7,8 +7,10 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.cse110_team16_project.Units.Degrees;
-import com.example.cse110_team16_project.Units.Radians;
+import com.example.cse110_team16_project.classes.Units.Degrees;
+import com.example.cse110_team16_project.classes.Units.Radians;
+import com.example.cse110_team16_project.classes.Misc.Converters;
+import com.example.cse110_team16_project.classes.CoordinateClasses.Coordinates;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,14 +20,14 @@ public class DeviceTracker {
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
 
     private static final int UPDATE_TIME = 200;
-    private static final int UPDATE_MIN_METERS = 20;
+    private static final int UPDATE_MIN_METERS = 0;
 
     Activity activity;
 
     private final LocationService locationService;
     private final OrientationService orientationService;
 
-    private final MutableLiveData<Coordinates> coordinates = new MutableLiveData<>();
+    private final MutableLiveData<Coordinates> coordinates = new MutableLiveData<>(null);
 
     public DeviceTracker(Activity activity){
         this(activity, LocationService.singleton(activity,UPDATE_TIME, UPDATE_MIN_METERS),
@@ -39,7 +41,8 @@ public class DeviceTracker {
         this.orientationService = orientationService;
 
         getLocation().observe((LifecycleOwner) activity, location -> {
-            coordinates.postValue(Converters.LocationToCoordinates(location));
+            Coordinates newCoords = Converters.LocationToCoordinates(location);
+            if(newCoords != null) coordinates.postValue(newCoords);
         });
     }
 

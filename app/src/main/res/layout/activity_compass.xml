@@ -104,15 +104,49 @@
         app:srcCompat="@drawable/ms2_user_dot" />
 
     <Button
-        android:id="@+id/backButton"
+        android:id="@+id/uidButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="120dp"
-        android:text="Back"
-        android:onClick="onBackClicked"
-        app:layout_constraintVertical_bias="0.9"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CompassLayout" />
+        android:onClick="onUIDClicked"
+        android:text="UID/Debug"
+        app:layout_constraintStart_toStartOf="@id/leftGuide"
+        app:layout_constraintTop_toBottomOf="@id/botGuide" />
+
+    <Button
+        android:id="@+id/toListActivityButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="ontoListClicked"
+        android:text="Edit Locations"
+        app:layout_constraintEnd_toEndOf="@id/rightGuide"
+        app:layout_constraintTop_toBottomOf="@id/botGuide" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <TextView
+            android:id="@+id/gpsLight"
+            android:layout_marginTop="15dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/gps_red"/>
+
+        <TextView
+            android:id="@+id/gpsText"
+            android:layout_marginTop="10dp"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:textSize="16dp"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:text=""/>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

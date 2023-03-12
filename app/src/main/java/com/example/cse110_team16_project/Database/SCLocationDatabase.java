@@ -7,8 +7,8 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-import com.example.cse110_team16_project.classes.Converters;
-import com.example.cse110_team16_project.classes.SCLocation;
+import com.example.cse110_team16_project.classes.Misc.Converters;
+import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 
 @Database(entities = {SCLocation.class}, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})

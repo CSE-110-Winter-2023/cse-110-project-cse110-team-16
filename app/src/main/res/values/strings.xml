@@ -4,4 +4,6 @@
     <string name="location_request_rationale_title">Social Compass Requires Permissions</string>
     <string name="location_request_rationale_text">The Social Compass application requires location permissions to run. Please enable location access.</string>
     <string name="ok">OK</string>
+    <string name="close_icon">✕</string>
+    <string name="new_location_hint">Add another code here</string>
 </resources>
