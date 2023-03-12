@@ -146,4 +146,8 @@ public class CompassActivity extends AppCompatActivity {
     public void onBackClicked(View view) {
         startActivity(new Intent(this, AddHomeLocations.class));
     }
+
+    public void setGpsstatus(GPSstatus gpsstatus) {
+        this.gpsstatus = gpsstatus;
+    }
 }
