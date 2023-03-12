@@ -25,12 +25,13 @@ public class GPSstatus {
     private static final int TIME_THRESHOLD = 60000;
     private static final int ONE_MIN = 60000;
     private static final int ONE_HOUR = 3600000;
+    private static final int REFRESH_PERIOD = 15 * 1000;
 
     public GPSstatus(LiveData<Location> loc, View v, TextView gt) {
         this.location = loc;
         this.statusDot = v;
         this.gpsText = gt;
-        this.initTime = 0;
+        this.initTime = -REFRESH_PERIOD;
     }
 
     private long getLocationAge() {
@@ -41,9 +42,10 @@ public class GPSstatus {
             }
             else {
                 Log.d("GPS", "No data yet!");
-                long initTimeNow = initTime;
-                initTime += ONE_MIN / 60;
-                return initTimeNow;
+                //long initTimeNow = initTime;
+
+                Log.d("GPS", "initTime = " + initTime);
+                return this.initTime;
             }
         }
         return 0;
@@ -67,6 +69,7 @@ public class GPSstatus {
         var executor = Executors.newSingleThreadScheduledExecutor();
         executor.scheduleAtFixedRate(() -> {
             try {
+                this.initTime += REFRESH_PERIOD;
                 if (isLocationLive() && this.location.getValue() != null) {
                     this.setGreen();
                     this.gpsText.setText("");
@@ -79,7 +82,7 @@ public class GPSstatus {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }, 0, 3, TimeUnit.SECONDS);
+        }, 0, REFRESH_PERIOD, TimeUnit.MILLISECONDS);
     }
 
     private void setGreen() {
