@@ -43,7 +43,7 @@ public class Story7ScenarioTest {
             mockLiveLoc.setValue(mockLoc);
             GPSStatus mockGPSStatus = new GPSStatus(mockLiveLoc, activity.findViewById(R.id.gpsLight),
                     activity.findViewById(R.id.gpsText));
-            activity.setGpsstatus(mockGPSStatus);
+            activity.setGpsStatus(mockGPSStatus);
             mockGPSStatus.updateGPSStatus();
             assertEquals(R.drawable.gps_green, gpsLight.getTag());
             mockGPSStatus.setMockLocation(null);
@@ -72,7 +72,7 @@ public class Story7ScenarioTest {
             mockLiveLoc.setValue(null);
             GPSStatus mockGPSStatus = new GPSStatus(mockLiveLoc, activity.findViewById(R.id.gpsLight),
                     activity.findViewById(R.id.gpsText));
-            activity.setGpsstatus(mockGPSStatus);
+            activity.setGpsStatus(mockGPSStatus);
             mockGPSStatus.updateGPSStatus();
             assertEquals(R.drawable.gps_red, gpsLight.getTag());
             mockGPSStatus.setMockLocation(mockLoc);

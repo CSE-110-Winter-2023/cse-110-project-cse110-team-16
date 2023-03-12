@@ -9,7 +9,7 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 
 import com.example.cse110_team16_project.R;
-import com.example.cse110_team16_project.Units.Degrees;
+import com.example.cse110_team16_project.classes.Units.Degrees;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;

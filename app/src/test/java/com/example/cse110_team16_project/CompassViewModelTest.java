@@ -10,8 +10,8 @@ import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.rule.GrantPermissionRule;
 
-import com.example.cse110_team16_project.Units.Meters;
-import com.example.cse110_team16_project.ViewModels.CompassViewModel;
+import com.example.cse110_team16_project.classes.Units.Meters;
+import com.example.cse110_team16_project.classes.ViewModels.CompassViewModel;
 import com.example.cse110_team16_project.classes.Misc.Converters;
 
 import org.junit.Rule;

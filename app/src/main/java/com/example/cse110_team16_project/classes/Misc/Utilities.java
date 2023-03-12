@@ -4,11 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.util.DisplayMetrics;
 
-import com.example.cse110_team16_project.Units.Meters;
-import com.example.cse110_team16_project.Units.Miles;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class Utilities {

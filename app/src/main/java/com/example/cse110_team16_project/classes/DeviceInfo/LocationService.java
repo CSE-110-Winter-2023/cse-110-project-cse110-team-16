@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project.DeviceInfo;
+package com.example.cse110_team16_project.classes.DeviceInfo;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 

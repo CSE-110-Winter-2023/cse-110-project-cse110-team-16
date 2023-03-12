@@ -8,10 +8,10 @@ import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.rule.GrantPermissionRule;
 
-import com.example.cse110_team16_project.Units.Degrees;
+import com.example.cse110_team16_project.classes.Units.Degrees;
 import com.example.cse110_team16_project.classes.Misc.Converters;
 import com.example.cse110_team16_project.classes.CoordinateClasses.Coordinates;
-import com.example.cse110_team16_project.DeviceInfo.DeviceTracker;
+import com.example.cse110_team16_project.classes.DeviceInfo.DeviceTracker;
 
 import org.junit.Rule;
 import org.junit.Test;

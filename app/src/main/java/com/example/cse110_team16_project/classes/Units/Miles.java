@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project.Units;
+package com.example.cse110_team16_project.classes.Units;
 
 public class Miles {
     private double miles;

@@ -5,7 +5,7 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import com.example.cse110_team16_project.Units.Degrees;
+import com.example.cse110_team16_project.classes.Units.Degrees;
 import com.example.cse110_team16_project.classes.Misc.Converters;
 
 public class Coordinates extends Pair<Double,Double>{

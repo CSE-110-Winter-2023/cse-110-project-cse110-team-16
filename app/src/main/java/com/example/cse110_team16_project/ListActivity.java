@@ -16,7 +16,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
-import com.example.cse110_team16_project.ViewModels.ListViewModel;
+import com.example.cse110_team16_project.classes.ViewModels.ListViewModel;
 import com.example.cse110_team16_project.classes.SCLocationsAdapter;
 
 public class ListActivity extends AppCompatActivity {

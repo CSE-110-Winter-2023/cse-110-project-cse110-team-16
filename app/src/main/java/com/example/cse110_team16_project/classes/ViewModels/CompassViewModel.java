@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project.ViewModels;
+package com.example.cse110_team16_project.classes.ViewModels;
 
 import android.app.Application;
 
@@ -8,8 +8,8 @@ import androidx.lifecycle.LiveData;
 
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
-import com.example.cse110_team16_project.Units.Meters;
-import com.example.cse110_team16_project.Units.Miles;
+import com.example.cse110_team16_project.classes.Units.Meters;
+import com.example.cse110_team16_project.classes.Units.Miles;
 import com.example.cse110_team16_project.classes.Misc.Converters;
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 

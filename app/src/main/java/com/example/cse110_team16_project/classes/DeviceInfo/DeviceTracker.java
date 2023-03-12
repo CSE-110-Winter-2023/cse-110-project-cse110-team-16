@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project.DeviceInfo;
+package com.example.cse110_team16_project.classes.DeviceInfo;
 
 import android.app.Activity;
 import android.location.Location;
@@ -7,8 +7,8 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.cse110_team16_project.Units.Degrees;
-import com.example.cse110_team16_project.Units.Radians;
+import com.example.cse110_team16_project.classes.Units.Degrees;
+import com.example.cse110_team16_project.classes.Units.Radians;
 import com.example.cse110_team16_project.classes.Misc.Converters;
 import com.example.cse110_team16_project.classes.CoordinateClasses.Coordinates;
 

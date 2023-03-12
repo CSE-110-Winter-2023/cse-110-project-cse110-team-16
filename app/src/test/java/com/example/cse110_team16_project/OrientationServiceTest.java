@@ -6,8 +6,8 @@ import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
-import com.example.cse110_team16_project.Units.Degrees;
-import com.example.cse110_team16_project.DeviceInfo.OrientationService;
+import com.example.cse110_team16_project.classes.Units.Degrees;
+import com.example.cse110_team16_project.classes.DeviceInfo.OrientationService;
 
 import org.junit.Rule;
 import org.junit.Test;

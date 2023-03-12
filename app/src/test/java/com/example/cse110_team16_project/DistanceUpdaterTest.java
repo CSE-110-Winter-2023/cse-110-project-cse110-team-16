@@ -10,10 +10,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.rule.GrantPermissionRule;
 
-import com.example.cse110_team16_project.Units.Meters;
+import com.example.cse110_team16_project.classes.Units.Meters;
 import com.example.cse110_team16_project.classes.CoordinateClasses.Coordinates;
 import com.example.cse110_team16_project.classes.DistanceUpdater;
-import com.example.cse110_team16_project.Units.Radians;
+import com.example.cse110_team16_project.classes.Units.Radians;
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 
 import org.junit.Rule;

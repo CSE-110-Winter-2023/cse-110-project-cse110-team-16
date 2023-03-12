@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project.DeviceInfo;
+package com.example.cse110_team16_project.classes.DeviceInfo;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,8 +10,8 @@ import android.hardware.SensorManager;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.cse110_team16_project.Units.Degrees;
-import com.example.cse110_team16_project.Units.Radians;
+import com.example.cse110_team16_project.classes.Units.Degrees;
+import com.example.cse110_team16_project.classes.Units.Radians;
 import com.example.cse110_team16_project.classes.Misc.Converters;
 
 public class OrientationService implements SensorEventListener{
