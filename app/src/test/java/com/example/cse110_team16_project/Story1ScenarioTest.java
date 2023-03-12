@@ -36,7 +36,7 @@ import java.util.List;
 @RunWith(RobolectricTestRunner.class)
 public class Story1ScenarioTest {
 
-    public final int WAIT_FOR_ROOM_TIME = 1500;
+    private final int WAIT_FOR_ROOM_TIME = 1500;
     private SCLocationDao dao;
     private SCLocationDatabase db;
 

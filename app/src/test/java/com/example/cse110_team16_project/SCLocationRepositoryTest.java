@@ -35,6 +35,8 @@ import java.util.concurrent.Future;
 
 @RunWith(RobolectricTestRunner.class)
 public class SCLocationRepositoryTest {
+
+    private final int WAIT_FOR_UPDATE_TIME = 1500;
     private SCLocationDao dao;
     private SCLocationDatabase db;
 
@@ -48,6 +50,7 @@ public class SCLocationRepositoryTest {
                 .allowMainThreadQueries()
                 .build();
         dao = db.getDao();
+        SCLocationDatabase.inject(db);
     }
 
     @After
@@ -61,16 +64,18 @@ public class SCLocationRepositoryTest {
         var scenario = ActivityScenario.launch(CompassActivity.class);
         scenario.moveToState(Lifecycle.State.STARTED);
         scenario.onActivity(activity -> {
-            SCLocationRepository repository = new SCLocationRepository(SCLocationDatabase.provide(activity).getDao());
-            String private_code = "amongusnoonewilleverhavethisasacode";
-            SCLocation location = new SCLocation(3,3,"testlabel","6969696969696");
+            SCLocationRepository repository = new SCLocationRepository(dao);
+            String private_code = "SCLocationRepositoryTest1Private";
+            String public_code = "SCLocationRepositoryTest1Public";
+            String label = "testLabel";
+            SCLocation location = new SCLocation(3,3,label,public_code);
             repository.upsertRemote(location,private_code);
-            SCLocation retrievedLocation = repository.getRemote(location.getPublicCode());
             try {
-                Thread.sleep(1000); //ew
+                Thread.sleep(WAIT_FOR_UPDATE_TIME); //ew
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+            SCLocation retrievedLocation = repository.getRemote(location.getPublicCode());
             assertEquals(retrievedLocation.getLabel(),location.getLabel());
             assertEquals(retrievedLocation.getLatitude(),location.getLatitude(),0.01);
             assertEquals(retrievedLocation.getLongitude(),location.getLongitude(),0.01);
@@ -85,14 +90,16 @@ public class SCLocationRepositoryTest {
             scenario.moveToState(Lifecycle.State.STARTED);
             scenario.onActivity(activity -> {
             SCLocationRepository repository = new SCLocationRepository(dao);
-            SCLocation scLocation1 = new SCLocation(2,2,"Mom","wadadawdabdbawbdwadawdwada");
-            SCLocation scLocation3 = new SCLocation(4,4,"Momn't","wadadawdabdbawbdwadawdwada");
+            String public_code = "SCLocationRepositoryTest2Public";
+            String private_code = "SCLocationRepositoryTest2Private";
+            SCLocation scLocation1 = new SCLocation(2,2,"testLabel1",public_code);
+            SCLocation scLocation3 = new SCLocation(4,4,"testLabel2",public_code);
 
             repository.upsertLocal(scLocation1);
             repository.upsertLocal(scLocation3);
-            repository.deleteRemote(scLocation3.getPublicCode(), scLocation3.getPublicCode());
+            repository.deleteRemote(scLocation3.getPublicCode(), private_code);
                 try {
-                    Thread.sleep(1000); //ew
+                    Thread.sleep(WAIT_FOR_UPDATE_TIME); //ew
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -107,8 +114,9 @@ public class SCLocationRepositoryTest {
         scenario.moveToState(Lifecycle.State.STARTED);
         scenario.onActivity(activity -> {
             SCLocationRepository repository = new SCLocationRepository(dao);
-            SCLocation scLocation1 = new SCLocation(2,2,"Mom","wadadawdabdbawbdwadawdwada");
-
+            String public_code = "SCLocationRepositoryTest3Public";
+            String label = "testLabel";
+            SCLocation scLocation1 = new SCLocation(2,2,label,public_code);
             repository.upsertLocal(scLocation1);
             repository.deleteLocal(scLocation1);
             assertFalse(repository.existsLocal(scLocation1.getPublicCode()));
@@ -121,8 +129,10 @@ public class SCLocationRepositoryTest {
         scenario.moveToState(Lifecycle.State.STARTED);
         scenario.onActivity(activity -> {
             SCLocationRepository repository = new SCLocationRepository(dao);
-            SCLocation location = new SCLocation(2,2,"Mom","wadadawdabdbawbdwadawdwada");
+            String public_code = "SCLocationRepositoryTest3Public";
+            String label = "testLabel";
 
+            SCLocation location = new SCLocation(2,2,label,public_code);
             Future<Void> future = repository.upsertRemote(location,location.public_code);
             try {
                 future.get();
@@ -131,7 +141,7 @@ public class SCLocationRepositoryTest {
             }
             LiveData<SCLocation> retrievedLocationLive = repository.getSynced(location.public_code);
             try {
-                Thread.sleep(1000); //ew
+                Thread.sleep(WAIT_FOR_UPDATE_TIME); //ew
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -139,7 +149,7 @@ public class SCLocationRepositoryTest {
                 retrievedLocationLive.removeObservers(activity);
                 retrievedLocationLive.observe(activity,(retrievedLocation) -> {
                     try {
-                        Thread.sleep(1000); //ew
+                        Thread.sleep(WAIT_FOR_UPDATE_TIME); //ew
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -158,7 +168,9 @@ public class SCLocationRepositoryTest {
         scenario.moveToState(Lifecycle.State.STARTED);
         scenario.onActivity(activity -> {
             SCLocationRepository repository = new SCLocationRepository(dao);
-            SCLocation location = new SCLocation(2,2,"Mom","wadadawdabdbawbdwadawdwada");
+            String public_code = "SCLocationRepositoryTest4Public";
+            String label = "testLabel";
+            SCLocation location = new SCLocation(2,2,label,public_code);
 
             Future<Void> future = repository.upsertRemote(location,location.public_code);
             try {
@@ -168,7 +180,7 @@ public class SCLocationRepositoryTest {
             }
             LiveData<SCLocation> retrievedLocationLive = repository.getRemoteLive(location.public_code);
             try {
-                Thread.sleep(1000); //ew
+                Thread.sleep(WAIT_FOR_UPDATE_TIME); //ew
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -176,7 +188,7 @@ public class SCLocationRepositoryTest {
                 retrievedLocationLive.removeObservers(activity);
                 retrievedLocationLive.observe(activity,(retrievedLocation) -> {
                     try {
-                        Thread.sleep(1000); //ew
+                        Thread.sleep(WAIT_FOR_UPDATE_TIME); //ew
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -195,23 +207,26 @@ public class SCLocationRepositoryTest {
         scenario.moveToState(Lifecycle.State.STARTED);
         scenario.onActivity(activity -> {
             SCLocationRepository repository = new SCLocationRepository(dao);
-            SCLocation location = new SCLocation(2,2,"Mom","wadadawdabdbawbdwadawdwada");
-
+            String public_code = "SCLocationRepositoryTest5Public";
+            String private_code = "SCLocationRepositoryTest5Private";
+            String label = "testLabel";
+            SCLocation location = new SCLocation(0,0,label,public_code);
+            repository.upsertRemote(location,private_code);
+            try {
+                Thread.sleep(WAIT_FOR_UPDATE_TIME); //ew
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             MutableLiveData<SCLocation> liveLocation = new MutableLiveData<>();
             liveLocation.postValue(location);
-            repository.updateSCLocationLive(liveLocation,location.public_code);
+            repository.updateSCLocationLive(liveLocation,private_code);
             try {
-                Thread.sleep(1000); //ew
+                Thread.sleep(WAIT_FOR_UPDATE_TIME); //ew
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
 
             SCLocation retrievedLocation = repository.getRemote(location.getPublicCode());
-            try {
-                Thread.sleep(1000); //ew
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
             assertEquals(retrievedLocation.getLabel(), location.getLabel());
             assertEquals(retrievedLocation.getLatitude(), location.getLatitude(), 0.01);
             assertEquals(retrievedLocation.getLongitude(), location.getLongitude(), 0.01);
@@ -220,7 +235,7 @@ public class SCLocationRepositoryTest {
             location.setCoordinates(new Coordinates(3,3));
             liveLocation.postValue(location);
             try {
-                Thread.sleep(4000); //ew
+                Thread.sleep(WAIT_FOR_UPDATE_TIME); //ew
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
