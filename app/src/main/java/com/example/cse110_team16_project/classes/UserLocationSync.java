@@ -10,12 +10,12 @@ import com.example.cse110_team16_project.Database.SCLocationRepository;
 import com.example.cse110_team16_project.classes.CoordinateClasses.Coordinates;
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 
-public class UserLocationSynch {
+public class UserLocationSync {
     SCLocation location;
     MutableLiveData<SCLocation> locationLive = new MutableLiveData<>(null);
 
-    public UserLocationSynch(LiveData<Coordinates> userCoords, SCLocation user, String private_code,
-                             Activity activity, SCLocationRepository repo){
+    public UserLocationSync(LiveData<Coordinates> userCoords, SCLocation user, String private_code,
+                            Activity activity, SCLocationRepository repo){
 
         location = user;
         repo.updateSCLocationLive(locationLive,private_code);

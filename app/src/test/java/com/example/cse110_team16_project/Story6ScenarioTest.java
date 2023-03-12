@@ -16,7 +16,7 @@ import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
 import com.example.cse110_team16_project.classes.CoordinateClasses.Coordinates;
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
-import com.example.cse110_team16_project.classes.UserLocationSynch;
+import com.example.cse110_team16_project.classes.UserLocationSync;
 
 import org.junit.After;
 import org.junit.Before;
@@ -59,7 +59,7 @@ public class Story6ScenarioTest {
             repository.upsertRemote(location,code);
             Coordinates coords = new Coordinates(2,2);
             MutableLiveData<Coordinates> liveCoordinates = new MutableLiveData<>(null);
-            UserLocationSynch syncher = new UserLocationSynch(liveCoordinates,
+            UserLocationSync syncher = new UserLocationSync(liveCoordinates,
                     new SCLocation(label,code),code,activity,repository);
             liveCoordinates.postValue(coords);
             try {
