@@ -25,11 +25,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
 @RunWith(RobolectricTestRunner.class)
-public class UserLocationSynchTest {
+public class Story6ScenarioTest {
     private SCLocationDao dao;
     private SCLocationDatabase db;
 
