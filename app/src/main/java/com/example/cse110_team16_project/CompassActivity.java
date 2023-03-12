@@ -26,11 +26,13 @@ import com.example.cse110_team16_project.classes.CompassViewModel;
 import com.example.cse110_team16_project.classes.Constants;
 import com.example.cse110_team16_project.classes.Coordinates;
 import com.example.cse110_team16_project.Units.Degrees;
+import com.example.cse110_team16_project.classes.GPSstatus;
 import com.example.cse110_team16_project.classes.SCLocation;
 import com.example.cse110_team16_project.classes.DeviceTracker;
 import com.example.cse110_team16_project.classes.UserLocationSynch;
 
 
+import java.security.spec.ECField;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -44,9 +46,11 @@ public class CompassActivity extends AppCompatActivity {
     private CompassUIManager compassUIManager;
     private CompassViewModel viewModel;
 
-    private UserLocationSynch locationSyncer;
 
+    private GPSstatus gpsstatus;
+    private UserLocationSynch locationSyncer;
     private SCLocationRepository repo;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +69,15 @@ public class CompassActivity extends AppCompatActivity {
 
         viewModel = setupViewModel();
         deviceTracker = new DeviceTracker(this);
-        locationSyncer = new UserLocationSynch(deviceTracker.getCoordinates(),
+        compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
+        gpsstatus = new GPSstatus(deviceTracker.getLocation(), findViewById(R.id.gpsLight), findViewById(R.id.gpsText));
+        try{
+            gpsstatus.trackGPSStatus();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+locationSyncer = new UserLocationSynch(deviceTracker.getCoordinates(),
                 new SCLocation(userLabel,public_code),private_code, this, repo);
         compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(),
                 findViewById(R.id.compassRing));
@@ -146,5 +158,9 @@ public class CompassActivity extends AppCompatActivity {
 
     public void onBackClicked(View view) {
         startActivity(new Intent(this, AddHomeLocations.class));
+    }
+
+    public void setGpsstatus(GPSstatus gpsstatus) {
+        this.gpsstatus = gpsstatus;
     }
 }

@@ -18,7 +18,7 @@ public class DeviceTracker {
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
 
     private static final int UPDATE_TIME = 200;
-    private static final int UPDATE_MIN_METERS = 20;
+    private static final int UPDATE_MIN_METERS = 0;
 
     Activity activity;
 

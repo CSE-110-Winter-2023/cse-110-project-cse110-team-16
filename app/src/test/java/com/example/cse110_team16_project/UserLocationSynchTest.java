@@ -58,14 +58,16 @@ public class UserLocationSynchTest {
         scenario.onActivity(activity -> {
             SCLocationRepository repository = new SCLocationRepository(dao);
             String label = "Mom";
-            String code = "wadadawdabdbawbdwadawdwada";
+            String code = "Story6Scenario1Test";
+            SCLocation location = new SCLocation(0,0,label,code);
+            repository.upsertRemote(location,code);
             Coordinates coords = new Coordinates(2,2);
             MutableLiveData<Coordinates> liveCoordinates = new MutableLiveData<>(null);
             UserLocationSynch syncher = new UserLocationSynch(liveCoordinates,
                     new SCLocation(label,code),code,activity,repository);
             liveCoordinates.postValue(coords);
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
