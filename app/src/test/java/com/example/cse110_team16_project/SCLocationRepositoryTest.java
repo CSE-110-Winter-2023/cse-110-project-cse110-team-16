@@ -71,7 +71,7 @@ public class SCLocationRepositoryTest {
             SCLocation location = new SCLocation(3,3,label,public_code);
             repository.upsertRemote(location,private_code);
             try {
-                Thread.sleep(WAIT_FOR_UPDATE_TIME); //ew
+                Thread.sleep(WAIT_FOR_UPDATE_TIME); 
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -99,7 +99,7 @@ public class SCLocationRepositoryTest {
             repository.upsertLocal(scLocation3);
             repository.deleteRemote(scLocation3.getPublicCode(), private_code);
                 try {
-                    Thread.sleep(WAIT_FOR_UPDATE_TIME); //ew
+                    Thread.sleep(WAIT_FOR_UPDATE_TIME); 
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -141,7 +141,7 @@ public class SCLocationRepositoryTest {
             }
             LiveData<SCLocation> retrievedLocationLive = repository.getSynced(location.public_code);
             try {
-                Thread.sleep(WAIT_FOR_UPDATE_TIME); //ew
+                Thread.sleep(WAIT_FOR_UPDATE_TIME); 
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -149,7 +149,7 @@ public class SCLocationRepositoryTest {
                 retrievedLocationLive.removeObservers(activity);
                 retrievedLocationLive.observe(activity,(retrievedLocation) -> {
                     try {
-                        Thread.sleep(WAIT_FOR_UPDATE_TIME); //ew
+                        Thread.sleep(WAIT_FOR_UPDATE_TIME); 
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -180,7 +180,7 @@ public class SCLocationRepositoryTest {
             }
             LiveData<SCLocation> retrievedLocationLive = repository.getRemoteLive(location.public_code);
             try {
-                Thread.sleep(WAIT_FOR_UPDATE_TIME); //ew
+                Thread.sleep(WAIT_FOR_UPDATE_TIME); 
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -188,7 +188,7 @@ public class SCLocationRepositoryTest {
                 retrievedLocationLive.removeObservers(activity);
                 retrievedLocationLive.observe(activity,(retrievedLocation) -> {
                     try {
-                        Thread.sleep(WAIT_FOR_UPDATE_TIME); //ew
+                        Thread.sleep(WAIT_FOR_UPDATE_TIME); 
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -213,7 +213,7 @@ public class SCLocationRepositoryTest {
             SCLocation location = new SCLocation(0,0,label,public_code);
             repository.upsertRemote(location,private_code);
             try {
-                Thread.sleep(WAIT_FOR_UPDATE_TIME); //ew
+                Thread.sleep(WAIT_FOR_UPDATE_TIME); 
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -221,7 +221,7 @@ public class SCLocationRepositoryTest {
             liveLocation.postValue(location);
             repository.updateSCLocationLive(liveLocation,private_code);
             try {
-                Thread.sleep(WAIT_FOR_UPDATE_TIME); //ew
+                Thread.sleep(WAIT_FOR_UPDATE_TIME); 
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -235,7 +235,7 @@ public class SCLocationRepositoryTest {
             location.setCoordinates(new Coordinates(3,3));
             liveLocation.postValue(location);
             try {
-                Thread.sleep(WAIT_FOR_UPDATE_TIME); //ew
+                Thread.sleep(WAIT_FOR_UPDATE_TIME); 
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
