@@ -64,8 +64,10 @@ public class Story1ScenarioTest {
         scenario.moveToState(Lifecycle.State.RESUMED);
         scenario.onActivity(activity -> {
             SCLocationRepository repository = new SCLocationRepository(db.getDao());
-            String private_code = "Story1Scenario1private";
-            SCLocation location = new SCLocation(3,3,"testLabel","Story1Scenario1Public");
+            String private_code = "Story1Scenario1Private";
+            String public_code = "Story1Scenario1Public";
+            String label = "testLabel";
+            SCLocation location = new SCLocation(3,3,label,public_code);
             repository.upsertRemote(location,private_code);
             List<SCLocation> beforeLocationList = dao.getAll();
             EditText newLocationText = activity.findViewById(R.id.input_new_location_code);
@@ -89,8 +91,10 @@ public class Story1ScenarioTest {
         scenario.moveToState(Lifecycle.State.RESUMED);
         scenario.onActivity(activity -> {
             SCLocationRepository repository = new SCLocationRepository(db.getDao());
-            String private_code = "Story1Scenario1private";
-            SCLocation location = new SCLocation(3,3,"testLabel","Story1Scenario1pubic");
+            String private_code = "Story1Scenario2Private";
+            String public_code = "Story1Scenario2Public";
+            String label = "testLabel";
+            SCLocation location = new SCLocation(3,3,label,public_code);
             repository.deleteRemote(location.public_code,private_code);
             List<SCLocation> beforeLocationList = dao.getAll();
             EditText newLocationText = activity.findViewById(R.id.input_new_location_code);

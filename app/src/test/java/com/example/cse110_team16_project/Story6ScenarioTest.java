@@ -40,6 +40,7 @@ public class Story6ScenarioTest {
                 .allowMainThreadQueries()
                 .build();
         dao = db.getDao();
+        SCLocationDatabase.inject(db);
     }
 
     @After
@@ -54,20 +55,21 @@ public class Story6ScenarioTest {
         scenario.onActivity(activity -> {
             SCLocationRepository repository = new SCLocationRepository(dao);
             String label = "Mom";
-            String code = "Story6Scenario1Test";
-            SCLocation location = new SCLocation(0,0,label,code);
-            repository.upsertRemote(location,code);
+            String private_code = "Story6Scenario1TestPrivate";
+            String public_code = "Story6Scenario1TestPublic";
+            SCLocation location = new SCLocation(0,0,label,public_code);
+            repository.upsertRemote(location,private_code);
             Coordinates coords = new Coordinates(2,2);
             MutableLiveData<Coordinates> liveCoordinates = new MutableLiveData<>(null);
             UserLocationSync syncher = new UserLocationSync(liveCoordinates,
-                    new SCLocation(label,code),code,activity,repository);
+                    new SCLocation(label,public_code),private_code,activity,repository);
             liveCoordinates.postValue(coords);
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            SCLocation updatedLocation = repository.getRemote(code);
+            SCLocation updatedLocation = repository.getRemote(public_code);
             assertEquals(2,updatedLocation.getLatitude(),0.01);
             assertEquals(2,updatedLocation.getLongitude(),0.01);
 
