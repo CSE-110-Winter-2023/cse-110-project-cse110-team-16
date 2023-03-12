@@ -10,14 +10,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.cse110_team16_project.R;
+import com.example.cse110_team16_project.classes.Misc.Converters;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class GPSstatus {
+public class GPSStatus {
     private LiveData<Location> location;
     private View statusDot;
     private TextView gpsText;
@@ -28,7 +26,7 @@ public class GPSstatus {
     private static final int ONE_HOUR = 3600000;
     private static final int REFRESH_PERIOD = 15 * 1000;
 
-    public GPSstatus(LiveData<Location> loc, View v, TextView gt) {
+    public GPSStatus(LiveData<Location> loc, View v, TextView gt) {
         this.location = loc;
         this.statusDot = v;
         this.gpsText = gt;

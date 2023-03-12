@@ -18,10 +18,9 @@ import static org.junit.Assert.assertNull;
 import androidx.test.rule.GrantPermissionRule;
 
 
-import com.example.cse110_team16_project.classes.SCLocation;
+import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 @RunWith(RobolectricTestRunner.class)

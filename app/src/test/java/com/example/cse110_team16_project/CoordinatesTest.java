@@ -6,10 +6,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.*;
 
-import android.location.Location;
-
-import com.example.cse110_team16_project.classes.Constants;
-import com.example.cse110_team16_project.classes.Coordinates;
+import com.example.cse110_team16_project.classes.CoordinateClasses.Coordinates;
 
 /**
  * Example local unit test, which will execute on the development machine (host).

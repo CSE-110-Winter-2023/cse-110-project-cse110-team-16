@@ -1,13 +1,14 @@
-package com.example.cse110_team16_project.classes;
+package com.example.cse110_team16_project.classes.Misc;
 
 import android.location.Location;
 
 import androidx.room.TypeConverter;
 
-import com.example.cse110_team16_project.Units.Degrees;
-import com.example.cse110_team16_project.Units.Meters;
-import com.example.cse110_team16_project.Units.Miles;
-import com.example.cse110_team16_project.Units.Radians;
+import com.example.cse110_team16_project.classes.Units.Degrees;
+import com.example.cse110_team16_project.classes.Units.Meters;
+import com.example.cse110_team16_project.classes.Units.Miles;
+import com.example.cse110_team16_project.classes.Units.Radians;
+import com.example.cse110_team16_project.classes.CoordinateClasses.Coordinates;
 
 import java.time.Instant;
 import java.util.ArrayList;

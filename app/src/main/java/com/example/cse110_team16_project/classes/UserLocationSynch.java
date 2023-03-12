@@ -7,13 +7,15 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.cse110_team16_project.Database.SCLocationRepository;
+import com.example.cse110_team16_project.classes.CoordinateClasses.Coordinates;
+import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 
 public class UserLocationSynch {
     SCLocation location;
     MutableLiveData<SCLocation> locationLive = new MutableLiveData<>(null);
 
     public UserLocationSynch(LiveData<Coordinates> userCoords, SCLocation user, String private_code,
-                      Activity activity, SCLocationRepository repo){
+                             Activity activity, SCLocationRepository repo){
 
         location = user;
         repo.updateSCLocationLive(locationLive,private_code);

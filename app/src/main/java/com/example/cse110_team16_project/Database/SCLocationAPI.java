@@ -1,15 +1,9 @@
 package com.example.cse110_team16_project.Database;
 import android.util.Log;
 
-import com.example.cse110_team16_project.classes.Coordinates;
-import com.example.cse110_team16_project.classes.SCLocation;
+import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-
-import org.json.JSONObject;
 
 import java.util.Map;
 
@@ -94,7 +88,7 @@ public class SCLocationAPI {
         try (var response = client.newCall(request).execute()) {
             //assert response.body() != null;
             var body = response.body().string();
-            Log.i("putSCLocation",body);
+            Log.i("deleteSCLocation",body);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -118,7 +112,7 @@ public class SCLocationAPI {
         try (var response = client.newCall(request).execute()) {
             //assert response.body() != null;
             var body = response.body().string();
-            Log.i("putSCLocation",body);
+            Log.i("patchSCLocation",body);
         } catch (Exception e) {
             e.printStackTrace();
         }

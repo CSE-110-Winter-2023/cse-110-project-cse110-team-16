@@ -6,7 +6,7 @@ import android.location.Location;
 import android.os.SystemClock;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.cse110_team16_project.classes.GPSstatus;
+import com.example.cse110_team16_project.classes.GPSStatus;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,13 +26,13 @@ public class GPSStatusTest {
         mockLiveLoc.setValue(mockLoc);
 
         // GPS enabled, we have location
-        GPSstatus gpsStatus = new GPSstatus(mockLiveLoc, null, null);
+        GPSStatus gpsStatus = new GPSStatus(mockLiveLoc, null, null);
         long locAge = gpsStatus.getLocationAge();
         assertEquals(100, locAge);
 
         // GPS initially disabled, location null
         mockLiveLoc.setValue(null);
-        gpsStatus = new GPSstatus(mockLiveLoc, null, null);
+        gpsStatus = new GPSStatus(mockLiveLoc, null, null);
         locAge = gpsStatus.getLocationAge();
         assertEquals(-REFRESH_PERIOD, locAge);
     }
@@ -46,7 +46,7 @@ public class GPSStatusTest {
         long currTime = System.currentTimeMillis();
         mockLoc.setTime(currTime);
         mockLiveLoc.setValue(mockLoc);
-        GPSstatus gpsStatus = new GPSstatus(mockLiveLoc, null, null);
+        GPSStatus gpsStatus = new GPSStatus(mockLiveLoc, null, null);
         assertEquals(true, gpsStatus.isLocationLive());
 
         long timeNow = System.currentTimeMillis();

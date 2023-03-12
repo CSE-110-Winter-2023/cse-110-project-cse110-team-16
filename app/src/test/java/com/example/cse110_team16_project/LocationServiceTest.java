@@ -6,29 +6,17 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 
-import com.example.cse110_team16_project.Units.Degrees;
-import com.example.cse110_team16_project.classes.Converters;
-import com.example.cse110_team16_project.classes.Coordinates;
-import com.example.cse110_team16_project.classes.LocationService;
-import com.example.cse110_team16_project.classes.OrientationService;
+import com.example.cse110_team16_project.classes.Misc.Converters;
+import com.example.cse110_team16_project.classes.CoordinateClasses.Coordinates;
+import com.example.cse110_team16_project.classes.DeviceInfo.LocationService;
 
 import org.junit.Rule;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.MutableLiveData;
-import androidx.test.core.app.ActivityScenario;
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.test.rule.GrantPermissionRule;
 
-import com.example.cse110_team16_project.Units.Degrees;
-import com.example.cse110_team16_project.classes.OrientationService;
-import com.example.cse110_team16_project.classes.Utilities;
-
-import org.junit.Rule;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
