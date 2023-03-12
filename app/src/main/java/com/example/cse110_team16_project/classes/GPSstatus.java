@@ -92,8 +92,4 @@ public class GPSstatus {
     private void setRed() {
         this.statusDot.setBackgroundResource(R.drawable.gps_red);
     }
-
-    public void setMockLocation(LiveData<Location> mockLoc) {
-        this.location = mockLoc;
-    }
 }
