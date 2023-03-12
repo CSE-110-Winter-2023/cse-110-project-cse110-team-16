@@ -159,7 +159,4 @@ public class CompassActivity extends AppCompatActivity {
         startActivity(new Intent(this, ListActivity.class));
     }
 
-    public void setGpsStatus(GPSStatus gpsstatus) {
-        this.gpsstatus = gpsstatus;
-    }
 }

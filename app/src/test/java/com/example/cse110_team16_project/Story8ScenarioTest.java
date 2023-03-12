@@ -51,7 +51,6 @@ public class Story8ScenarioTest {
             GPSStatus mockGPSStatus = new GPSStatus(mockLiveLoc, activity.findViewById(R.id.gpsLight),
                     activity.findViewById(R.id.gpsText));
 
-            activity.setGpsStatus(mockGPSStatus);
             mockGPSStatus.updateGPSStatus();
             // now turn gps off for 1 min
             ShadowSystemClock.advanceBy(60, TimeUnit.SECONDS);
@@ -89,8 +88,6 @@ public class Story8ScenarioTest {
             mockLiveLoc.setValue(mockLoc);
             GPSStatus mockGPSStatus = new GPSStatus(mockLiveLoc, activity.findViewById(R.id.gpsLight),
                     activity.findViewById(R.id.gpsText));
-
-            activity.setGpsStatus(mockGPSStatus);
             mockGPSStatus.updateGPSStatus();
             // now turn gps off for 1 min
             ShadowSystemClock.advanceBy(59, TimeUnit.MINUTES);

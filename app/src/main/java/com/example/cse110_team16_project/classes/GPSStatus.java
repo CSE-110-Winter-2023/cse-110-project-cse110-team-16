@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -98,6 +99,7 @@ public class GPSStatus {
         this.statusDot.setTag(R.drawable.gps_red);
     }
 
+    @VisibleForTesting
     public void setMockLocation(Location location){
         MutableLiveData<Location> newloc = new MutableLiveData<>();
         newloc.setValue(location);
