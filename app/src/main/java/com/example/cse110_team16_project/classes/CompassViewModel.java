@@ -18,7 +18,7 @@ import java.util.List;
 public class CompassViewModel extends AndroidViewModel {
     public static final double SECTOR_RADIUS = 45;
     public static final int[] MILES_DISTANCES = new int[]{0, 1, 10, 500}; //first index is zero for calculations
-    private LiveData<List<SCLocation>> scLocations;
+    private List<LiveData<SCLocation>> scLocations;
     private final SCLocationRepository repo;
 
     public CompassViewModel(@NonNull Application application) {
@@ -33,15 +33,17 @@ public class CompassViewModel extends AndroidViewModel {
      * Load all user stored SCLocations from the remote database.
      * @return a LiveData object that will be updated when any location changes.
      */
-    public LiveData<List<SCLocation>> getSCLocations() {
+    public List<LiveData<SCLocation>> getSCLocations() {
         if(scLocations == null) return refreshSCLocations();
         return scLocations;
     }
 
-    public LiveData<List<SCLocation>> refreshSCLocations(){
-            scLocations = new MutableLiveData<>();
+    public List<LiveData<SCLocation>> refreshSCLocations(){
+            scLocations = new ArrayList<>();
             List<String> public_codes = repo.getLocalPublicCodes();
-            scLocations = repo.getRemoteLive(public_codes);
+            for(String code: public_codes) {
+                scLocations.add(repo.getRemoteLive(code));
+            }
         return scLocations;
     }
 
