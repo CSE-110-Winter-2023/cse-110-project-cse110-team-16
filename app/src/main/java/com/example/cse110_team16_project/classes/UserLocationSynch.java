@@ -10,7 +10,7 @@ import com.example.cse110_team16_project.Database.SCLocationRepository;
 
 public class UserLocationSynch {
     SCLocation location;
-    MutableLiveData<SCLocation> locationLive = new MutableLiveData<SCLocation>(null);
+    MutableLiveData<SCLocation> locationLive = new MutableLiveData<>(null);
 
     public UserLocationSynch(LiveData<Coordinates> userCoords, SCLocation user, String private_code,
                       Activity activity, SCLocationRepository repo){
