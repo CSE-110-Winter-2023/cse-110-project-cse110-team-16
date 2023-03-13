@@ -136,6 +136,7 @@ public class CompassActivity extends AppCompatActivity {
         userUIAdapter = new UserUIAdapter(this, liveFriendDist, friendOrientations
         ,friendLabels, userOrientation);
 
+        userUIAdapter.updateMapIcons();
 
     }
 

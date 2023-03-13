@@ -23,6 +23,7 @@ import java.util.concurrent.AbstractExecutorService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 
 /** Currently unused class previously meant for managing the Location icons on compass.
@@ -123,6 +124,16 @@ public class UserUIAdapter{
             layoutParams.circleRadius = friendDistances.get(i).intValue();
             friendViews.get(i).setLayoutParams(layoutParams);
         }
+    }
+
+    public void updateMapIcons(){
+        var executor = Executors.newSingleThreadScheduledExecutor();
+        executor.scheduleAtFixedRate(() -> {
+            updateDirectionUI(Converters.RadiansToDegrees(userOrientation.getValue()),
+                    friendOrientation.getValue());
+            updateDistanceUI(friendDistances.getValue());
+        }, 0, 3, TimeUnit.SECONDS);
+
     }
 
 
