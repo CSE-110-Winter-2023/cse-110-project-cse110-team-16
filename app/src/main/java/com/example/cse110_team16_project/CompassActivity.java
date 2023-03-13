@@ -103,7 +103,7 @@ public class CompassActivity extends AppCompatActivity {
                 = absoluteDirectionUpdater.getLastKnownEntityDirectionsFromUser(); //Friend Orientations
 
         DistanceUpdater distanceUpdater = new DistanceUpdater(this, liveFriendSCLoc, userCoord);
-
+/*
         distanceUpdater.updateAllEntityDistancesFromUser(friendSCLocations, userCoord.getValue());
         LiveData<List<Meters>> friendDistance = distanceUpdater.getLastKnownEntityDistancesFromUser();
         List<Double> friendDistInDouble = new ArrayList<>();
@@ -111,6 +111,13 @@ public class CompassActivity extends AppCompatActivity {
         for(Meters distance: friendDistance.getValue()){
             friendDistInDouble.add(distance.getMeters());
         }
+
+ */
+        List<Double> friendDistInDouble = new ArrayList<>();
+        friendDistInDouble.add(1.0);
+        friendDistInDouble.add(9.0);
+        friendDistInDouble.add(50.0);
+
         MutableLiveData<List<Double>> liveFriendDist = new MutableLiveData<>(); //Friend Distances
         liveFriendDist.setValue(friendDistInDouble);
 

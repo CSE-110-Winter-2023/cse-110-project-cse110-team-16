@@ -1,5 +1,6 @@
 package com.example.cse110_team16_project.classes.UI;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.view.View;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import com.example.cse110_team16_project.classes.Units.Radians;
 import com.example.cse110_team16_project.classes.Units.Degrees;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.AbstractExecutorService;
 import java.util.concurrent.ExecutorService;
@@ -47,7 +49,7 @@ public class UserUIAdapter{
     public UserUIAdapter(Activity activity, @NonNull LiveData<List<Double>> friendDistances,
                          @NonNull LiveData<List<Degrees>> friendOrientation, List<String> friendLabels
                          , LiveData<Radians> userOrientation){
-
+        this.friends = new ArrayList<>();
         this.activity = activity;
         this.friendDistances = friendDistances;
         this.friendOrientation = friendOrientation;
@@ -60,7 +62,6 @@ public class UserUIAdapter{
                     return null;
                 })
         );
-
         friendDistances.observe((LifecycleOwner) activity,
                     distances -> this.future = backgroundThreadExecutor.submit(() -> {
                         updateDistanceUI(distances);
@@ -79,14 +80,22 @@ public class UserUIAdapter{
 
 
     public void populateFriendLabels(List<String> friendLabels) {
-
         if(friendLabels.size() == 0){
             return;
         }
         for(int i = 0 ; i < friendLabels.size() ; i++) {
+            // Get the CompassActivity layout
             TextView addFriend = new TextView(activity);
             addFriend.setText(friendLabels.get(i));
             friends.add(addFriend);
+        }
+        displayFriendLabels();
+    }
+
+    public void displayFriendLabels(){
+        ConstraintLayout layout = activity.findViewById(R.id.CompassLayout);
+        for (TextView friend: friends){
+            layout.addView(friend);
         }
     }
 
