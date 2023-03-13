@@ -19,14 +19,10 @@ public class UserLocationSync {
 
         location = user;
         repo.updateSCLocationLive(locationLive,private_code);
-        userCoords.observe((LifecycleOwner) activity,(potentialNullCoords) -> {
-            if(potentialNullCoords != null) {
-                userCoords.removeObservers((LifecycleOwner) activity);
                 userCoords.observe((LifecycleOwner) activity, (coords) -> {
                     location.setCoordinates(coords);
                     locationLive.postValue(location);
                 });
-            }
-        });
+
     }
 }
