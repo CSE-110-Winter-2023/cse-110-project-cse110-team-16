@@ -81,6 +81,8 @@ public class CompassActivity extends AppCompatActivity {
         var dao = db.getDao();
         this.repo = new SCLocationRepository(dao);
 
+        deviceTracker = new DeviceTracker(this);
+
         List<String> publicCodes = repo.getLocalPublicCodes();
         List<SCLocation> friendSCLocations = new ArrayList<>();
         List<String> friendLabels = new ArrayList<>(); //Friend Labels
@@ -102,6 +104,7 @@ public class CompassActivity extends AppCompatActivity {
 
         DistanceUpdater distanceUpdater = new DistanceUpdater(this, liveFriendSCLoc, userCoord);
 
+        distanceUpdater.updateAllEntityDistancesFromUser(friendSCLocations, userCoord.getValue());
         LiveData<List<Meters>> friendDistance = distanceUpdater.getLastKnownEntityDistancesFromUser();
         List<Double> friendDistInDouble = new ArrayList<>();
 
@@ -118,7 +121,6 @@ public class CompassActivity extends AppCompatActivity {
         loadUserInfo();
 
         viewModel = setupViewModel();
-        deviceTracker = new DeviceTracker(this);
         compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
 
         gpsstatus = new GPSStatus(deviceTracker.getLocation(), findViewById(R.id.gpsLight), findViewById(R.id.gpsText));
