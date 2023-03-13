@@ -65,6 +65,7 @@ public class Story7ScenarioTest {
             Location mockLoc = new Location("dummy provider");
             mockLoc.setLatitude(100);
             mockLoc.setLongitude(-100);
+            mockLoc.setTime(System.currentTimeMillis());
             mockLiveLoc.setValue(mockLoc);
             GPSStatus mockGPSStatus = new GPSStatus(mockLiveLoc, activity.findViewById(R.id.gpsLight),
                     activity.findViewById(R.id.gpsText));
@@ -97,6 +98,7 @@ public class Story7ScenarioTest {
                     activity.findViewById(R.id.gpsText));
             mockGPSStatus.updateGPSStatus();
             assertEquals(R.drawable.gps_red, gpsLight.getTag());
+            mockLoc.setTime(System.currentTimeMillis());
             mockGPSStatus.setMockLocation(mockLoc);
             mockGPSStatus.updateGPSStatus();
             assertEquals(R.drawable.gps_green, gpsLight.getTag());

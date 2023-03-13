@@ -70,12 +70,6 @@ public class CompassActivity extends AppCompatActivity {
         deviceTracker = new DeviceTracker(this);
         compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
         gpsstatus = new GPSStatus(deviceTracker.getLocation(), findViewById(R.id.gpsLight), findViewById(R.id.gpsText));
-        try{
-            gpsstatus.trackGPSStatus();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-
         UserLocationSync locationSync = new UserLocationSync(deviceTracker.getCoordinates(),
                 new SCLocation(userLabel,public_code),private_code, this, repo);
         compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(),
@@ -128,6 +122,7 @@ public class CompassActivity extends AppCompatActivity {
     protected void onPause(){
         super.onPause();
         if(deviceTracker != null) deviceTracker.unregisterListeners();
+        if(gpsstatus != null) gpsstatus.stopTracking();
     }
 
     @Override
@@ -137,6 +132,7 @@ public class CompassActivity extends AppCompatActivity {
         if(deviceTracker != null) {
             deviceTracker.registerListeners();
         }
+        if(gpsstatus != null) gpsstatus.trackGPSStatus();
     }
 
     @Override

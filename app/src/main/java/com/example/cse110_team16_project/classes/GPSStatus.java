@@ -14,6 +14,7 @@ import com.example.cse110_team16_project.R;
 import com.example.cse110_team16_project.classes.Misc.Converters;
 
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class GPSStatus {
@@ -22,10 +23,12 @@ public class GPSStatus {
     private TextView gpsText;
     private long initTime;
 
+    private ScheduledFuture<?> future;
+
     private static final int TIME_THRESHOLD = 60000;
     private static final int ONE_MIN = 60000;
     private static final int ONE_HOUR = 3600000;
-    private static final int REFRESH_PERIOD = 15 * 1000;
+    public static final int REFRESH_PERIOD = 6000;
 
     public GPSStatus(LiveData<Location> loc, View v, TextView gt) {
         this.location = loc;
@@ -34,30 +37,28 @@ public class GPSStatus {
         this.initTime = -REFRESH_PERIOD;
     }
 
-    public long getLocationAge() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            Location currLoc = this.location.getValue();
-            if (currLoc != null) {
-                return currLoc.getElapsedRealtimeAgeMillis();
-            }
-            else {
-                Log.d("GPS", "No data yet!");
-                //long initTimeNow = initTime;
-
-                Log.d("GPS", "initTime = " + initTime);
-                return this.initTime;
-            }
+    public long getLocationAge(long currentMillis) {
+        Location currLoc = this.location.getValue();
+        if (currLoc != null) {
+            long timeElapsed = currentMillis - currLoc.getTime();
+            Log.d("Time Elapsed", timeElapsed + "");
+            return timeElapsed;
         }
-        return 0;
+        else {
+            Log.d("GPS", "No data yet!");
+            //long initTimeNow = initTime;
+            Log.d("GPS", "initTime = " + initTime);
+            return this.initTime;
+        }
     }
 
-    public boolean isLocationLive() {
-        Log.d("GPS", Long.toString(getLocationAge()));
-        return getLocationAge() < TIME_THRESHOLD;
+    public boolean isLocationLive(long currentMillis) {
+        Long locationAge = getLocationAge(currentMillis);
+        return locationAge < TIME_THRESHOLD;
     }
 
     public void updateGPSLostTime() {
-        long locationAge = getLocationAge();
+        long locationAge = getLocationAge(System.currentTimeMillis());
         if (locationAge < ONE_HOUR) {
             this.gpsText.setText(Converters.milisecToMins(locationAge) + "m");
         } else {
@@ -67,15 +68,21 @@ public class GPSStatus {
 
     public void trackGPSStatus() {
         var executor = Executors.newSingleThreadScheduledExecutor();
-        executor.scheduleAtFixedRate(() -> {
+        future = executor.scheduleAtFixedRate(() -> {
            updateGPSStatus();
         }, 0, REFRESH_PERIOD, TimeUnit.MILLISECONDS);
+    }
+
+    public void stopTracking() {
+        if (this.future != null && !this.future.isCancelled()) {
+            future.cancel(true);
+        }
     }
 
     public void updateGPSStatus(){
         try {
             this.initTime += REFRESH_PERIOD;
-            if (isLocationLive() && this.location.getValue() != null) {
+            if (isLocationLive(System.currentTimeMillis()) && this.location.getValue() != null) {
                 this.setGreen();
                 this.gpsText.setText("");
                 Log.d("GPS", "GPS status set to green");
