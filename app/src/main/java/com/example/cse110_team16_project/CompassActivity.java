@@ -30,6 +30,7 @@ import com.example.cse110_team16_project.classes.Misc.Constants;
 import com.example.cse110_team16_project.classes.GPSStatus;
 import com.example.cse110_team16_project.classes.UserLocationSync;
 
+import java.util.List;
 
 
 public class CompassActivity extends AppCompatActivity {
@@ -42,6 +43,7 @@ public class CompassActivity extends AppCompatActivity {
     private GPSStatus gpsstatus;
     private SCLocationRepository repo;
 
+    private List<String> locationPublicCodes = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +85,9 @@ public class CompassActivity extends AppCompatActivity {
         private_code = sharedPref.getString(Constants.SharedPreferences.private_code, "");
     }
 
+    public void setupUI(){
+
+    }
     private CompassViewModel setupViewModel() {
         return new ViewModelProvider(this).get(CompassViewModel.class);
     }
@@ -126,7 +131,16 @@ public class CompassActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        if (this.repo != null) Log.d("Number of locations","" + repo.getLocalPublicCodes().size());
+
+        if (this.repo != null){
+            Log.d("Number of locations","" + repo.getLocalPublicCodes().size());
+            if (locationPublicCodes == null || getIntent().getBooleanExtra("locationsChanged",false)){
+                Log.d("CompassActivity","Locations changed!");
+                locationPublicCodes = repo.getLocalPublicCodes();
+                Log.d("locationPublicCodes size","" + locationPublicCodes.size());
+                setupUI();
+            }
+        }
         if(gpsstatus != null) gpsstatus.trackGPSStatus();
     }
 
@@ -134,6 +148,7 @@ public class CompassActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent){
         super.onNewIntent(intent);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        setIntent(intent);
     }
 
     public CompassUIManager getCompassUIManager() {

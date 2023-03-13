@@ -4,12 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -20,12 +22,15 @@ import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 import com.example.cse110_team16_project.classes.ViewModels.ListViewModel;
 import com.example.cse110_team16_project.classes.SCLocationsAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ListActivity extends AppCompatActivity {
     // This annotation will cause an IDE error if you try to access recyclerView outside of a test.
     // It can also be set to "otherwise = VisibleForTesting.PRIVATE" to allow access from this.
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public RecyclerView recyclerView;
-
+    private List<String> changes = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,8 +96,10 @@ public class ListActivity extends AppCompatActivity {
 
 
             var code = input.getText().toString();
-            if(viewModel.getOrCreateSCLocation(code,this) != null){
+            SCLocation newLocation = viewModel.getOrCreateSCLocation(code,this).getValue();
+            if(newLocation != null){
                 input.setText("");
+                storeChange(newLocation);
             }
             return true;
         });
@@ -105,5 +112,18 @@ public class ListActivity extends AppCompatActivity {
         // Delete the location
         Log.d("SCLocationsAdapter", "Deleted location " + location.getPublicCode());
         viewModel.delete(location);
+        storeChange(location);
+    }
+
+    public void storeChange(SCLocation location){
+        if(!changes.remove(location.getPublicCode())) changes.add(location.getPublicCode());
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        Intent intent = new Intent(this,CompassActivity.class);
+        intent.putExtra("locationsChanged", !changes.isEmpty());
+        startActivity(intent);
     }
 }
