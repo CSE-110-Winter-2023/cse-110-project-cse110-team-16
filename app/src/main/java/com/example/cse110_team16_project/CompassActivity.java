@@ -12,6 +12,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
@@ -25,7 +27,15 @@ import android.widget.TextView;
 
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
+import com.example.cse110_team16_project.classes.AbsoluteDirectionUpdater;
+import com.example.cse110_team16_project.classes.CoordinateClasses.Coordinates;
 import com.example.cse110_team16_project.classes.DeviceInfo.DeviceTracker;
+import com.example.cse110_team16_project.classes.DeviceInfo.OrientationService;
+import com.example.cse110_team16_project.classes.DistanceUpdater;
+import com.example.cse110_team16_project.classes.UI.UserUIAdapter;
+import com.example.cse110_team16_project.classes.Units.Degrees;
+import com.example.cse110_team16_project.classes.Units.Meters;
+import com.example.cse110_team16_project.classes.Units.Radians;
 import com.example.cse110_team16_project.classes.ViewModels.CompassViewModel;
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 import com.example.cse110_team16_project.classes.UI.CompassUIManager;
@@ -34,6 +44,8 @@ import com.example.cse110_team16_project.classes.GPSStatus;
 import com.example.cse110_team16_project.classes.UserLocationSynch;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -47,12 +59,10 @@ public class CompassActivity extends AppCompatActivity {
     private CompassUIManager compassUIManager;
     private CompassViewModel viewModel;
 
-
+    private UserUIAdapter userUIAdapter;
     private GPSStatus gpsstatus;
     private UserLocationSynch locationSyncer;
     private SCLocationRepository repo;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +80,38 @@ public class CompassActivity extends AppCompatActivity {
         var db = SCLocationDatabase.provide(this);
         var dao = db.getDao();
         this.repo = new SCLocationRepository(dao);
+
+        List<String> publicCodes = repo.getLocalPublicCodes();
+        List<SCLocation> friendSCLocations = new ArrayList<>();
+        List<String> friendLabels = new ArrayList<>(); //Friend Labels
+        MutableLiveData<List<SCLocation>> liveFriendSCLoc = new MutableLiveData<>();
+        liveFriendSCLoc.setValue(friendSCLocations);
+        LiveData<Coordinates> userCoord = deviceTracker.getCoordinates();
+        for(String s: publicCodes){
+            friendSCLocations.add(repo.getRemote(s));
+        }
+        for(SCLocation singular: friendSCLocations){
+            friendLabels.add(singular.getLabel());
+        }
+
+        AbsoluteDirectionUpdater absoluteDirectionUpdater = new AbsoluteDirectionUpdater(this,
+                liveFriendSCLoc, userCoord);
+
+        LiveData<List<Degrees>> friendOrientations
+                = absoluteDirectionUpdater.getLastKnownEntityDirectionsFromUser(); //Friend Orientations
+
+        DistanceUpdater distanceUpdater = new DistanceUpdater(this, liveFriendSCLoc, userCoord);
+
+        LiveData<List<Meters>> friendDistance = distanceUpdater.getLastKnownEntityDistancesFromUser();
+        List<Double> friendDistInDouble = new ArrayList<>();
+
+        for(Meters distance: friendDistance.getValue()){
+            friendDistInDouble.add(distance.getMeters());
+        }
+        MutableLiveData<List<Double>> liveFriendDist = new MutableLiveData<>(); //Friend Distances
+        liveFriendDist.setValue(friendDistInDouble);
+
+        LiveData<Radians> userOrientation = deviceTracker.getOrientation(); //User Orientation
 
         repo = new SCLocationRepository(SCLocationDatabase.
                 provide(this).getDao());
@@ -90,6 +132,10 @@ public class CompassActivity extends AppCompatActivity {
                 new SCLocation(userLabel,public_code),private_code, this, repo);
         compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(),
                 findViewById(R.id.compassRing));
+
+        userUIAdapter = new UserUIAdapter(this, liveFriendDist, friendOrientations
+        ,friendLabels, userOrientation);
+
 
     }
 

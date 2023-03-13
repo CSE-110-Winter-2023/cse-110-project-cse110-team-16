@@ -39,13 +39,13 @@ public class UserUIAdapter{
     private LiveData<List<Degrees>> friendOrientation;
     private List<TextView> friends;
 
-    private OrientationService orientationService;
+    private LiveData<Radians> userOrientation;
 
     private  Radians userDirection;
 
     public UserUIAdapter(Activity activity, @NonNull LiveData<List<Double>> friendDistances,
                          @NonNull LiveData<List<Degrees>> friendOrientation, List<String> friendLabels
-                         , OrientationService orientationService){
+                         , LiveData<Radians> userOrientation){
 
         this.activity = activity;
         this.friendDistances = friendDistances;
@@ -53,9 +53,9 @@ public class UserUIAdapter{
         this.friendLabels = friendLabels;
         populateFriendLabels(friendLabels);
 
-        orientationService.getOrientation().observe((LifecycleOwner) activity,
-                userOrientation -> this.future = backgroundThreadExecutor.submit(() -> {
-                    userDirection = userOrientation;
+        userOrientation.observe((LifecycleOwner) activity,
+                userOri -> this.future = backgroundThreadExecutor.submit(() -> {
+                    userDirection = userOri;
                     return null;
                 })
         );
