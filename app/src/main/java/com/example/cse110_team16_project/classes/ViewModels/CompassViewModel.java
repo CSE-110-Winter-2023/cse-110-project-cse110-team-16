@@ -34,14 +34,14 @@ public class CompassViewModel extends AndroidViewModel {
      * Load all user stored SCLocations from the remote database.
      * @return a LiveData object that will be updated when any location changes.
      */
-    public List<LiveData<SCLocation>> getSCLocations() {
-        if(scLocations == null) return refreshSCLocations();
+    public List<LiveData<SCLocation>> getSCLocations(List<String> public_codes) {
+        if(scLocations == null) return refreshSCLocations(public_codes);
         return scLocations;
     }
 
-    public List<LiveData<SCLocation>> refreshSCLocations(){
-            scLocations = new ArrayList<>();
-            List<String> public_codes = repo.getLocalPublicCodes();
+    public List<LiveData<SCLocation>> refreshSCLocations(List<String> public_codes){
+        repo.killAllRemoteLiveThreads();
+        scLocations = new ArrayList<>();
             for(String code: public_codes) {
                 scLocations.add(repo.getRemoteLive(code));
             }
