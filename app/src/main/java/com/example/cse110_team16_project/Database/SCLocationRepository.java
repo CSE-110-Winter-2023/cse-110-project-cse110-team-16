@@ -143,7 +143,9 @@ public class SCLocationRepository {
         var executor = Executors.newSingleThreadScheduledExecutor();
         executor.scheduleAtFixedRate(() -> {
             SCLocation location = scLocation.getValue();
+            if (location != null) {
                 api.patchSCLocation(location,private_code,false);
+            }
         }, 0,3, TimeUnit.SECONDS);
     }
 
