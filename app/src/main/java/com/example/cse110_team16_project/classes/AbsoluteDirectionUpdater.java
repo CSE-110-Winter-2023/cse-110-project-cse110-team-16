@@ -21,7 +21,6 @@ import java.util.concurrent.Future;
  */
 public class AbsoluteDirectionUpdater {
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
-    private Future<Void> future;
 
     private final MutableLiveData<List<Degrees>> lastKnownEntityDirectionsFromUser = new MutableLiveData<>();
 
@@ -29,17 +28,11 @@ public class AbsoluteDirectionUpdater {
                                     @NonNull LiveData<Coordinates> userCoordinates){
 
             userCoordinates.observe((LifecycleOwner) activity, coordinates ->
-                    this.future = backgroundThreadExecutor.submit(() -> {
-                        updateAllEntityDirectionsFromUser(coordinateEntities.getValue(), coordinates);
-                        return null;
-                    })
+                    backgroundThreadExecutor.submit(() -> updateAllEntityDirectionsFromUser(coordinateEntities.getValue(), coordinates))
             );
 
             coordinateEntities.observe((LifecycleOwner) activity, entityCoordinates ->
-                    this.future = backgroundThreadExecutor.submit(() -> {
-                        updateAllEntityDirectionsFromUser(entityCoordinates, userCoordinates.getValue());
-                        return null;
-                    })
+                    backgroundThreadExecutor.submit(() -> updateAllEntityDirectionsFromUser(entityCoordinates, userCoordinates.getValue()))
             );
     }
 
@@ -75,5 +68,4 @@ public class AbsoluteDirectionUpdater {
         return userCoordinates.bearingTo(entity.getCoordinates());
     }
 
-    public Future<Void>  getFuture() { return future; }
 }

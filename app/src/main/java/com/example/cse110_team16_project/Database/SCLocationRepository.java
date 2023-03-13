@@ -22,7 +22,7 @@ public class SCLocationRepository {
         this.dao = dao;
     }
 
-    private List<ScheduledFuture<?>> remoteUpdateThreads = new ArrayList<>();
+    private final List<ScheduledFuture<?>> remoteUpdateThreads = new ArrayList<>();
 
     // Synced Methods
     // ==============
@@ -92,16 +92,12 @@ public class SCLocationRepository {
         return dao.exists(public_code);
     }
     public void deleteRemote(String public_code, String private_code) {
-        Executors.newSingleThreadExecutor().submit(() -> {
-            api.deleteSCLocation(public_code, private_code);
-        });
+        Executors.newSingleThreadExecutor().submit(() -> api.deleteSCLocation(public_code, private_code));
 
     }
     public boolean existsRemote(String public_code) {
         try {
-            return Executors.newSingleThreadExecutor().submit(() -> {
-                return(api.getSCLocation(public_code) != null);
-            }).get();
+            return Executors.newSingleThreadExecutor().submit(() -> (api.getSCLocation(public_code) != null)).get();
         } catch (ExecutionException | InterruptedException e) {
             return false;
         }
@@ -110,9 +106,7 @@ public class SCLocationRepository {
     // ==============
     public SCLocation getRemote(String public_code){
         try {
-            return Executors.newSingleThreadExecutor().submit(() -> {
-                return(api.getSCLocation(public_code));
-            }).get();
+            return Executors.newSingleThreadExecutor().submit(() -> (api.getSCLocation(public_code))).get();
         } catch (ExecutionException | InterruptedException e) {
             return null;
         }
@@ -128,12 +122,11 @@ public class SCLocationRepository {
         // You don't need to worry about killing background threads.
 
 
-        MutableLiveData<SCLocation> scLocation = new MutableLiveData<>(null);
+        MutableLiveData<SCLocation> scLocation = new MutableLiveData<>();
 
         var executor = Executors.newSingleThreadScheduledExecutor();
         remoteUpdateThreads.add(
-            executor.scheduleAtFixedRate(() -> {
-                        scLocation.postValue(api.getSCLocation(public_code));},
+            executor.scheduleAtFixedRate(() -> scLocation.postValue(api.getSCLocation(public_code)),
                     0,3, TimeUnit.SECONDS)
         );
         return scLocation;
@@ -150,9 +143,7 @@ public class SCLocationRepository {
         var executor = Executors.newSingleThreadScheduledExecutor();
         executor.scheduleAtFixedRate(() -> {
             SCLocation location = scLocation.getValue();
-            if(location != null){
                 api.patchSCLocation(location,private_code,false);
-            }
         }, 0,3, TimeUnit.SECONDS);
     }
 

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
@@ -84,7 +85,7 @@ public class ListActivity extends AppCompatActivity {
         var input = (EditText) findViewById(R.id.input_new_location_code);
         input.setOnEditorActionListener((view, actionId, event) -> {
             // If the event isn't "done" or "enter", do nothing.
-            if (actionId != EditorInfo.IME_ACTION_DONE) {
+            if (actionId != EditorInfo.IME_ACTION_DONE && event.getAction() != KeyEvent.ACTION_DOWN) {
                 return false;
             }
 

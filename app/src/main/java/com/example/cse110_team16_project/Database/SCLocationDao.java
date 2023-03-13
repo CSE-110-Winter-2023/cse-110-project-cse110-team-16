@@ -14,10 +14,6 @@ import java.util.List;
 @Dao
 public abstract class SCLocationDao {
 
-    //Do not use, use Insert instead
-    //chance it isn't working properly
-    @Upsert
-    public abstract long upsert(SCLocation scLocation);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract long insert(SCLocation scLocation);

@@ -28,25 +28,18 @@ import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 import com.example.cse110_team16_project.classes.UI.CompassUIManager;
 import com.example.cse110_team16_project.classes.Misc.Constants;
 import com.example.cse110_team16_project.classes.GPSStatus;
-import com.example.cse110_team16_project.classes.UserLocationSynch;
+import com.example.cse110_team16_project.classes.UserLocationSync;
 
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class CompassActivity extends AppCompatActivity {
-    private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
 
     private String public_code;
     private String private_code;
     private String userLabel;
     private DeviceTracker deviceTracker;
     private CompassUIManager compassUIManager;
-    private CompassViewModel viewModel;
-
-
     private GPSStatus gpsstatus;
-    private UserLocationSynch locationSyncer;
     private SCLocationRepository repo;
 
 
@@ -71,17 +64,10 @@ public class CompassActivity extends AppCompatActivity {
                 provide(this).getDao());
         loadUserInfo();
 
-        viewModel = setupViewModel();
         deviceTracker = new DeviceTracker(this);
         compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
         gpsstatus = new GPSStatus(deviceTracker.getLocation(), findViewById(R.id.gpsLight), findViewById(R.id.gpsText));
-        try{
-            gpsstatus.trackGPSStatus();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-
-        locationSyncer = new UserLocationSynch(deviceTracker.getCoordinates(),
+        UserLocationSync locationSync = new UserLocationSync(deviceTracker.getCoordinates(),
                 new SCLocation(userLabel,public_code),private_code, this, repo);
         compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(),
                 findViewById(R.id.compassRing));
@@ -133,6 +119,7 @@ public class CompassActivity extends AppCompatActivity {
     protected void onPause(){
         super.onPause();
         if(deviceTracker != null) deviceTracker.unregisterListeners();
+        if(gpsstatus != null) gpsstatus.stopTracking();
     }
 
     @Override
@@ -142,6 +129,7 @@ public class CompassActivity extends AppCompatActivity {
         if(deviceTracker != null) {
             deviceTracker.registerListeners();
         }
+        if(gpsstatus != null) gpsstatus.trackGPSStatus();
     }
 
     @Override
@@ -164,7 +152,4 @@ public class CompassActivity extends AppCompatActivity {
         startActivity(new Intent(this, ListActivity.class));
     }
 
-    public void setGpsStatus(GPSStatus gpsstatus) {
-        this.gpsstatus = gpsstatus;
-    }
 }
