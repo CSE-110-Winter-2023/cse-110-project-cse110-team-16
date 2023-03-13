@@ -15,13 +15,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         SharedPreferences preferences = getSharedPreferences("user_info", Context.MODE_PRIVATE);
         Intent intent;
-        if(preferences.contains("private_code")) {
-            intent = new Intent(this, CompassActivity.class);
-        }
-        else {
-            intent = new Intent(this, AddNameActivity.class);
-            intent.putExtra("isNewUser",true);
-        }
+//        if(preferences.contains("private_code")) {
+//            intent = new Intent(this, CompassActivity.class);
+//        }
+//        else {
+//            intent = new Intent(this, AddNameActivity.class);
+//            intent.putExtra("isNewUser",true);
+//        }
+        intent = new Intent(this, ListActivity.class);
         finish();
         startActivity(intent);
 
