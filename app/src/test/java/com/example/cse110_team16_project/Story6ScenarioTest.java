@@ -60,7 +60,7 @@ public class Story6ScenarioTest {
             SCLocation location = new SCLocation(0,0,label,public_code);
             repository.upsertRemote(location,private_code);
             Coordinates coords = new Coordinates(2,2);
-            MutableLiveData<Coordinates> liveCoordinates = new MutableLiveData<>(null);
+            MutableLiveData<Coordinates> liveCoordinates = new MutableLiveData<>();
             UserLocationSync syncher = new UserLocationSync(liveCoordinates,
                     new SCLocation(label,public_code),private_code,activity,repository);
             liveCoordinates.postValue(coords);

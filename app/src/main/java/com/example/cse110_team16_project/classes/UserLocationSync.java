@@ -12,7 +12,7 @@ import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 
 public class UserLocationSync {
     SCLocation location;
-    MutableLiveData<SCLocation> locationLive = new MutableLiveData<>(null);
+    MutableLiveData<SCLocation> locationLive = new MutableLiveData<>();
 
     public UserLocationSync(LiveData<Coordinates> userCoords, SCLocation user, String private_code,
                             Activity activity, SCLocationRepository repo){

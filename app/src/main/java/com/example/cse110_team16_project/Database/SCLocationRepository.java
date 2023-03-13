@@ -128,7 +128,7 @@ public class SCLocationRepository {
         // You don't need to worry about killing background threads.
 
 
-        MutableLiveData<SCLocation> scLocation = new MutableLiveData<>(null);
+        MutableLiveData<SCLocation> scLocation = new MutableLiveData<>();
 
         var executor = Executors.newSingleThreadScheduledExecutor();
         remoteUpdateThreads.add(
@@ -150,9 +150,7 @@ public class SCLocationRepository {
         var executor = Executors.newSingleThreadScheduledExecutor();
         executor.scheduleAtFixedRate(() -> {
             SCLocation location = scLocation.getValue();
-            if(location != null){
                 api.patchSCLocation(location,private_code,false);
-            }
         }, 0,3, TimeUnit.SECONDS);
     }
 
