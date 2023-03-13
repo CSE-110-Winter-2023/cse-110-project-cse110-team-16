@@ -56,26 +56,27 @@ public class CompassActivity extends AppCompatActivity {
     }
 
     private void finishOnCreate(){
+        setupRepository();
+        loadUserInfo();
+
+        deviceTracker = new DeviceTracker(this);
+        deviceTracker.registerListeners(); //battery life is a social construct
+        compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
+        gpsstatus = new GPSStatus(deviceTracker.getLocation(), findViewById(R.id.gpsLight), findViewById(R.id.gpsText));
+        UserLocationSync locationSync = new UserLocationSync(deviceTracker.getCoordinates(),
+                new SCLocation(userLabel,public_code),private_code, this, repo);
+    }
+
+
+    private void setupRepository() {
         var db = SCLocationDatabase.provide(this);
         var dao = db.getDao();
         this.repo = new SCLocationRepository(dao);
 
         repo = new SCLocationRepository(SCLocationDatabase.
                 provide(this).getDao());
-        loadUserInfo();
-
-        deviceTracker = new DeviceTracker(this);
-        compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
-        gpsstatus = new GPSStatus(deviceTracker.getLocation(), findViewById(R.id.gpsLight), findViewById(R.id.gpsText));
-        UserLocationSync locationSync = new UserLocationSync(deviceTracker.getCoordinates(),
-                new SCLocation(userLabel,public_code),private_code, this, repo);
-        compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(),
-                findViewById(R.id.compassRing));
     }
-
-
     private void loadUserInfo(){
-
         SharedPreferences sharedPref = this.getSharedPreferences(Constants.SharedPreferences.user_info, Context.MODE_PRIVATE);
         userLabel = sharedPref.getString(Constants.SharedPreferences.label, "");
         public_code = sharedPref.getString(Constants.SharedPreferences.public_code, "");
@@ -118,7 +119,7 @@ public class CompassActivity extends AppCompatActivity {
     @Override
     protected void onPause(){
         super.onPause();
-        if(deviceTracker != null) deviceTracker.unregisterListeners();
+        //if(deviceTracker != null) deviceTracker.unregisterListeners();
         if(gpsstatus != null) gpsstatus.stopTracking();
     }
 
@@ -126,9 +127,6 @@ public class CompassActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         if (this.repo != null) Log.d("Number of locations","" + repo.getLocalPublicCodes().size());
-        if(deviceTracker != null) {
-            deviceTracker.registerListeners();
-        }
         if(gpsstatus != null) gpsstatus.trackGPSStatus();
     }
 
