@@ -15,13 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 /**lastKnownDistances.getValue() can contain null values or be null
  */
 public class DistanceUpdater {
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
-    private Future<Void> future;
 
     private final MutableLiveData<List<Meters>> lastKnownDistancesFromUser = new MutableLiveData<>(); //in meters
 
@@ -29,17 +27,11 @@ public class DistanceUpdater {
                            @NonNull LiveData<Coordinates> userCoordinates) {
 
             userCoordinates.observe((LifecycleOwner) activity, coordinates ->
-                    this.future = backgroundThreadExecutor.submit(() -> {
-                        updateAllEntityDistancesFromUser(coordinateEntities.getValue(), coordinates);
-                        return null;
-                    })
+                    backgroundThreadExecutor.submit(() -> updateAllEntityDistancesFromUser(coordinateEntities.getValue(), coordinates))
             );
 
             coordinateEntities.observe((LifecycleOwner) activity, entityCoordinates ->
-                    this.future = backgroundThreadExecutor.submit(() -> {
-                        updateAllEntityDistancesFromUser(entityCoordinates, userCoordinates.getValue());
-                        return null;
-                    })
+                    backgroundThreadExecutor.submit(() -> updateAllEntityDistancesFromUser(entityCoordinates, userCoordinates.getValue()))
             );
 
     }
@@ -75,6 +67,5 @@ public class DistanceUpdater {
         return userCoordinates.distanceTo(entity.getCoordinates());
     }
 
-    public Future<Void>  getFuture() { return future; }
 }
 

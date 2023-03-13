@@ -12,13 +12,9 @@ import com.example.cse110_team16_project.classes.Units.Radians;
 import com.example.cse110_team16_project.classes.Misc.Converters;
 import com.example.cse110_team16_project.classes.CoordinateClasses.Coordinates;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 
 public class DeviceTracker {
-    private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
-
     private static final int UPDATE_TIME = 200;
     private static final int UPDATE_MIN_METERS = 0;
 

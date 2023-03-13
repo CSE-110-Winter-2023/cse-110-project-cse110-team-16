@@ -14,13 +14,13 @@ public class UserLocationSync {
     SCLocation location;
     MutableLiveData<SCLocation> locationLive = new MutableLiveData<>();
 
-    public UserLocationSync(LiveData<Coordinates> userCoords, SCLocation user, String private_code,
+    public UserLocationSync(LiveData<Coordinates> userCoordinates, SCLocation user, String private_code,
                             Activity activity, SCLocationRepository repo){
 
         location = user;
         repo.updateSCLocationLive(locationLive,private_code);
-                userCoords.observe((LifecycleOwner) activity, (coords) -> {
-                    location.setCoordinates(coords);
+                userCoordinates.observe((LifecycleOwner) activity, (coordinates) -> {
+                    location.setCoordinates(coordinates);
                     locationLive.postValue(location);
                 });
 

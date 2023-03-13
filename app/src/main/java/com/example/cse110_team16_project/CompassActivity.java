@@ -31,11 +31,8 @@ import com.example.cse110_team16_project.classes.GPSStatus;
 import com.example.cse110_team16_project.classes.UserLocationSync;
 
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class CompassActivity extends AppCompatActivity {
-    private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
 
     private String public_code;
     private String private_code;

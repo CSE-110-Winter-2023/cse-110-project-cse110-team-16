@@ -1,7 +1,6 @@
 package com.example.cse110_team16_project.classes;
 
 import android.location.Location;
-import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -19,15 +18,15 @@ import java.util.concurrent.TimeUnit;
 
 public class GPSStatus {
     private LiveData<Location> location;
-    private View statusDot;
-    private TextView gpsText;
+    private final View statusDot;
+    private final TextView gpsText;
     private long initTime;
 
     private ScheduledFuture<?> future;
 
-    private static final int TIME_THRESHOLD = 60000;
     private static final int ONE_MIN = 60000;
     private static final int ONE_HOUR = 3600000;
+    private static final int TIME_THRESHOLD = ONE_MIN;
     public static final int REFRESH_PERIOD = 6000;
 
     public GPSStatus(LiveData<Location> loc, View v, TextView gt) {
@@ -53,7 +52,7 @@ public class GPSStatus {
     }
 
     public boolean isLocationLive(long currentMillis) {
-        Long locationAge = getLocationAge(currentMillis);
+        long locationAge = getLocationAge(currentMillis);
         return locationAge < TIME_THRESHOLD;
     }
 
@@ -68,9 +67,7 @@ public class GPSStatus {
 
     public void trackGPSStatus() {
         var executor = Executors.newSingleThreadScheduledExecutor();
-        future = executor.scheduleAtFixedRate(() -> {
-           updateGPSStatus();
-        }, 0, REFRESH_PERIOD, TimeUnit.MILLISECONDS);
+        future = executor.scheduleAtFixedRate(this::updateGPSStatus, 0, REFRESH_PERIOD, TimeUnit.MILLISECONDS);
     }
 
     public void stopTracking() {

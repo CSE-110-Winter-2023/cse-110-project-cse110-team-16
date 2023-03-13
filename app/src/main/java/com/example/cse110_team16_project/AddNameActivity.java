@@ -55,8 +55,8 @@ public class AddNameActivity extends AppCompatActivity {
 
         editor.apply();
 
-        Log.d("ADDNAME", "name is " + name + ".");
-        Log.d("ADDNAME", "private code is " + private_code + ".");
+        Log.d("AddName", "name is " + name + ".");
+        Log.d("AddName", "private code is " + private_code + ".");
         SCLocationRepository repo = new SCLocationRepository(SCLocationDatabase.
                 provide(this).getDao());
         SCLocation newUser = new SCLocation(name,public_code);
