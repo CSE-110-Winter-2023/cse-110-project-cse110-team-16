@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
@@ -23,7 +24,7 @@ import android.view.View;
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
 import com.example.cse110_team16_project.classes.DeviceInfo.DeviceTracker;
-import com.example.cse110_team16_project.classes.ViewModels.CompassViewModel;
+import com.example.cse110_team16_project.classes.ViewModels.RepositoryMediator;
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 import com.example.cse110_team16_project.classes.UI.CompassUIManager;
 import com.example.cse110_team16_project.classes.Misc.Constants;
@@ -43,7 +44,9 @@ public class CompassActivity extends AppCompatActivity {
     private GPSStatus gpsstatus;
     private SCLocationRepository repo;
 
-    private List<String> locationPublicCodes = null;
+    private RepositoryMediator viewModel;
+    private List<LiveData<SCLocation>> locations = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,7 @@ public class CompassActivity extends AppCompatActivity {
 
     private void finishOnCreate(){
         setupRepository();
+        viewModel = new RepositoryMediator(repo);
         loadUserInfo();
 
         deviceTracker = new DeviceTracker(this);
@@ -85,11 +89,11 @@ public class CompassActivity extends AppCompatActivity {
         private_code = sharedPref.getString(Constants.SharedPreferences.private_code, "");
     }
 
-    public void setupUI(){
+    private void setupUpdaters() {
 
     }
-    private CompassViewModel setupViewModel() {
-        return new ViewModelProvider(this).get(CompassViewModel.class);
+    private void setupUI(){
+
     }
 
     private void handleLocationPermission(){
@@ -134,10 +138,10 @@ public class CompassActivity extends AppCompatActivity {
 
         if (this.repo != null){
             Log.d("Number of locations","" + repo.getLocalPublicCodes().size());
-            if (locationPublicCodes == null || getIntent().getBooleanExtra("locationsChanged",false)){
+            if (locations == null || getIntent().getBooleanExtra("locationsChanged",false)){
                 Log.d("CompassActivity","Locations changed!");
-                locationPublicCodes = repo.getLocalPublicCodes();
-                Log.d("locationPublicCodes size","" + locationPublicCodes.size());
+                locations = viewModel.refreshSCLocations(repo.getLocalPublicCodes());
+                setupUpdaters();
                 setupUI();
             }
         }
