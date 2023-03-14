@@ -1,17 +1,23 @@
 package com.example.cse110_team16_project.classes.UI;
 
+import static java.security.AccessController.getContext;
+
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.Constraints;
+import androidx.core.util.Pair;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -98,26 +104,44 @@ public class UserUIAdapter{
     }
 
     public void displayFriendLabels(){
-        ConstraintLayout parentLayout = activity.findViewById(R.id.CompassLayout);
-        for (TextView friend: friends){
-            ConstraintLayout.LayoutParams friendLayoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
-            friendLayoutParams.circleConstraint = R.id.CompassLayout;
-            friendLayoutParams.circleRadius = 200;
-            friend.setHeight(100);
-            friend.setWidth(500);
-            friendLayoutParams.circleAngle = 45;
-            friend.setTextColor(Color.BLUE);
-//            friendLayoutParams.bottomMargin = 0;
-//            friendLayoutParams.topMargin = 0;
-//            friendLayoutParams.leftMargin = 0;
-//            friendLayoutParams.rightMargin = 0;
-//            friendLayoutParams.endToEnd = R.id.CompassLayout;
-//            friendLayoutParams.startToStart = R.id.CompassLayout;
-//            friendLayoutParams.topToBottom = R.id.CompassLayout;
-//            friendLayoutParams.bottomToTop = R.id.CompassLayout;
-            friend.setLayoutParams(friendLayoutParams);
+        int deviceHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+        int deviceWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+        int halfDeviceHeight = deviceHeight/2;
+        int halfDeviceWidth = deviceWidth/2;
 
-            parentLayout.addView(friend);
+        Log.d("DEVICEINFO", "Device height is :" + deviceHeight);
+        Log.d("DEVICEINFO", "Device width is " + deviceWidth);
+
+        ConstraintLayout parentLayout = activity.findViewById(R.id.MainLayout);
+        ImageView spot = activity.findViewById(R.id.userPosition);
+
+
+
+        for(TextView friend: friends){
+            float textAngle = (float) Math.PI / 180 * 225;
+            int textRadius = 300;
+
+            spot.post(new Runnable() {
+                @Override
+                public void run() {
+                    final int spotX = (int) spot.getX() - spot.getWidth()/2;
+                    final int spotY = (int) spot.getY() - spot.getWidth()/2;
+
+                    Log.d("DEVICEINFO", "spotX is :" + spotX);
+                    Log.d("DEVICEINFO", "spotY is " + spotY);
+
+                    int friendX = (int) spotX + (int) (Math.cos(textAngle - Math.PI/2) * textRadius);
+                    int friendY = (int) spotY + (int) (Math.sin(textAngle - Math.PI/2) * textRadius);
+
+                    friend.setHeight(300);
+                    friend.setWidth(300);
+
+                    friend.setX(friendX);
+                    friend.setY(friendY);
+
+                    parentLayout.addView(friend);
+                }
+            });
         }
     }
 
