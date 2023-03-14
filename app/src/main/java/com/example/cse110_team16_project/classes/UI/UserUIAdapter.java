@@ -89,6 +89,7 @@ public class UserUIAdapter{
             // Get the CompassActivity layout
             TextView addFriend = new TextView(activity);
             addFriend.setText(friendLabels.get(i));
+            addFriend.setId(View.generateViewId());
             friends.add(addFriend);
         }
         displayFriendLabels();
@@ -97,12 +98,18 @@ public class UserUIAdapter{
     public void displayFriendLabels(){
         ConstraintLayout layout = activity.findViewById(R.id.CompassLayout);
         for (TextView friend: friends){
-            friend.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            ConstraintLayout.LayoutParams friendLayoutParams = new ConstraintLayout.LayoutParams(friend.getLayoutParams());
-            friendLayoutParams.circleAngle = 120;
-            friendLayoutParams.circleRadius = 10;
+            ConstraintLayout.LayoutParams friendLayoutParams = new ConstraintLayout.LayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            friendLayoutParams.circleRadius = 400;
+            friendLayoutParams.circleAngle = 180;
             friend.setLayoutParams(friendLayoutParams);
+            ConstraintSet c = new ConstraintSet();
+            ConstraintLayout cl = (ConstraintLayout) activity.findViewById(R.id.CompassLayout);
+            c.clone(cl);
+            c.constrainCircle(friend.getId(), R.id.compassRing, 400, 90);
+            c.applyTo(cl);
+
             layout.addView(friend);
+
         }
     }
 
