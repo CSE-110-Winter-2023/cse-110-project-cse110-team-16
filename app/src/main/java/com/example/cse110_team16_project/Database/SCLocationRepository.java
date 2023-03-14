@@ -68,7 +68,9 @@ public class SCLocationRepository {
 
     // Local Methods
     // =============
-
+    public SCLocation getLocal(String public_code) {
+        return dao.get(public_code);
+    }
     public LiveData<SCLocation> getLocalLive(String public_code) {
         return dao.getLive(public_code);
     }

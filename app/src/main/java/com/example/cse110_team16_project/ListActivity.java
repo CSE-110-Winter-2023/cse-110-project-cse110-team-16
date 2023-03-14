@@ -30,7 +30,7 @@ public class ListActivity extends AppCompatActivity {
     // It can also be set to "otherwise = VisibleForTesting.PRIVATE" to allow access from this.
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public RecyclerView recyclerView;
-    private List<String> changes = new ArrayList<>();
+    private final List<String> changes = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,13 +90,14 @@ public class ListActivity extends AppCompatActivity {
         var input = (EditText) findViewById(R.id.input_new_location_code);
         input.setOnEditorActionListener((view, actionId, event) -> {
             // If the event isn't "done" or "enter", do nothing.
-            if (actionId != EditorInfo.IME_ACTION_DONE && event.getAction() != KeyEvent.ACTION_DOWN) {
+            if (actionId != EditorInfo.IME_ACTION_DONE &&
+                    (event == null || (event.getKeyCode() != KeyEvent.KEYCODE_ENTER || event.getAction() != KeyEvent.ACTION_DOWN))) {
                 return false;
             }
 
 
             var code = input.getText().toString();
-            SCLocation newLocation = viewModel.getOrCreateSCLocation(code,this).getValue();
+            SCLocation newLocation = viewModel.getOrCreateSCLocation(code,this);
             if(newLocation != null){
                 input.setText("");
                 storeChange(newLocation);
