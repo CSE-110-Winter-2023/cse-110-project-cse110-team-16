@@ -36,6 +36,7 @@ public class SCLocationDatabaseTest {
                 .allowMainThreadQueries()
                 .build();
         dao = db.getDao();
+        SCLocationDatabase.inject(db);
     }
 
     @After
@@ -45,9 +46,13 @@ public class SCLocationDatabaseTest {
 
     @Test
     public void testInsert(){
-        SCLocation scLocation1 = new SCLocation(2,2,"Mom","1234567890");
-        SCLocation scLocation2 = new SCLocation(3,3,"Mom","1234567891");
-        SCLocation scLocation3 = new SCLocation(4,4,"Momn't","1234567890");
+        String public_code1 = "SCLocationDatabaseTest1Public1";
+        String public_code2 = "SCLocationDatabaseTest1Public2";
+        String label1 = "testLabel1";
+        String label2 = "testLabel2";
+        SCLocation scLocation1 = new SCLocation(2,2,label1,public_code1);
+        SCLocation scLocation2 = new SCLocation(3,3,label1,public_code2);
+        SCLocation scLocation3 = new SCLocation(4,4,label2,public_code1);
 
         long id1 = dao.insert(scLocation1);
         long id2 = dao.insert(scLocation2);
@@ -56,27 +61,34 @@ public class SCLocationDatabaseTest {
         assertNotEquals(id1,id3);
         assertNotEquals(id1,id2);
 
-        SCLocation retrievedReplacedItem = dao.get("1234567890");
-        assertTrue(retrievedReplacedItem.getLabel().equals("Momn't"));
+        SCLocation retrievedReplacedItem = dao.get(public_code1);
+        assertEquals(label2, retrievedReplacedItem.getLabel());
         assertEquals(4, retrievedReplacedItem.getLatitude(),0.1);
         assertEquals(4, retrievedReplacedItem.getLongitude(),0.1);
     }
 
     @Test
     public void testExists() {
-        SCLocation scLocation1 = new SCLocation(2,2,"Mom","1234567890");
+        String public_code1 = "SCLocationDatabaseTest2Public1";
+        String public_code2 = "SCLocationDatabaseTest2Public2"; //should be different from public_code1
+        String label = "testLabel";
+
+        SCLocation scLocation1 = new SCLocation(2,2,label,public_code1);
         long id1 = dao.insert(scLocation1);
 
-        assertTrue(dao.exists("1234567890"));
-        assertFalse(dao.exists("1111111111"));
+        assertTrue(dao.exists(public_code1));
+        assertFalse(dao.exists(public_code2));
     }
 
     @Test
     public void testGet(){
-        SCLocation scLocation1 = new SCLocation(2,2,"Mom","1234567890");
+        String public_code = "SCLocationDatabaseTest3Public";
+        String label = "testLabel";
+
+        SCLocation scLocation1 = new SCLocation(2,2,label,public_code);
         long id1 = dao.insert(scLocation1);
 
-        SCLocation retrieved = dao.get("1234567890");
+        SCLocation retrieved = dao.get(public_code);
         assertEquals(retrieved.getLabel(),scLocation1.getLabel());
         assertEquals(retrieved.getLatitude(),scLocation1.getLatitude(),0.001);
         assertEquals(retrieved.getLongitude(),scLocation1.getLongitude(),0.001);
@@ -90,8 +102,12 @@ public class SCLocationDatabaseTest {
 
     @Test
     public void testGetAll(){
-        SCLocation scLocation1 = new SCLocation(2,2,"Mom","1234567890");
-        SCLocation scLocation2 = new SCLocation(3,3,"Mom","1234567891");
+        String public_code1 = "SCLocationDatabaseTest4Public1";
+        String public_code2 = "SCLocationDatabaseTest4Public2";
+        String label1 = "testLabel1";
+        String label2 = "testLabel2";
+        SCLocation scLocation1 = new SCLocation(2,2,label1,public_code1);
+        SCLocation scLocation2 = new SCLocation(3,3,label2,public_code2);
 
         long id1 = dao.insert(scLocation1);
         long id2 = dao.insert(scLocation2);
@@ -106,38 +122,51 @@ public class SCLocationDatabaseTest {
 
     @Test
     public void testGetAllPublicCodes(){
-        SCLocation scLocation1 = new SCLocation(2,2,"Mom","1234567890");
-        SCLocation scLocation2 = new SCLocation(3,3,"Mom","1234567891");
+
+        String public_code1 = "SCLocationDatabaseTest5Public1"; //public_code1 should come alphabetically before public_code2
+        String public_code2 = "SCLocationDatabaseTest5Public2";
+        String label1 = "testLabel1";
+        String label2 = "testLabel2";
+        SCLocation scLocation1 = new SCLocation(2,2,label1,public_code1);
+        SCLocation scLocation2 = new SCLocation(3,3,label2,public_code2);
 
         long id1 = dao.insert(scLocation2);
         long id2 = dao.insert(scLocation1);
 
 
         List<String> retrievedCodes = dao.getAllPublicCodes();
-        assertEquals(retrievedCodes.get(0),"1234567890");
-        assertEquals(retrievedCodes.get(1),"1234567891");
+        assertEquals(retrievedCodes.get(0),public_code1);
+        assertEquals(retrievedCodes.get(1),public_code2);
     }
 
     @Test
     public void testDeleteByCode() {
-        SCLocation scLocation1 = new SCLocation(2, 2, "Mom", "1234567890");
-        SCLocation scLocation2 = new SCLocation(3, 3, "Mom", "1234567891");
+        String public_code1 = "SCLocationDatabaseTest6Public1";
+        String public_code2 = "SCLocationDatabaseTest6Public2";
+        String label1 = "testLabel1";
+        String label2 = "testLabel2";
+        SCLocation scLocation1 = new SCLocation(2,2,label1,public_code1);
+        SCLocation scLocation2 = new SCLocation(3,3,label2,public_code2);
 
         long id1 = dao.insert(scLocation1);
         long id2 = dao.insert(scLocation2);
 
 
-        dao.deleteByCode("1234567890");
+        dao.deleteByCode(public_code1);
 
-        SCLocation removedItem = dao.get("1234567890");
+        SCLocation removedItem = dao.get(public_code1);
         assertNull(removedItem);
-        assertTrue(dao.exists("1234567891"));
+        assertTrue(dao.exists(public_code2));
     }
 
     @Test
     public void testDelete() {
-        SCLocation scLocation1 = new SCLocation(2, 2, "Mom", "1234567890");
-        SCLocation scLocation2 = new SCLocation(3, 3, "Mom", "1234567891");
+        String public_code1 = "SCLocationDatabaseTest7Public1";
+        String public_code2 = "SCLocationDatabaseTest7Public2";
+        String label1 = "testLabel1";
+        String label2 = "testLabel2";
+        SCLocation scLocation1 = new SCLocation(2,2,label1,public_code1);
+        SCLocation scLocation2 = new SCLocation(3,3,label2,public_code2);
 
         long id1 = dao.insert(scLocation1);
         long id2 = dao.insert(scLocation2);
@@ -145,9 +174,9 @@ public class SCLocationDatabaseTest {
 
         int del = dao.delete(scLocation1);
 
-        SCLocation removedItem = dao.get("1234567890");
+        SCLocation removedItem = dao.get(public_code1);
         assertNull(removedItem);
-        assertTrue(dao.exists("1234567891"));
+        assertTrue(dao.exists(public_code2));
     }
 
 }

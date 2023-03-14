@@ -56,6 +56,7 @@ public class SCLocationsAdapter extends RecyclerView.Adapter<SCLocationsAdapter.
         notifyDataSetChanged();
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         var view = LayoutInflater.from(parent.getContext())

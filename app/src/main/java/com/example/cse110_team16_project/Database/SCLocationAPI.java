@@ -19,7 +19,7 @@ public class SCLocationAPI {
 
     private OkHttpClient client;
 
-    public SCLocationAPI() {
+    private SCLocationAPI() {
         this.client = new OkHttpClient();
     }
 

@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project.classes.ViewModels;
+package com.example.cse110_team16_project.classes;
 import android.app.Activity;
 import android.app.Application;
 
@@ -41,14 +41,17 @@ public class ListViewModel extends AndroidViewModel {
      * @param public_code the public_code of the location
      * @return a LiveData object that will be updated when this location changes.
      */
-    public LiveData<SCLocation> getOrCreateSCLocation(String public_code, Activity activity) {
+    public SCLocation getOrCreateSCLocation(String public_code, Activity activity) {
         if (!repo.existsLocal(public_code)) {
             if(!repo.existsRemote(public_code)){
                 Utilities.showError(activity, "UID does not exist.");
                 return null;
             }
             SCLocation newLocation = repo.getRemote(public_code);
-            if(newLocation != null) repo.upsertLocal(newLocation);
+            if(newLocation != null) {
+                repo.upsertLocal(newLocation);
+                return newLocation;
+            }
             else {
                 Utilities.showError(activity, "Unable to retrieve location " +
                         "from remote database.");
@@ -56,7 +59,7 @@ public class ListViewModel extends AndroidViewModel {
             }
         }
         else Utilities.showAlert(activity, "Location already exists.");
-        return repo.getLocalLive(public_code);
+        return repo.getLocal(public_code);
     }
 
     public void delete(SCLocation location) {
