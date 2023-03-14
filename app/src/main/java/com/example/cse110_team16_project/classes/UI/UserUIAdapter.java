@@ -2,7 +2,9 @@ package com.example.cse110_team16_project.classes.UI;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -95,6 +97,11 @@ public class UserUIAdapter{
     public void displayFriendLabels(){
         ConstraintLayout layout = activity.findViewById(R.id.CompassLayout);
         for (TextView friend: friends){
+            friend.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            ConstraintLayout.LayoutParams friendLayoutParams = new ConstraintLayout.LayoutParams(friend.getLayoutParams());
+            friendLayoutParams.circleAngle = 120;
+            friendLayoutParams.circleRadius = 10;
+            friend.setLayoutParams(friendLayoutParams);
             layout.addView(friend);
         }
     }
