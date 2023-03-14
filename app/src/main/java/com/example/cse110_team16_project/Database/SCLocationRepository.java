@@ -68,7 +68,9 @@ public class SCLocationRepository {
 
     // Local Methods
     // =============
-
+    public SCLocation getLocal(String public_code) {
+        return dao.get(public_code);
+    }
     public LiveData<SCLocation> getLocalLive(String public_code) {
         return dao.getLive(public_code);
     }
@@ -143,7 +145,9 @@ public class SCLocationRepository {
         var executor = Executors.newSingleThreadScheduledExecutor();
         executor.scheduleAtFixedRate(() -> {
             SCLocation location = scLocation.getValue();
+            if (location != null) {
                 api.patchSCLocation(location,private_code,false);
+            }
         }, 0,3, TimeUnit.SECONDS);
     }
 

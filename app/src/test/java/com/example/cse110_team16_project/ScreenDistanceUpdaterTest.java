@@ -4,16 +4,23 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Lifecycle;
+import androidx.room.Room;
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.rule.GrantPermissionRule;
+import androidx.test.core.app.ApplicationProvider;
 
+import com.example.cse110_team16_project.Database.SCLocationDao;
+import com.example.cse110_team16_project.Database.SCLocationDatabase;
+import com.example.cse110_team16_project.Database.SCLocationRepository;
+import com.example.cse110_team16_project.classes.Updaters.ScreenDistanceUpdater;
 import com.example.cse110_team16_project.classes.Units.Meters;
-import com.example.cse110_team16_project.classes.ViewModels.CompassViewModel;
 import com.example.cse110_team16_project.classes.Misc.Converters;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,13 +31,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(RobolectricTestRunner.class)
-public class CompassViewModelTest {
+public class ScreenDistanceUpdaterTest {
+    private SCLocationDao dao;
+    private SCLocationDatabase db;
+
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
-    @Rule
-    public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule
-            .grant(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION);
+    @Before
+    public void createDb(){
+        Context context = ApplicationProvider.getApplicationContext();
+        db = Room.inMemoryDatabaseBuilder(context, SCLocationDatabase.class)
+                .allowMainThreadQueries()
+                .build();
+        dao = db.getDao();
+        SCLocationDatabase.inject(db);
+    }
+
+    @After
+    public void closeDb() throws Exception {
+        db.close();
+    }
 
     @Test
     public void testFindScreenDistance(){
@@ -40,6 +61,8 @@ public class CompassViewModelTest {
         scenario.moveToState(Lifecycle.State.RESUMED);
         scenario.onActivity(activity ->
         {
+            SCLocationRepository repository = new SCLocationRepository(dao);
+
             List<Meters> distances = new ArrayList<>();
             distances.add(new Meters(300)); //.186411 miles
             distances.add(new Meters(2000));  //1.24274 miles
@@ -47,17 +70,17 @@ public class CompassViewModelTest {
             distances.add(new Meters(5000000)); // 3106.855961
             distances.add(new Meters(50000)); // 31.06856
 
-            CompassViewModel viewModel = new CompassViewModel(application);
-            List<Double> requiredDistances = viewModel.findScreenDistance(distances,3);
+            ScreenDistanceUpdater updater = new ScreenDistanceUpdater(activity);
+            List<Double> requiredDistances = updater.findScreenDistance(distances,3);
             assertEquals(Converters.metersToMiles(new Meters(300)).getMiles()*
-                    CompassViewModel.SECTOR_RADIUS,requiredDistances.get(0),0.1);
+                    ScreenDistanceUpdater.LARGEST_RADIUS/3,requiredDistances.get(0),0.1);
             assertEquals((Converters.metersToMiles(new Meters(2000)).getMiles()/9 + 1)*
-                    CompassViewModel.SECTOR_RADIUS,requiredDistances.get(1),0.1);
+                    ScreenDistanceUpdater.LARGEST_RADIUS/3,requiredDistances.get(1),0.1);
             assertEquals((Converters.metersToMiles(new Meters(70)).getMiles()/1 + 0)*
-                    CompassViewModel.SECTOR_RADIUS,requiredDistances.get(2),0.1);
-            assertEquals(3*CompassViewModel.SECTOR_RADIUS,requiredDistances.get(3),0.1);
+                    ScreenDistanceUpdater.LARGEST_RADIUS/3,requiredDistances.get(2),0.1);
+            assertEquals(3* ScreenDistanceUpdater.LARGEST_RADIUS/3,requiredDistances.get(3),0.1);
             assertEquals((Converters.metersToMiles(new Meters(50000)).getMiles()/490 + 2)*
-                    CompassViewModel.SECTOR_RADIUS,requiredDistances.get(4),0.1);
+                    ScreenDistanceUpdater.LARGEST_RADIUS/3,requiredDistances.get(4),0.1);
         });
     }
 }

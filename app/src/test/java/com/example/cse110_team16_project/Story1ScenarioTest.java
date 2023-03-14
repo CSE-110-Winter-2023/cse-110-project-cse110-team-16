@@ -18,6 +18,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 
+import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
@@ -73,7 +74,7 @@ public class Story1ScenarioTest {
             EditText newLocationText = activity.findViewById(R.id.input_new_location_code);
             newLocationText.requestFocus();
             newLocationText.setText(location.getPublicCode());
-            newLocationText.onEditorAction(EditorInfo.IME_ACTION_DONE);
+            newLocationText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
             newLocationText.clearFocus();
             try {
                 Thread.sleep(WAIT_FOR_ROOM_TIME);
@@ -90,7 +91,7 @@ public class Story1ScenarioTest {
         var scenario = ActivityScenario.launch(ListActivity.class);
         scenario.moveToState(Lifecycle.State.RESUMED);
         scenario.onActivity(activity -> {
-            SCLocationRepository repository = new SCLocationRepository(db.getDao());
+            SCLocationRepository repository = new SCLocationRepository(dao);
             String private_code = "Story1Scenario2Private";
             String public_code = "Story1Scenario2Public";
             String label = "testLabel";
@@ -100,7 +101,7 @@ public class Story1ScenarioTest {
             EditText newLocationText = activity.findViewById(R.id.input_new_location_code);
             newLocationText.requestFocus();
             newLocationText.setText(location.getPublicCode());
-            newLocationText.onEditorAction(EditorInfo.IME_ACTION_DONE);
+            newLocationText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
             newLocationText.clearFocus();
             try {
                 Thread.sleep(WAIT_FOR_ROOM_TIME);
