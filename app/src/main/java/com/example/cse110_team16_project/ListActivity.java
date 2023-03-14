@@ -10,15 +10,25 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.Intent;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
+import com.example.cse110_team16_project.classes.Misc.Constants;
 import com.example.cse110_team16_project.classes.ListViewModel;
+
 import com.example.cse110_team16_project.classes.SCLocationsAdapter;
 
 import java.util.ArrayList;
@@ -49,6 +59,21 @@ public class ListActivity extends AppCompatActivity {
         var adapter = setupAdapter(viewModel);
 
         setupViews(viewModel, adapter);
+
+
+
+        // Set text for UID_display
+        SharedPreferences sharedPref = this.getSharedPreferences(Constants.SharedPreferences.user_info, Context.MODE_PRIVATE);
+        TextView UID_display = findViewById(R.id.uid_text);
+        UID_display.setText(sharedPref.getString(Constants.SharedPreferences.public_code, ""));
+
+        // Set text for UID_Btn
+        Button UID_Btn = findViewById(R.id.show_uid_btn);
+        if (UID_display.getVisibility() == View.INVISIBLE){
+            UID_Btn.setText("Show UID");
+        } else {
+            UID_Btn.setText("Hide UID");
+        }
     }
 
     private ListViewModel setupViewModel() {
@@ -125,5 +150,21 @@ public class ListActivity extends AppCompatActivity {
         Intent intent = new Intent(this,CompassActivity.class);
         intent.putExtra("locationsChanged", !changes.isEmpty());
         startActivity(intent);
+    }
+
+    public void onUIDBtnClicked(View view) {
+        TextView UID_display = findViewById(R.id.uid_text);
+        Button UID_Btn = findViewById(R.id.show_uid_btn);
+        if (UID_display.getVisibility() == View.INVISIBLE){
+            UID_display.setVisibility(View.VISIBLE);
+            UID_Btn.setText("Hide UID");
+        } else {
+            UID_display.setVisibility(View.INVISIBLE);
+            UID_Btn.setText("Show UID");
+        }
+    }
+
+    public void onAdvanceBtnClicked(View view) {
+        startActivity(new Intent(this, CompassActivity.class));
     }
 }
