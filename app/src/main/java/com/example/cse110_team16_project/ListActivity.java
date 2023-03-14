@@ -27,7 +27,6 @@ import android.widget.TextView;
 
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 import com.example.cse110_team16_project.classes.Misc.Constants;
-import com.example.cse110_team16_project.classes.ViewModels.ListViewModel;
 import com.example.cse110_team16_project.classes.ListViewModel;
 
 import com.example.cse110_team16_project.classes.SCLocationsAdapter;
