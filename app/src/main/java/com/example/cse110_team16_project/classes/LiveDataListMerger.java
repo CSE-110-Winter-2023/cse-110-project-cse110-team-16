@@ -9,12 +9,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-public class LiveDataListMerger<T> {
+import javax.annotation.Nonnull;
 
+public class LiveDataListMerger<T> {
+    public static final int UPDATE_TIME = 3000;
     private ScheduledFuture<?> future;
     private MediatorLiveData<List<T>> mergedLiveData = new MediatorLiveData<>();
 
-    public LiveDataListMerger(List<LiveData<T>> liveDataList){
+    public LiveDataListMerger(@Nonnull List<LiveData<T>> liveDataList){
         var executor = Executors.newSingleThreadScheduledExecutor();
         future = executor.scheduleAtFixedRate(() ->
         {
@@ -23,12 +25,16 @@ public class LiveDataListMerger<T> {
                 dataList.add(liveDataList.get(i).getValue());
             }
             mergedLiveData.postValue(dataList);
-        },0,3000, TimeUnit.MILLISECONDS);
+        },0,UPDATE_TIME, TimeUnit.MILLISECONDS);
     }
 
     public void stopUpdating() {
         if (this.future != null && !this.future.isCancelled()) {
             future.cancel(true);
         }
+    }
+
+    public LiveData<List<T>> getMergedList() {
+        return this.mergedLiveData;
     }
 }
