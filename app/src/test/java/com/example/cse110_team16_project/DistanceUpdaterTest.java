@@ -12,7 +12,7 @@ import androidx.test.rule.GrantPermissionRule;
 
 import com.example.cse110_team16_project.classes.Units.Meters;
 import com.example.cse110_team16_project.classes.CoordinateClasses.Coordinates;
-import com.example.cse110_team16_project.classes.DistanceUpdater;
+import com.example.cse110_team16_project.classes.Updaters.DistanceUpdater;
 import com.example.cse110_team16_project.classes.Units.Radians;
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 

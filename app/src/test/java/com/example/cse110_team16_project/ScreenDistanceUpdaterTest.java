@@ -15,7 +15,7 @@ import androidx.test.core.app.ApplicationProvider;
 import com.example.cse110_team16_project.Database.SCLocationDao;
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
-import com.example.cse110_team16_project.classes.ScreenDistanceUpdater;
+import com.example.cse110_team16_project.classes.Updaters.ScreenDistanceUpdater;
 import com.example.cse110_team16_project.classes.Units.Meters;
 import com.example.cse110_team16_project.classes.Misc.Converters;
 

@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,7 +18,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
-import com.example.cse110_team16_project.classes.ViewModels.ListViewModel;
+import com.example.cse110_team16_project.classes.ListViewModel;
 import com.example.cse110_team16_project.classes.SCLocationsAdapter;
 
 import java.util.ArrayList;

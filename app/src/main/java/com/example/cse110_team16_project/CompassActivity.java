@@ -21,12 +21,11 @@ import android.view.View;
 
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
-import com.example.cse110_team16_project.classes.AbsoluteDirectionUpdater;
+import com.example.cse110_team16_project.classes.Updaters.AbsoluteDirectionUpdater;
 import com.example.cse110_team16_project.classes.DeviceInfo.DeviceTracker;
-import com.example.cse110_team16_project.classes.DistanceUpdater;
+import com.example.cse110_team16_project.classes.Updaters.DistanceUpdater;
 import com.example.cse110_team16_project.classes.LiveDataListMerger;
-import com.example.cse110_team16_project.classes.ScreenDistanceUpdater;
-import com.example.cse110_team16_project.classes.ViewModels.RepositoryMediator;
+import com.example.cse110_team16_project.classes.Updaters.ScreenDistanceUpdater;
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 import com.example.cse110_team16_project.classes.UI.CompassUIManager;
 import com.example.cse110_team16_project.classes.Misc.Constants;

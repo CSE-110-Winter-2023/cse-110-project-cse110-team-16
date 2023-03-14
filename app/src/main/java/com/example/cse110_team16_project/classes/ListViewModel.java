@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project.classes.ViewModels;
+package com.example.cse110_team16_project.classes;
 import android.app.Activity;
 import android.app.Application;
 
