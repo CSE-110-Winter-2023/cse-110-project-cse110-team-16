@@ -10,8 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.content.Intent;
@@ -23,15 +21,17 @@ import android.view.View;
 
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
+import com.example.cse110_team16_project.classes.AbsoluteDirectionUpdater;
 import com.example.cse110_team16_project.classes.DeviceInfo.DeviceTracker;
+import com.example.cse110_team16_project.classes.DistanceUpdater;
+import com.example.cse110_team16_project.classes.LiveDataListMerger;
+import com.example.cse110_team16_project.classes.ScreenDistanceUpdater;
 import com.example.cse110_team16_project.classes.ViewModels.RepositoryMediator;
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 import com.example.cse110_team16_project.classes.UI.CompassUIManager;
 import com.example.cse110_team16_project.classes.Misc.Constants;
 import com.example.cse110_team16_project.classes.GPSStatus;
 import com.example.cse110_team16_project.classes.UserLocationSync;
-
-import java.util.List;
 
 
 public class CompassActivity extends AppCompatActivity {
@@ -44,8 +44,13 @@ public class CompassActivity extends AppCompatActivity {
     private GPSStatus gpsstatus;
     private SCLocationRepository repo;
 
-    private RepositoryMediator viewModel;
-    private List<LiveData<SCLocation>> locations = null;
+    private RepositoryMediator mediator;
+    private LiveDataListMerger<SCLocation> locations = null;
+
+    private DistanceUpdater distanceUpdater;
+    private AbsoluteDirectionUpdater absoluteDirectionUpdater;
+    private ScreenDistanceUpdater screenDistanceUpdater;
+
 
 
     @Override
@@ -62,7 +67,7 @@ public class CompassActivity extends AppCompatActivity {
 
     private void finishOnCreate(){
         setupRepository();
-        viewModel = new RepositoryMediator(repo);
+        mediator = new RepositoryMediator(repo);
         loadUserInfo();
 
         deviceTracker = new DeviceTracker(this);
@@ -90,7 +95,10 @@ public class CompassActivity extends AppCompatActivity {
     }
 
     private void setupUpdaters() {
-
+        distanceUpdater = new DistanceUpdater(this,locations.getMergedList(),deviceTracker.getCoordinates());
+        absoluteDirectionUpdater = new AbsoluteDirectionUpdater(this,locations.getMergedList(),deviceTracker.getCoordinates());
+        screenDistanceUpdater = new ScreenDistanceUpdater(this);
+        screenDistanceUpdater.startObserve(distanceUpdater.getLastKnownEntityDistancesFromUser());
     }
     private void setupUI(){
 
@@ -140,7 +148,8 @@ public class CompassActivity extends AppCompatActivity {
             Log.d("Number of locations","" + repo.getLocalPublicCodes().size());
             if (locations == null || getIntent().getBooleanExtra("locationsChanged",false)){
                 Log.d("CompassActivity","Locations changed!");
-                locations = viewModel.refreshSCLocations(repo.getLocalPublicCodes());
+                if(locations != null) locations.stopUpdating();
+                locations = new LiveDataListMerger<>(mediator.refreshSCLocations(repo.getLocalPublicCodes()));
                 setupUpdaters();
                 setupUI();
             }
