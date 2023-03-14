@@ -135,9 +135,14 @@ public class UserUIAdapter{
 //            Log.d("UIManager", Boolean.toString(this.friendDistances.getValue() != null));
             for (int i = 0; i < this.friends.size(); i++) {
                 TextView friend = this.friends.get(i);
-                double dist = this.friendDistances.getValue().get(i);
-                Degrees angle = this.friendOrientation.getValue().get(i);
-                displayFriendLabel((int)dist, (float)angle.getDegrees(), 100, 250, friend, parentLayout);
+                    List<Double> retrievedDistList = this.friendDistances.getValue();
+                  if(retrievedDistList == null) return;
+                    Double dist = retrievedDistList.get(i); //possible null here
+
+                    if (friendOrientation != null) {
+                        Degrees angle = this.friendOrientation.getValue().get(i);
+                        displayFriendLabel(dist.intValue(), (float) angle.getDegrees(), 100, 250, friend, parentLayout);
+                    }
             }
 //        }, 0, 1, TimeUnit.SECONDS);
 
