@@ -2,6 +2,7 @@ package com.example.cse110_team16_project.classes.UI;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.constraintlayout.widget.Constraints;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -96,20 +98,26 @@ public class UserUIAdapter{
     }
 
     public void displayFriendLabels(){
-        ConstraintLayout layout = activity.findViewById(R.id.CompassLayout);
+        ConstraintLayout parentLayout = activity.findViewById(R.id.CompassLayout);
         for (TextView friend: friends){
-            ConstraintLayout.LayoutParams friendLayoutParams = new ConstraintLayout.LayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            friendLayoutParams.circleRadius = 400;
-            friendLayoutParams.circleAngle = 180;
+            ConstraintLayout.LayoutParams friendLayoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+            friendLayoutParams.circleConstraint = R.id.CompassLayout;
+            friendLayoutParams.circleRadius = 200;
+            friend.setHeight(100);
+            friend.setWidth(500);
+            friendLayoutParams.circleAngle = 45;
+            friend.setTextColor(Color.BLUE);
+//            friendLayoutParams.bottomMargin = 0;
+//            friendLayoutParams.topMargin = 0;
+//            friendLayoutParams.leftMargin = 0;
+//            friendLayoutParams.rightMargin = 0;
+//            friendLayoutParams.endToEnd = R.id.CompassLayout;
+//            friendLayoutParams.startToStart = R.id.CompassLayout;
+//            friendLayoutParams.topToBottom = R.id.CompassLayout;
+//            friendLayoutParams.bottomToTop = R.id.CompassLayout;
             friend.setLayoutParams(friendLayoutParams);
-            ConstraintSet c = new ConstraintSet();
-            ConstraintLayout cl = (ConstraintLayout) activity.findViewById(R.id.CompassLayout);
-            c.clone(cl);
-            c.constrainCircle(friend.getId(), R.id.compassRing, 400, 90);
-            c.applyTo(cl);
 
-            layout.addView(friend);
-
+            parentLayout.addView(friend);
         }
     }
 
