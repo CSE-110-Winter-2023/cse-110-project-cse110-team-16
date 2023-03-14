@@ -21,6 +21,7 @@ import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 import com.example.cse110_team16_project.classes.DeviceInfo.DeviceTracker;
+import com.example.cse110_team16_project.classes.DeviceInfo.OrientationService;
 import com.example.cse110_team16_project.classes.GPSStatus;
 import com.example.cse110_team16_project.classes.LiveDataListMerger;
 import com.example.cse110_team16_project.classes.Misc.Constants;
