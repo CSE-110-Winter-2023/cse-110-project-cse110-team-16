@@ -10,9 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.Intent;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -25,14 +28,19 @@ import android.widget.TextView;
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 import com.example.cse110_team16_project.classes.Misc.Constants;
 import com.example.cse110_team16_project.classes.ViewModels.ListViewModel;
+import com.example.cse110_team16_project.classes.ListViewModel;
+
 import com.example.cse110_team16_project.classes.SCLocationsAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ListActivity extends AppCompatActivity {
     // This annotation will cause an IDE error if you try to access recyclerView outside of a test.
     // It can also be set to "otherwise = VisibleForTesting.PRIVATE" to allow access from this.
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public RecyclerView recyclerView;
-
+    private final List<String> changes = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,14 +115,17 @@ public class ListActivity extends AppCompatActivity {
         var input = (EditText) findViewById(R.id.input_new_location_code);
         input.setOnEditorActionListener((view, actionId, event) -> {
             // If the event isn't "done" or "enter", do nothing.
-            if (actionId != EditorInfo.IME_ACTION_DONE && event.getAction() != KeyEvent.ACTION_DOWN) {
+            if (actionId != EditorInfo.IME_ACTION_DONE &&
+                    (event == null || (event.getKeyCode() != KeyEvent.KEYCODE_ENTER || event.getAction() != KeyEvent.ACTION_DOWN))) {
                 return false;
             }
 
 
             var code = input.getText().toString();
-            if(viewModel.getOrCreateSCLocation(code,this) != null){
+            SCLocation newLocation = viewModel.getOrCreateSCLocation(code,this);
+            if(newLocation != null){
                 input.setText("");
+                storeChange(newLocation);
             }
             return true;
         });
@@ -127,6 +138,19 @@ public class ListActivity extends AppCompatActivity {
         // Delete the location
         Log.d("SCLocationsAdapter", "Deleted location " + location.getPublicCode());
         viewModel.delete(location);
+        storeChange(location);
+    }
+
+    public void storeChange(SCLocation location){
+        if(!changes.remove(location.getPublicCode())) changes.add(location.getPublicCode());
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        Intent intent = new Intent(this,CompassActivity.class);
+        intent.putExtra("locationsChanged", !changes.isEmpty());
+        startActivity(intent);
     }
 
     public void onUIDBtnClicked(View view) {

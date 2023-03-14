@@ -31,7 +31,8 @@ public class AddNameActivity extends AppCompatActivity {
         var input = (EditText) findViewById(R.id.YourNameField);
         input.setOnEditorActionListener((view, actionId, event) -> {
             // If the event isn't "done" or "enter", do nothing.
-            if (actionId == EditorInfo.IME_ACTION_DONE || event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (actionId == EditorInfo.IME_ACTION_DONE ||
+                    (event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN))) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
                 input.clearFocus();
