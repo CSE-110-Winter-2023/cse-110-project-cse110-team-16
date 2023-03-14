@@ -81,6 +81,8 @@ public class SCLocationRepository {
 
     public List<String> getLocalPublicCodes() { return dao.getAllPublicCodes();}
 
+    public List<String> getLocalLabels() {return dao.getAllLabels();}
+
     //TODO: Reminder that dao.insert is used here and not dao.upsert
     public void upsertLocal(SCLocation scLocation) {
         dao.insert(scLocation);

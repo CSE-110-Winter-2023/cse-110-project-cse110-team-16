@@ -43,7 +43,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class UserUIAdapter{
 
-
+    private final int halfDeviceHeight = Resources.getSystem().getDisplayMetrics().heightPixels/2;
+    private final int halfDeviceWidth = Resources.getSystem().getDisplayMetrics().widthPixels/2;
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
     private Future<Void> future;
     Activity activity;
@@ -129,11 +130,6 @@ public class UserUIAdapter{
     }
 
     public void displayFriendLabels(){
-        int deviceHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
-        int deviceWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
-        int halfDeviceHeight = deviceHeight/2;
-        int halfDeviceWidth = deviceWidth/2;
-
         ConstraintLayout parentLayout = activity.findViewById(R.id.MainLayout);
 
         for(TextView friend: friends){
@@ -187,7 +183,7 @@ public class UserUIAdapter{
             updateDirectionUI(Converters.RadiansToDegrees(userOrientation.getValue()),
                     friendOrientation.getValue());
             updateDistanceUI(friendDistances.getValue());
-        }, 0, 3, TimeUnit.SECONDS);
+        }, 0, 100, TimeUnit.MILLISECONDS);
 
     }
 

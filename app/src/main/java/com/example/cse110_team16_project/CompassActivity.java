@@ -25,6 +25,7 @@ import com.example.cse110_team16_project.classes.GPSStatus;
 import com.example.cse110_team16_project.classes.LiveDataListMerger;
 import com.example.cse110_team16_project.classes.Misc.Constants;
 import com.example.cse110_team16_project.classes.UI.CompassUIManager;
+import com.example.cse110_team16_project.classes.UI.UserUIAdapter;
 import com.example.cse110_team16_project.classes.Updaters.AbsoluteDirectionUpdater;
 import com.example.cse110_team16_project.classes.Updaters.DistanceUpdater;
 import com.example.cse110_team16_project.classes.Updaters.ScreenDistanceUpdater;
@@ -47,8 +48,7 @@ public class CompassActivity extends AppCompatActivity {
     private DistanceUpdater distanceUpdater;
     private AbsoluteDirectionUpdater absoluteDirectionUpdater;
     private ScreenDistanceUpdater screenDistanceUpdater;
-
-
+    private UserUIAdapter userUIAdapter;
 
 
 
@@ -101,7 +101,8 @@ public class CompassActivity extends AppCompatActivity {
         screenDistanceUpdater.startObserve(distanceUpdater.getLastKnownEntityDistancesFromUser());
     }
     private void setupUI(){
-
+        userUIAdapter = new UserUIAdapter(this, screenDistanceUpdater.getScreenDistances(), absoluteDirectionUpdater.getLastKnownEntityDirectionsFromUser(),
+                repo.getLocalLabels(), deviceTracker.getOrientation());
     }
 
     private void handleLocationPermission(){
