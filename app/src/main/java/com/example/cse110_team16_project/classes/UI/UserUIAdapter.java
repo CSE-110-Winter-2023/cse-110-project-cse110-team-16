@@ -103,45 +103,45 @@ public class UserUIAdapter{
         displayFriendLabels();
     }
 
+    public void displayFriendLabel(int radius, float angle, int height, int width, TextView tv, ConstraintLayout parent){
+        ImageView spot = activity.findViewById(R.id.userPosition);
+        spot.post(new Runnable() {
+            @Override
+            public void run() {
+                final int spotX = (int) spot.getX() - spot.getWidth()/2;
+                final int spotY = (int) spot.getY() - spot.getWidth()/2;
+
+                Log.d("DEVICEINFO", "spotX is :" + spotX);
+                Log.d("DEVICEINFO", "spotY is " + spotY);
+
+                int friendX = (int) spotX + (int) (Math.cos(angle - Math.PI/2) * radius);
+                int friendY = (int) spotY + (int) (Math.sin(angle - Math.PI/2) * radius);
+
+                tv.setHeight(height);
+                tv.setWidth(width);
+
+                tv.setX(friendX);
+                tv.setY(friendY);
+
+                parent.addView(tv);
+            }
+        });
+    }
+
     public void displayFriendLabels(){
         int deviceHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
         int deviceWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
         int halfDeviceHeight = deviceHeight/2;
         int halfDeviceWidth = deviceWidth/2;
 
-        Log.d("DEVICEINFO", "Device height is :" + deviceHeight);
-        Log.d("DEVICEINFO", "Device width is " + deviceWidth);
-
         ConstraintLayout parentLayout = activity.findViewById(R.id.MainLayout);
-        ImageView spot = activity.findViewById(R.id.userPosition);
-
-
 
         for(TextView friend: friends){
-            float textAngle = (float) Math.PI / 180 * 225;
+            float angleDegree = 225;
+            float textAngle = (float) Math.PI / 180 * angleDegree;
             int textRadius = 300;
 
-            spot.post(new Runnable() {
-                @Override
-                public void run() {
-                    final int spotX = (int) spot.getX() - spot.getWidth()/2;
-                    final int spotY = (int) spot.getY() - spot.getWidth()/2;
-
-                    Log.d("DEVICEINFO", "spotX is :" + spotX);
-                    Log.d("DEVICEINFO", "spotY is " + spotY);
-
-                    int friendX = (int) spotX + (int) (Math.cos(textAngle - Math.PI/2) * textRadius);
-                    int friendY = (int) spotY + (int) (Math.sin(textAngle - Math.PI/2) * textRadius);
-
-                    friend.setHeight(300);
-                    friend.setWidth(300);
-
-                    friend.setX(friendX);
-                    friend.setY(friendY);
-
-                    parentLayout.addView(friend);
-                }
-            });
+            displayFriendLabel(textRadius, textAngle, 100, 250, friend, parentLayout);
         }
     }
 
