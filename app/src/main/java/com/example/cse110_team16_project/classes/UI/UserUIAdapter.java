@@ -104,19 +104,18 @@ public class UserUIAdapter{
         displayFriendLabels();
     }
 
+
     public void displayFriendLabel(int radius, float angle, int height, int width, TextView tv, ConstraintLayout parent){
         ImageView spot = activity.findViewById(R.id.userPosition);
+        float finalAngle = angle - (float)Math.PI/2;
         spot.post(new Runnable() {
             @Override
             public void run() {
                 final int spotX = (int) spot.getX() - spot.getWidth()/2;
                 final int spotY = (int) spot.getY() - spot.getWidth()/2;
 
-                Log.d("DEVICEINFO", "spotX is :" + spotX);
-                Log.d("DEVICEINFO", "spotY is " + spotY);
-
-                int friendX = (int) spotX + (int) (Math.cos(angle - Math.PI/2) * radius);
-                int friendY = (int) spotY + (int) (Math.sin(angle - Math.PI/2) * radius);
+                int friendX = (int) spotX + (int) (Math.cos(finalAngle) * radius);
+                int friendY = (int) spotY + (int) (Math.sin(finalAngle) * radius);
 
                 tv.setHeight(height);
                 tv.setWidth(width);
