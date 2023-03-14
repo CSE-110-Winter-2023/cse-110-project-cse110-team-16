@@ -33,6 +33,10 @@ public class ScreenDistanceUpdater {
         if(miles == null) return null;
         List<Double> screenDistances = new ArrayList<>();
         for(Miles mile: miles){
+            if(mile == null) {
+                screenDistances.add(null);
+                continue;
+            }
             if(mile.getMiles() > MILES_DISTANCES[numZones]) {
                 screenDistances.add(LARGEST_RADIUS);
                 continue;

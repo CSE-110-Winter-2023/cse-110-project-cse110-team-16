@@ -1,16 +1,9 @@
 package com.example.cse110_team16_project;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-
 import static com.example.cse110_team16_project.classes.Misc.Constants.APP_REQUEST_CODE;
 
 import android.Manifest;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,17 +12,22 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
-import com.example.cse110_team16_project.classes.Updaters.AbsoluteDirectionUpdater;
-import com.example.cse110_team16_project.classes.DeviceInfo.DeviceTracker;
-import com.example.cse110_team16_project.classes.Updaters.DistanceUpdater;
-import com.example.cse110_team16_project.classes.LiveDataListMerger;
-import com.example.cse110_team16_project.classes.Updaters.ScreenDistanceUpdater;
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
-import com.example.cse110_team16_project.classes.UI.CompassUIManager;
-import com.example.cse110_team16_project.classes.Misc.Constants;
+import com.example.cse110_team16_project.classes.DeviceInfo.DeviceTracker;
 import com.example.cse110_team16_project.classes.GPSStatus;
+import com.example.cse110_team16_project.classes.LiveDataListMerger;
+import com.example.cse110_team16_project.classes.Misc.Constants;
+import com.example.cse110_team16_project.classes.UI.CompassUIManager;
+import com.example.cse110_team16_project.classes.Updaters.AbsoluteDirectionUpdater;
+import com.example.cse110_team16_project.classes.Updaters.DistanceUpdater;
+import com.example.cse110_team16_project.classes.Updaters.ScreenDistanceUpdater;
 import com.example.cse110_team16_project.classes.UserLocationSync;
 
 
@@ -49,6 +47,9 @@ public class CompassActivity extends AppCompatActivity {
     private DistanceUpdater distanceUpdater;
     private AbsoluteDirectionUpdater absoluteDirectionUpdater;
     private ScreenDistanceUpdater screenDistanceUpdater;
+
+
+
 
 
 
