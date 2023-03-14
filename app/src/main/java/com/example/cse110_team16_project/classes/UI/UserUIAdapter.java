@@ -123,6 +123,9 @@ public class UserUIAdapter{
                 tv.setX(friendX);
                 tv.setY(friendY);
 
+                if(tv.getParent() != null) {
+                    ((ViewGroup)tv.getParent()).removeView(tv);
+                }
                 parent.addView(tv);
             }
         });
@@ -131,8 +134,8 @@ public class UserUIAdapter{
     public void displayFriendLabels(){
         ConstraintLayout parentLayout = activity.findViewById(R.id.MainLayout);
         var executor = Executors.newSingleThreadScheduledExecutor();
-//        executor.scheduleAtFixedRate(() -> {
-//            Log.d("UIManager", Boolean.toString(this.friendDistances.getValue() != null));
+        executor.scheduleAtFixedRate(() -> {
+            Log.d("UIManager", Boolean.toString(this.friendDistances.getValue() != null));
             for (int i = 0; i < this.friends.size(); i++) {
                 TextView friend = this.friends.get(i);
                     List<Double> retrievedDistList = this.friendDistances.getValue();
@@ -144,7 +147,7 @@ public class UserUIAdapter{
                         displayFriendLabel(dist.intValue(), (float) angle.getDegrees(), 100, 250, friend, parentLayout);
                     }
             }
-//        }, 0, 1, TimeUnit.SECONDS);
+        }, 0, 1, TimeUnit.SECONDS);
 
 
 //        for(TextView friend: friends){
