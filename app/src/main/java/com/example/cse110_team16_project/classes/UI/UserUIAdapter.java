@@ -130,12 +130,17 @@ public class UserUIAdapter{
 
     public void displayFriendLabels(){
         ConstraintLayout parentLayout = activity.findViewById(R.id.MainLayout);
-        for (int i = 0; i < this.friends.size(); i++) {
-            TextView friend = this.friends.get(i);
-            double dist = this.friendDistances.getValue().get(i);
-            Degrees angle = this.friendOrientation.getValue().get(i);
-            displayFriendLabel((int)dist, (float)angle.getDegrees(), 100, 250, friend, parentLayout);
-        }
+        var executor = Executors.newSingleThreadScheduledExecutor();
+//        executor.scheduleAtFixedRate(() -> {
+//            Log.d("UIManager", Boolean.toString(this.friendDistances.getValue() != null));
+            for (int i = 0; i < this.friends.size(); i++) {
+                TextView friend = this.friends.get(i);
+                double dist = this.friendDistances.getValue().get(i);
+                Degrees angle = this.friendOrientation.getValue().get(i);
+                displayFriendLabel((int)dist, (float)angle.getDegrees(), 100, 250, friend, parentLayout);
+            }
+//        }, 0, 1, TimeUnit.SECONDS);
+
 
 //        for(TextView friend: friends){
 //            float angleDegree = 225;
