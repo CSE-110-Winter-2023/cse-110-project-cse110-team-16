@@ -165,6 +165,6 @@ public class ListActivity extends AppCompatActivity {
     }
 
     public void onAdvanceBtnClicked(View view) {
-        startActivity(new Intent(this, CompassActivity.class));
+        onBackPressed();
     }
 }
