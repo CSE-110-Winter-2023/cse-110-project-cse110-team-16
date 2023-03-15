@@ -4,8 +4,10 @@ import static java.security.AccessController.getContext;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -122,6 +124,9 @@ public class UserUIAdapter{
 
                 tv.setX(friendX);
                 tv.setY(friendY);
+                Context context = tv.getContext();
+                Drawable top = context.getResources().getDrawable(R.drawable.friend_triangle);
+                tv.setCompoundDrawablesWithIntrinsicBounds(null, top, null, null);
 
                 if(tv.getParent() != null) {
                     ((ViewGroup)tv.getParent()).removeView(tv);
@@ -137,16 +142,18 @@ public class UserUIAdapter{
         var executor = Executors.newSingleThreadScheduledExecutor();
         executor.scheduleAtFixedRate(() -> {
             Log.d("UIManager", Boolean.toString(this.friendDistances.getValue() != null));
+            Log.d("FriendSize", Integer.toString(this.friends.size()));
             List<Double> retrievedDistList = this.friendDistances.getValue();
 
             for (int i = 0; i < this.friends.size(); i++) {
                 TextView friend = this.friends.get(i);
+
                   if(retrievedDistList == null) return;
                     Double dist = retrievedDistList.get(i); //possible null here
 
                     if (friendOrientation != null) {
                         Degrees angle = this.friendOrientation.getValue().get(i);
-                        displayFriendLabel(dist.intValue(), (float) angle.getDegrees(), 100, 250, friend, parentLayout);
+                        displayFriendLabel(dist.intValue(), (float) angle.getDegrees(), 200, 250, friend, parentLayout);
                     }
             }
         }, 0, 1, TimeUnit.SECONDS);
@@ -205,6 +212,12 @@ public class UserUIAdapter{
             updateDistanceUI(friendDistances.getValue());
         }, 0, 100, TimeUnit.MILLISECONDS);
 
+    }
+
+    public void destroyTextViews(){
+        for(TextView tv: friends){
+            ((ViewGroup)tv.getParent()).removeView(tv);
+        }
     }
 
 

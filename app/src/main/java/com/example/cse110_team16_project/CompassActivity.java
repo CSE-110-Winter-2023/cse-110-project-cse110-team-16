@@ -95,6 +95,16 @@ public class CompassActivity extends AppCompatActivity {
         private_code = sharedPref.getString(Constants.SharedPreferences.private_code, "");
     }
 
+    public void destroyUpdaters(){
+        screenDistanceUpdater = null;
+        absoluteDirectionUpdater = null;
+        distanceUpdater = null;
+    }
+    public void destroyUI(){
+        userUIAdapter.destroyTextViews();
+        userUIAdapter = null;
+    }
+
     private void setupUpdaters() {
         distanceUpdater = new DistanceUpdater(this,locations.getMergedList(),deviceTracker.getCoordinates());
         absoluteDirectionUpdater = new AbsoluteDirectionUpdater(this,locations.getMergedList(),deviceTracker.getCoordinates());
@@ -104,6 +114,7 @@ public class CompassActivity extends AppCompatActivity {
     private void setupUI(){
         userUIAdapter = new UserUIAdapter(this, screenDistanceUpdater.getScreenDistances(), absoluteDirectionUpdater.getLastKnownEntityDirectionsFromUser(),
                 repo.getLocalLabels(), deviceTracker.getOrientation());
+
     }
 
     private void handleLocationPermission(){
@@ -146,12 +157,17 @@ public class CompassActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
 
+
         if (this.repo != null){
             Log.d("Number of locations","" + repo.getLocalPublicCodes().size());
             if (locations == null || getIntent().getBooleanExtra("locationsChanged",false)){
                 Log.d("CompassActivity","Locations changed!");
                 if(locations != null) locations.stopUpdating();
                 locations = new LiveDataListMerger<>(mediator.refreshSCLocations(repo.getLocalPublicCodes()));
+
+
+                destroyUpdaters();
+                if(userUIAdapter != null) destroyUI();
                 setupUpdaters();
                 setupUI();
             }
