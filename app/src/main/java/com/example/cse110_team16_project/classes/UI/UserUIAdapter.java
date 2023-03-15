@@ -99,6 +99,8 @@ public class UserUIAdapter{
             return;
         }
 
+        if(friends.size() != friendOrientation.size() || friends.size() != friendDistances.size()) return;
+
         for(int i = 0 ; i < friends.size() ; i++){
             View curView = friends.get(i);
             ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) curView.getLayoutParams();
