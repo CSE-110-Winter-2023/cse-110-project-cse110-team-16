@@ -65,17 +65,18 @@ public class Story7ScenarioTest {
             Location mockLoc = new Location("dummy provider");
             mockLoc.setLatitude(100);
             mockLoc.setLongitude(-100);
-            mockLoc.setTime(System.currentTimeMillis());
+            long currentTime = 100000000;
+            mockLoc.setTime(currentTime);
             mockLiveLoc.setValue(mockLoc);
             GPSStatus mockGPSStatus = new GPSStatus(mockLiveLoc, activity.findViewById(R.id.gpsLight),
                     activity.findViewById(R.id.gpsText));
-            mockGPSStatus.updateGPSStatus();
+            mockGPSStatus.updateGPSStatus(currentTime+=3000);
             assertEquals(R.drawable.gps_green, gpsLight.getTag());
             mockGPSStatus.setMockLocation(null);
-            mockGPSStatus.updateGPSStatus();
+            mockGPSStatus.updateGPSStatus(currentTime+=3000);
             assertEquals(R.drawable.gps_red, gpsLight.getTag());
             mockGPSStatus.setMockLocation(mockLoc);
-            mockGPSStatus.updateGPSStatus();
+            mockGPSStatus.updateGPSStatus(currentTime+=3000);
             assertEquals(R.drawable.gps_green, gpsLight.getTag());
         });
     }
@@ -96,11 +97,12 @@ public class Story7ScenarioTest {
             mockLiveLoc.setValue(null);
             GPSStatus mockGPSStatus = new GPSStatus(mockLiveLoc, activity.findViewById(R.id.gpsLight),
                     activity.findViewById(R.id.gpsText));
-            mockGPSStatus.updateGPSStatus();
+            int currentTime = 100000000;
+            mockGPSStatus.updateGPSStatus(currentTime);
             assertEquals(R.drawable.gps_red, gpsLight.getTag());
-            mockLoc.setTime(System.currentTimeMillis());
+            mockLoc.setTime(currentTime);
             mockGPSStatus.setMockLocation(mockLoc);
-            mockGPSStatus.updateGPSStatus();
+            mockGPSStatus.updateGPSStatus(currentTime+=3000);
             assertEquals(R.drawable.gps_green, gpsLight.getTag());
         });
     }
