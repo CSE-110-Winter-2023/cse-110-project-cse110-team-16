@@ -1,5 +1,7 @@
 package com.example.cse110_team16_project.classes.UI;
 
+import static com.example.cse110_team16_project.classes.Updaters.ScreenDistanceUpdater.LARGEST_RADIUS;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -102,11 +104,17 @@ public class UserUIAdapter{
         if(friends.size() != friendOrientation.size() || friends.size() != friendDistances.size()) return;
 
         for(int i = 0 ; i < friends.size() ; i++){
-            View curView = friends.get(i);
+            TextView curView = friends.get(i);
             ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) curView.getLayoutParams();
             params.circleRadius = friendDistances.get(i).intValue();
             params.circleAngle = (float) Degrees.subtractDegrees(friendOrientation.get(i),userDirection).getDegrees();
-
+            if(params.circleRadius == LARGEST_RADIUS) {
+                activity.runOnUiThread(() -> curView.setText(""));
+            }
+            else {
+                String reAddLabel = friendLabels.get(i);
+                activity.runOnUiThread(() -> curView.setText(reAddLabel));
+            }
             activity.runOnUiThread(() -> curView.setLayoutParams(params));
         }
     }
