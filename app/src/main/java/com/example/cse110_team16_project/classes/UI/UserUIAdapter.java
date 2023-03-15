@@ -1,58 +1,36 @@
 package com.example.cse110_team16_project.classes.UI;
 
-import static java.security.AccessController.getContext;
-
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.constraintlayout.widget.Constraints;
-import androidx.core.util.Pair;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.example.cse110_team16_project.R;
-import com.example.cse110_team16_project.classes.DeviceInfo.OrientationService;
 import com.example.cse110_team16_project.classes.Misc.Converters;
-import com.example.cse110_team16_project.classes.Units.Radians;
 import com.example.cse110_team16_project.classes.Units.Degrees;
-
+import com.example.cse110_team16_project.classes.Units.Radians;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.AbstractExecutorService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
+
 
 
 /** Currently unused class previously meant for managing the Location icons on compass.
  * Recommend using ViewGroup instead.
  */
 public class UserUIAdapter{
-
-    private final int halfDeviceHeight = Resources.getSystem().getDisplayMetrics().heightPixels/2;
-    private final int halfDeviceWidth = Resources.getSystem().getDisplayMetrics().widthPixels/2;
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
-    private Future<Void> future;
     Activity activity;
     private List<String> friendLabels;
-    private LiveData<List<Double>> friendDistances;
     private List<TextView> friends;
 
 
@@ -61,17 +39,16 @@ public class UserUIAdapter{
                          , LiveData<Radians> userOrientation){
         this.friends = new ArrayList<>();
         this.activity = activity;
-        this.friendDistances = friendDistances;
 
         friendDistances.observe((LifecycleOwner) activity,
-                    distances -> this.future = backgroundThreadExecutor.submit(() -> {
+                    distances -> backgroundThreadExecutor.submit(() -> {
                         updateUI(Converters.RadiansToDegrees(userOrientation.getValue()),friendOrientation.getValue(),distances);
                         return null;
                     })
             );
 
         userOrientation.observe((LifecycleOwner) activity,
-                orientation -> this.future = backgroundThreadExecutor.submit(() -> {
+                orientation -> backgroundThreadExecutor.submit(() -> {
                     updateUI(Converters.RadiansToDegrees(orientation),friendOrientation.getValue(),friendDistances.getValue());
                     return null;
                 })
@@ -139,6 +116,5 @@ public class UserUIAdapter{
             parent.removeView(tv);
         }
     }
-
 
 }
