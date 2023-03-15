@@ -21,12 +21,11 @@ import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 import com.example.cse110_team16_project.classes.DeviceInfo.DeviceTracker;
-import com.example.cse110_team16_project.classes.DeviceInfo.OrientationService;
 import com.example.cse110_team16_project.classes.GPSStatus;
 import com.example.cse110_team16_project.classes.LiveDataListMerger;
 import com.example.cse110_team16_project.classes.Misc.Constants;
 import com.example.cse110_team16_project.classes.UI.CompassUIManager;
-import com.example.cse110_team16_project.classes.UI.UserUIAdapter;
+import com.example.cse110_team16_project.classes.UI.UserIconManager;
 import com.example.cse110_team16_project.classes.Updaters.AbsoluteDirectionUpdater;
 import com.example.cse110_team16_project.classes.Updaters.DistanceUpdater;
 import com.example.cse110_team16_project.classes.Updaters.ScreenDistanceUpdater;
@@ -49,7 +48,7 @@ public class CompassActivity extends AppCompatActivity {
     private DistanceUpdater distanceUpdater;
     private AbsoluteDirectionUpdater absoluteDirectionUpdater;
     private ScreenDistanceUpdater screenDistanceUpdater;
-    private UserUIAdapter userUIAdapter;
+    private UserIconManager userIconManager;
 
 
 
@@ -106,7 +105,7 @@ public class CompassActivity extends AppCompatActivity {
     }
     private void setupUI(){
         compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
-        userUIAdapter = new UserUIAdapter(this, screenDistanceUpdater.getScreenDistances(), absoluteDirectionUpdater.getLastKnownEntityDirectionsFromUser(),
+        userIconManager = new UserIconManager(this, screenDistanceUpdater.getScreenDistances(), absoluteDirectionUpdater.getLastKnownEntityDirectionsFromUser(),
                  deviceTracker.getOrientation());
     }
 
@@ -164,7 +163,7 @@ public class CompassActivity extends AppCompatActivity {
         Log.d("CompassActivity","Locations changed!");
         locations.stopUpdating();
         locations.startObserving(mediator.refreshSCLocations(repo.getLocalPublicCodes()));
-        userUIAdapter.onFriendsChanged(repo.getLocalLabels());
+        userIconManager.onFriendsChanged(repo.getLocalLabels());
     }
 
     @Override

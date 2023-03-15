@@ -29,15 +29,15 @@ import java.util.concurrent.Executors;
 /** Currently unused class previously meant for managing the Location icons on compass.
  * Recommend using ViewGroup instead.
  */
-public class UserUIAdapter{
+public class UserIconManager {
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
     Activity activity;
     private List<String> friendLabels;
     private List<TextView> friends;
 
 
-    public UserUIAdapter(Activity activity, @NonNull LiveData<List<Double>> friendDistances,
-                         @NonNull LiveData<List<Degrees>> friendOrientation
+    public UserIconManager(Activity activity, @NonNull LiveData<List<Double>> friendDistances,
+                           @NonNull LiveData<List<Degrees>> friendOrientation
                          , LiveData<Radians> userOrientation){
         this.friends = new ArrayList<>();
         this.activity = activity;
