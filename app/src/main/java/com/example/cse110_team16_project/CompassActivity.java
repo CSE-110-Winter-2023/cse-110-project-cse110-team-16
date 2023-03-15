@@ -61,6 +61,7 @@ public class CompassActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         setContentView(R.layout.activity_compass);
+        //getLayoutInflater().inflate(R.layout.activity_compass,null);
         handleLocationPermission();
 
         setIntent(getIntent().putExtra("locationsChanged",true));

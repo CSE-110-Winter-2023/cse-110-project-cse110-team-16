@@ -53,7 +53,6 @@ public class UserUIAdapter{
     Activity activity;
     private List<String> friendLabels;
     private LiveData<List<Double>> friendDistances;
-    private LiveData<List<Degrees>> friendOrientation;
     private List<TextView> friends;
 
 
@@ -63,7 +62,6 @@ public class UserUIAdapter{
         this.friends = new ArrayList<>();
         this.activity = activity;
         this.friendDistances = friendDistances;
-        this.friendOrientation = friendOrientation;
 
         friendDistances.observe((LifecycleOwner) activity,
                     distances -> this.future = backgroundThreadExecutor.submit(() -> {
@@ -112,22 +110,14 @@ public class UserUIAdapter{
             params.circleConstraint = R.id.CompassLayout;
             params.circleRadius = 0;
             params.circleAngle = 0;
-            params.endToEnd = R.id.MainLayout;
             params.startToStart = R.id.MainLayout;
             params.topToTop = R.id.MainLayout;
-            params.bottomToBottom = R.id.MainLayout;
             tv.setLayoutParams(params);
-            tv.setHeight(height);
-            tv.setWidth(width);
-
-            tv.setX(friendX);
-            tv.setY(friendY);
-            Context context = tv.getContext();
+            Context context = activity;
             Drawable top = context.getResources().getDrawable(R.drawable.friend_triangle);
             tv.setCompoundDrawablesWithIntrinsicBounds(null, top, null, null);
             tv.setVisibility(View.VISIBLE);
             parent.addView(tv);
-            tv.invalidate();
         });
     }
 
@@ -177,7 +167,7 @@ public class UserUIAdapter{
             View curView = friends.get(i);
             ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) curView.getLayoutParams();
             params.circleRadius = friendDistances.get(i).intValue();
-            params.circleAngle = (float) Degrees.addDegrees(friendOrientation.get(i),userDirection).getDegrees();
+            params.circleAngle = (float) Degrees.subtractDegrees(friendOrientation.get(i),userDirection).getDegrees();
 
             activity.runOnUiThread(() -> curView.setLayoutParams(params));
 
