@@ -132,7 +132,7 @@ public class SCLocationRepository {
         var executor = Executors.newSingleThreadScheduledExecutor();
         remoteUpdateThreads.add(
             executor.scheduleAtFixedRate(() -> scLocation.postValue(api.getSCLocation(public_code)),
-                    0, LIVE_UPDATE_TIME, TimeUnit.MILLISECONDS)
+                    0, LIVE_UPDATE_TIME_MS, TimeUnit.MILLISECONDS)
         );
         return scLocation;
     }
@@ -151,7 +151,7 @@ public class SCLocationRepository {
             if (location != null) {
                 api.patchSCLocation(location,private_code,false);
             }
-        }, 0,LIVE_UPDATE_TIME, TimeUnit.MILLISECONDS);
+        }, 0,LIVE_UPDATE_TIME_MS, TimeUnit.MILLISECONDS);
     }
 
     public void killAllRemoteLiveThreads(){
