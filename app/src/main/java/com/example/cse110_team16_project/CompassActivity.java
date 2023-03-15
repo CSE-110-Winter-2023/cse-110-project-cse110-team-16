@@ -44,7 +44,7 @@ public class CompassActivity extends AppCompatActivity {
     private SCLocationRepository repo;
 
     private RepositoryMediator mediator;
-    private LiveDataListMerger<SCLocation> locations = null;
+    private LiveDataListMerger<SCLocation> locations = new LiveDataListMerger<>();
 
     private DistanceUpdater distanceUpdater;
     private AbsoluteDirectionUpdater absoluteDirectionUpdater;
@@ -73,10 +73,12 @@ public class CompassActivity extends AppCompatActivity {
 
         deviceTracker = new DeviceTracker(this);
         deviceTracker.registerListeners(); //battery life is a social construct
-        compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
+        setupUpdaters();
+        setupUI();
         gpsstatus = new GPSStatus(deviceTracker.getLocation(), findViewById(R.id.gpsLight), findViewById(R.id.gpsText));
         UserLocationSync locationSync = new UserLocationSync(deviceTracker.getCoordinates(),
                 new SCLocation(userLabel,public_code),private_code, this, repo);
+
     }
 
 
@@ -95,16 +97,6 @@ public class CompassActivity extends AppCompatActivity {
         private_code = sharedPref.getString(Constants.SharedPreferences.private_code, "");
     }
 
-    public void destroyUpdaters(){
-        screenDistanceUpdater = null;
-        absoluteDirectionUpdater = null;
-        distanceUpdater = null;
-    }
-    public void destroyUI(){
-        userUIAdapter.destroyTextViews();
-        userUIAdapter = null;
-    }
-
     private void setupUpdaters() {
         distanceUpdater = new DistanceUpdater(this,locations.getMergedList(),deviceTracker.getCoordinates());
         absoluteDirectionUpdater = new AbsoluteDirectionUpdater(this,locations.getMergedList(),deviceTracker.getCoordinates());
@@ -112,9 +104,9 @@ public class CompassActivity extends AppCompatActivity {
         screenDistanceUpdater.startObserve(distanceUpdater.getLastKnownEntityDistancesFromUser());
     }
     private void setupUI(){
+        compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
         userUIAdapter = new UserUIAdapter(this, screenDistanceUpdater.getScreenDistances(), absoluteDirectionUpdater.getLastKnownEntityDirectionsFromUser(),
                 repo.getLocalLabels(), deviceTracker.getOrientation());
-
     }
 
     private void handleLocationPermission(){
@@ -162,14 +154,8 @@ public class CompassActivity extends AppCompatActivity {
             Log.d("Number of locations","" + repo.getLocalPublicCodes().size());
             if (locations == null || getIntent().getBooleanExtra("locationsChanged",false)){
                 Log.d("CompassActivity","Locations changed!");
-                if(locations != null) locations.stopUpdating();
-                locations = new LiveDataListMerger<>(mediator.refreshSCLocations(repo.getLocalPublicCodes()));
-
-
-                destroyUpdaters();
-                if(userUIAdapter != null) destroyUI();
-                setupUpdaters();
-                setupUI();
+                locations.stopUpdating();
+                locations.startObserving(mediator.refreshSCLocations(repo.getLocalPublicCodes()));
             }
         }
         if(gpsstatus != null) gpsstatus.trackGPSStatus();

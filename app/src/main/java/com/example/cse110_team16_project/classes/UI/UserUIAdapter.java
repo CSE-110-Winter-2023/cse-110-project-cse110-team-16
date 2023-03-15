@@ -12,6 +12,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -216,7 +217,9 @@ public class UserUIAdapter{
 
     public void destroyTextViews(){
         for(TextView tv: friends){
-            ((ViewGroup)tv.getParent()).removeView(tv);
+            ViewGroup parent = ((ViewGroup)tv.getParent());
+            if(parent == null) return;
+            parent.removeView(tv);
         }
     }
 

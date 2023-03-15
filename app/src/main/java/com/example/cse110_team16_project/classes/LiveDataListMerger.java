@@ -16,7 +16,16 @@ public class LiveDataListMerger<T> {
     private ScheduledFuture<?> future;
     private MediatorLiveData<List<T>> mergedLiveData = new MediatorLiveData<>();
 
-    public LiveDataListMerger(@Nonnull List<LiveData<T>> liveDataList){
+    public LiveDataListMerger(){
+    }
+
+    public void stopUpdating() {
+        if (this.future != null && !this.future.isCancelled()) {
+            future.cancel(true);
+        }
+    }
+
+    public void startObserving(@Nonnull List<LiveData<T>> liveDataList){
         var executor = Executors.newSingleThreadScheduledExecutor();
         future = executor.scheduleAtFixedRate(() ->
         {
@@ -26,12 +35,6 @@ public class LiveDataListMerger<T> {
             }
             mergedLiveData.postValue(dataList);
         },0,UPDATE_TIME, TimeUnit.MILLISECONDS);
-    }
-
-    public void stopUpdating() {
-        if (this.future != null && !this.future.isCancelled()) {
-            future.cancel(true);
-        }
     }
 
     public LiveData<List<T>> getMergedList() {
