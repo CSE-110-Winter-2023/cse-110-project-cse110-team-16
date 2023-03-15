@@ -16,12 +16,13 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class SCLocationRepository {
+
+    public static final int LIVE_UPDATE_TIME_MS = 500;
     private final SCLocationDao dao;
     private final SCLocationAPI api = SCLocationAPI.provide();
     public SCLocationRepository(SCLocationDao dao) {
         this.dao = dao;
     }
-
     private final List<ScheduledFuture<?>> remoteUpdateThreads = new ArrayList<>();
 
     // Synced Methods
@@ -131,7 +132,7 @@ public class SCLocationRepository {
         var executor = Executors.newSingleThreadScheduledExecutor();
         remoteUpdateThreads.add(
             executor.scheduleAtFixedRate(() -> scLocation.postValue(api.getSCLocation(public_code)),
-                    0,3, TimeUnit.SECONDS)
+                    0, LIVE_UPDATE_TIME, TimeUnit.MILLISECONDS)
         );
         return scLocation;
     }
@@ -150,7 +151,7 @@ public class SCLocationRepository {
             if (location != null) {
                 api.patchSCLocation(location,private_code,false);
             }
-        }, 0,3, TimeUnit.SECONDS);
+        }, 0,LIVE_UPDATE_TIME, TimeUnit.MILLISECONDS);
     }
 
     public void killAllRemoteLiveThreads(){
