@@ -19,6 +19,8 @@ import com.example.cse110_team16_project.classes.Misc.Converters;
 import com.example.cse110_team16_project.classes.Units.Degrees;
 import com.example.cse110_team16_project.classes.Units.Radians;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -128,4 +130,7 @@ public class UserIconManager {
         }
     }
 
+    public List<TextView> getTextViews(){
+        return this.friends;
+    }
 }
