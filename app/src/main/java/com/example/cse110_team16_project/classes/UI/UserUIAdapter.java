@@ -126,6 +126,7 @@ public class UserUIAdapter{
                 if(tv.getParent() != null) {
                     ((ViewGroup)tv.getParent()).removeView(tv);
                 }
+
                 parent.addView(tv);
             }
         });
@@ -136,9 +137,10 @@ public class UserUIAdapter{
         var executor = Executors.newSingleThreadScheduledExecutor();
         executor.scheduleAtFixedRate(() -> {
             Log.d("UIManager", Boolean.toString(this.friendDistances.getValue() != null));
+            List<Double> retrievedDistList = this.friendDistances.getValue();
+
             for (int i = 0; i < this.friends.size(); i++) {
                 TextView friend = this.friends.get(i);
-                    List<Double> retrievedDistList = this.friendDistances.getValue();
                   if(retrievedDistList == null) return;
                     Double dist = retrievedDistList.get(i); //possible null here
 
