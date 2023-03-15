@@ -56,44 +56,35 @@ public class UserUIAdapter{
     private LiveData<List<Degrees>> friendOrientation;
     private List<TextView> friends;
 
-    private LiveData<Radians> userOrientation;
-
-    private  Radians userDirection;
 
     public UserUIAdapter(Activity activity, @NonNull LiveData<List<Double>> friendDistances,
-                         @NonNull LiveData<List<Degrees>> friendOrientation, List<String> friendLabels
+                         @NonNull LiveData<List<Degrees>> friendOrientation
                          , LiveData<Radians> userOrientation){
         this.friends = new ArrayList<>();
         this.activity = activity;
         this.friendDistances = friendDistances;
         this.friendOrientation = friendOrientation;
-        this.friendLabels = friendLabels;
-        populateFriendLabels(friendLabels);
 
-        userOrientation.observe((LifecycleOwner) activity,
-                userOri -> this.future = backgroundThreadExecutor.submit(() -> {
-                    userDirection = userOri;
-                    return null;
-                })
-        );
         friendDistances.observe((LifecycleOwner) activity,
                     distances -> this.future = backgroundThreadExecutor.submit(() -> {
-                        updateDistanceUI(distances);
+                        updateUI(Converters.RadiansToDegrees(userOrientation.getValue()),friendOrientation.getValue(),distances);
                         return null;
                     })
             );
 
-        friendOrientation.observe((LifecycleOwner) activity,
+        userOrientation.observe((LifecycleOwner) activity,
                 orientation -> this.future = backgroundThreadExecutor.submit(() -> {
-                    updateDirectionUI(Converters.RadiansToDegrees(userDirection), orientation);
+                    updateUI(Converters.RadiansToDegrees(orientation),friendOrientation.getValue(),friendDistances.getValue());
                     return null;
                 })
         );
-
     }
 
 
-    public void populateFriendLabels(List<String> friendLabels) {
+    public void onFriendsChanged(List<String> newFriendLabels) {
+        destroyTextViews();
+        friends.clear();
+        this.friendLabels = newFriendLabels;
         if(friendLabels.size() == 0){
             return;
         }
@@ -102,6 +93,7 @@ public class UserUIAdapter{
             TextView addFriend = new TextView(activity);
             addFriend.setText(friendLabels.get(i));
             addFriend.setId(View.generateViewId());
+            addFriend.setVisibility(View.INVISIBLE);
             friends.add(addFriend);
         }
         displayFriendLabels();
@@ -111,53 +103,47 @@ public class UserUIAdapter{
     public void displayFriendLabel(int radius, float angle, int height, int width, TextView tv, ConstraintLayout parent){
         ImageView spot = activity.findViewById(R.id.userPosition);
         float finalAngle = angle - (float)Math.PI/2;
-        spot.post(new Runnable() {
-            @Override
-            public void run() {
-                final int spotX = (int) spot.getX() - spot.getWidth()/2;
-                final int spotY = (int) spot.getY() - spot.getWidth()/2;
+        spot.post(() -> {
 
-                int friendX = (int) spotX + (int) (Math.cos(finalAngle) * radius);
-                int friendY = (int) spotY + (int) (Math.sin(finalAngle) * radius);
 
-                tv.setHeight(height);
-                tv.setWidth(width);
+            int friendX = (int) halfDeviceWidth + (int) (Math.cos(finalAngle) * radius);
+            int friendY = (int) halfDeviceHeight + (int) (Math.sin(finalAngle) * radius);
+            ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+            params.circleConstraint = R.id.CompassLayout;
+            params.circleRadius = 0;
+            params.circleAngle = 0;
+            params.endToEnd = R.id.MainLayout;
+            params.startToStart = R.id.MainLayout;
+            params.topToTop = R.id.MainLayout;
+            params.bottomToBottom = R.id.MainLayout;
+            tv.setLayoutParams(params);
+            tv.setHeight(height);
+            tv.setWidth(width);
 
-                tv.setX(friendX);
-                tv.setY(friendY);
-                Context context = tv.getContext();
-                Drawable top = context.getResources().getDrawable(R.drawable.friend_triangle);
-                tv.setCompoundDrawablesWithIntrinsicBounds(null, top, null, null);
-
-                if(tv.getParent() != null) {
-                    ((ViewGroup)tv.getParent()).removeView(tv);
-                }
-
-                parent.addView(tv);
-            }
+            tv.setX(friendX);
+            tv.setY(friendY);
+            Context context = tv.getContext();
+            Drawable top = context.getResources().getDrawable(R.drawable.friend_triangle);
+            tv.setCompoundDrawablesWithIntrinsicBounds(null, top, null, null);
+            tv.setVisibility(View.VISIBLE);
+            parent.addView(tv);
+            tv.invalidate();
         });
     }
 
     public void displayFriendLabels(){
         ConstraintLayout parentLayout = activity.findViewById(R.id.MainLayout);
-        var executor = Executors.newSingleThreadScheduledExecutor();
-        executor.scheduleAtFixedRate(() -> {
             Log.d("UIManager", Boolean.toString(this.friendDistances.getValue() != null));
             Log.d("FriendSize", Integer.toString(this.friends.size()));
-            List<Double> retrievedDistList = this.friendDistances.getValue();
 
             for (int i = 0; i < this.friends.size(); i++) {
                 TextView friend = this.friends.get(i);
 
-                  if(retrievedDistList == null) return;
-                    Double dist = retrievedDistList.get(i); //possible null here
+                    Double dist = 200.0; //possible null here
 
-                    if (friendOrientation != null) {
-                        Degrees angle = this.friendOrientation.getValue().get(i);
-                        displayFriendLabel(dist.intValue(), (float) angle.getDegrees(), 200, 250, friend, parentLayout);
-                    }
+                    Degrees angle = new Degrees(i*30);
+                    displayFriendLabel(dist.intValue(), (float) angle.getDegrees(), 200, 250, friend, parentLayout);
             }
-        }, 0, 1, TimeUnit.SECONDS);
 
 
 //        for(TextView friend: friends){
@@ -168,51 +154,34 @@ public class UserUIAdapter{
 //            displayFriendLabel(textRadius, textAngle, 100, 250, friend, parentLayout);
 //        }
     }
-
-    public void updateDirectionUI(Degrees userDirection, List<Degrees> friendOrientation){
+    public void updateUI(Degrees userDirection, List<Degrees> friendOrientation, List<Double> friendDistances){
         if(friendOrientation.size() == 0){
             return;
         }
-        updateIconDirections(userDirection, friends, friendOrientation);
+        /*
+        View center = activity.findViewById(R.id.userPosition);
+        float centerX = center.getX();
+        float centerY = center.getY();
+        */
+        for(int i = 0 ; i < friends.size() ; i++){
+            /*
+            Degrees relativeDirection = Degrees.addDegrees(friendOrientation.get(i),userDirection);
+            int offsetX = (int) (Math.cos(relativeDirection.getDegrees()-90) * friendDistances.get(i));
+            int offsetY = (int) (Math.sin(relativeDirection.getDegrees()-90) * friendDistances.get(i));
 
-    }
+            int friendX = (int) centerX + offsetX;
+            int friendY = (int) centerY + offsetY;
+            friends.get(i).setX(friendX);
+            friends.get(i).setY(friendY);
+        */
+            View curView = friends.get(i);
+            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) curView.getLayoutParams();
+            params.circleRadius = friendDistances.get(i).intValue();
+            params.circleAngle = (float) Degrees.addDegrees(friendOrientation.get(i),userDirection).getDegrees();
 
-    public void updateDistanceUI(List<Double> friendDistances){
-        if(friendDistances.size() == 0){
-            return;
+            activity.runOnUiThread(() -> curView.setLayoutParams(params));
+
         }
-        updateIconDistances(friends, friendDistances);
-    }
-
-    //update the position of the view representing a entity on the compass to the correct direction
-    //params View to update, relative direction the entity is from user in degrees
-    public void updateIconDirections(Degrees userDirection, List<TextView> friendViews, List<Degrees> friendOrientation) {
-        for(int i = 0 ; i < friendOrientation.size() ; i++){
-            friendOrientation.set(i, Degrees.subtractDegrees(friendOrientation.get(i),userDirection));
-        }
-        for(int i = 0 ; i < friendViews.size() ; i++) {
-            ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) friendViews.get(i).getLayoutParams();
-            layoutParams.circleAngle = (float) friendOrientation.get(i).getDegrees();
-            friendViews.get(i).setLayoutParams(layoutParams);
-        }
-    }
-
-    public void updateIconDistances(List<TextView> friendViews, List<Double> friendDistances){
-        for(int i = 0 ; i < friendViews.size() ; i++) {
-            ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) friendViews.get(i).getLayoutParams();
-            layoutParams.circleRadius = friendDistances.get(i).intValue();
-            friendViews.get(i).setLayoutParams(layoutParams);
-        }
-    }
-
-    public void updateMapIcons(){
-        var executor = Executors.newSingleThreadScheduledExecutor();
-        executor.scheduleAtFixedRate(() -> {
-            updateDirectionUI(Converters.RadiansToDegrees(userOrientation.getValue()),
-                    friendOrientation.getValue());
-            updateDistanceUI(friendDistances.getValue());
-        }, 0, 100, TimeUnit.MILLISECONDS);
-
     }
 
     public void destroyTextViews(){

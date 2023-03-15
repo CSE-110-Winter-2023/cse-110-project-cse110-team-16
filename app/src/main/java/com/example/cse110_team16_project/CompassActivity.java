@@ -63,7 +63,7 @@ public class CompassActivity extends AppCompatActivity {
         setContentView(R.layout.activity_compass);
         handleLocationPermission();
 
-
+        setIntent(getIntent().putExtra("locationsChanged",true));
     }
 
     private void finishOnCreate(){
@@ -106,7 +106,7 @@ public class CompassActivity extends AppCompatActivity {
     private void setupUI(){
         compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
         userUIAdapter = new UserUIAdapter(this, screenDistanceUpdater.getScreenDistances(), absoluteDirectionUpdater.getLastKnownEntityDirectionsFromUser(),
-                repo.getLocalLabels(), deviceTracker.getOrientation());
+                 deviceTracker.getOrientation());
     }
 
     private void handleLocationPermission(){
@@ -152,13 +152,18 @@ public class CompassActivity extends AppCompatActivity {
 
         if (this.repo != null){
             Log.d("Number of locations","" + repo.getLocalPublicCodes().size());
-            if (locations == null || getIntent().getBooleanExtra("locationsChanged",false)){
-                Log.d("CompassActivity","Locations changed!");
-                locations.stopUpdating();
-                locations.startObserving(mediator.refreshSCLocations(repo.getLocalPublicCodes()));
+            if (getIntent().getBooleanExtra("locationsChanged",false)){
+                onLocationsChanged();
             }
         }
         if(gpsstatus != null) gpsstatus.trackGPSStatus();
+    }
+
+    private void onLocationsChanged() {
+        Log.d("CompassActivity","Locations changed!");
+        locations.stopUpdating();
+        locations.startObserving(mediator.refreshSCLocations(repo.getLocalPublicCodes()));
+        userUIAdapter.onFriendsChanged(repo.getLocalLabels());
     }
 
     @Override
