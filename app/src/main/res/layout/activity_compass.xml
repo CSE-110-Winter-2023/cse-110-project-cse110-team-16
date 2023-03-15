@@ -61,9 +61,9 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
-        android:id="@+id/oneToTenMilesRing"
-        android:layout_width="359dp"
-        android:layout_height="399dp"
+        android:id="@+id/outerRing"
+        android:layout_width="380dp"
+        android:layout_height="380dp"
         android:layout_marginStart="75dp"
         android:layout_marginTop="232dp"
         android:layout_marginEnd="75dp"
@@ -75,13 +75,41 @@
         app:srcCompat="@drawable/ms2_map_ring" />
 
     <ImageView
+        android:id="@+id/oneTotenMilesRing"
+        android:layout_width="190dp"
+        android:layout_height="190dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ms2_map_ring" />
+
+    <ImageView
+        android:id="@+id/tenTo500MilesRing"
+        android:layout_width="285dp"
+        android:layout_height="285dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ms2_map_ring" />
+
+    <ImageView
         android:id="@+id/zeroToOneMilesRing"
-        android:layout_width="220dp"
-        android:layout_height="240dp"
-        android:layout_marginStart="135dp"
-        android:layout_marginTop="286dp"
-        android:layout_marginEnd="136dp"
-        android:layout_marginBottom="287dp"
+        android:layout_width="95dp"
+        android:layout_height="95dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -90,7 +118,7 @@
 
     <ImageView
         android:id="@+id/userPosition"
-        android:layout_width="20dp"
+        android:layout_width="10dp"
         android:layout_height="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
