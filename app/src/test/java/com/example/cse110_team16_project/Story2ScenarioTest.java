@@ -32,6 +32,8 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 @RunWith(RobolectricTestRunner.class)
 public class Story2ScenarioTest {
@@ -61,7 +63,7 @@ public class Story2ScenarioTest {
         db.close();
     }
 
-    // Helper: find all TextViews of parent View
+    // Helper: find all TextViews of parent View0
     List<TextView> friends = new ArrayList<>();
     public void findViews(View v) {
         try {
@@ -81,7 +83,7 @@ public class Story2ScenarioTest {
     }
 
     @Test
-    public void story2Scenario2() {
+    public void story2Scenario1() {
         // at least one UID added, check friend direction
         ActivityScenario<CompassActivity> scenario = ActivityScenario.launch(CompassActivity.class);
         scenario.moveToState(Lifecycle.State.STARTED);
@@ -100,18 +102,22 @@ public class Story2ScenarioTest {
             }
             assertTrue(repo.existsLocal(cse.getPublicCode()));
 
-            try {
-                Thread.sleep(15*WAIT_FOR_UPDATE_TIME);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-            ConstraintLayout parent = activity.findViewById(R.id.MainLayout);
-            this.findViews(parent);
-//            for (TextView friend : friends) {
-//                if (friend.getText() == "") {
-//                    assertEquals(R.drawable.friend_triangle, friend.getTag());
-//                }
-//            }
+            var executor = Executors.newSingleThreadExecutor();
+            executor.submit(() -> {
+                try {
+                    Thread.sleep(10 * WAIT_FOR_UPDATE_TIME);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
+                ConstraintLayout parent = activity.findViewById(R.id.MainLayout);
+                ArrayList<View> tvList = new ArrayList<>();
+                parent.findViewsWithText(tvList, cse.getLabel(), 0);
+                assertEquals(1, tvList.size());
+                ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) tvList.get(0).getLayoutParams();
+                assertEquals(10, layoutParams.circleAngle, 1);
+
+            });
         });
     }
 
