@@ -27,7 +27,7 @@ public class ScreenDistanceUpdater {
 
     public void startObserve(LiveData<List<Meters>> distances) {
         distances.observe((LifecycleOwner) activity, (obvDistances) -> {
-            screenDistances.postValue(findScreenDistance(obvDistances,3));
+            screenDistances.postValue(findScreenDistance(obvDistances,4));
         });
     }
     public List<Double> findScreenDistance(List<Meters> meters, int numZones) {
