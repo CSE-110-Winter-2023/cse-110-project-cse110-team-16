@@ -18,6 +18,7 @@ import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 import com.example.cse110_team16_project.classes.Misc.Constants;
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
+import com.example.cse110_team16_project.classes.Misc.Utilities;
 
 import java.util.UUID;
 
@@ -41,7 +42,7 @@ public class AddNameActivity extends AppCompatActivity {
         });
     }
 
-    public void onSubmitClicked(View view) {
+    public void onSubmitNameClicked(View view) {
         EditText editName = findViewById(R.id.YourNameField);
         String name = editName.getText().toString();
         String private_code = UUID.randomUUID().toString();
@@ -64,5 +65,21 @@ public class AddNameActivity extends AppCompatActivity {
         repo.upsertRemote(newUser,private_code);
         finish();
         startActivity(new Intent(this, CompassActivity.class));
+    }
+
+    public void onSubmitUrlClicked(View view) {
+        EditText editUrl = findViewById(R.id.mockUrlField);
+        String mockUrl = editUrl.getText().toString();
+        if(mockUrl.length() == 0){
+            Utilities.showError(this,"No URL inputted. API URL remains unchanged");
+            return;
+        }
+
+        SharedPreferences sharedPref = this.getSharedPreferences("mockUrl", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+        editor.putString("customUrl", mockUrl);
+
+        editor.apply();
     }
 }
