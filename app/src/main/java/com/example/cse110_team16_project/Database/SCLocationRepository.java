@@ -17,9 +17,14 @@ import java.util.concurrent.TimeUnit;
 
 public class SCLocationRepository {
     private final SCLocationDao dao;
-    private final SCLocationAPI api = SCLocationAPI.provide();
+    private final SCLocationAPI api;
     public SCLocationRepository(SCLocationDao dao) {
         this.dao = dao;
+        api = SCLocationAPI.provide();
+    }
+    public SCLocationRepository(SCLocationDao dao, String mockUrl) {
+        this(dao);
+        if(mockUrl.length() != 0) api.setUrl(mockUrl);
     }
 
     private final List<ScheduledFuture<?>> remoteUpdateThreads = new ArrayList<>();

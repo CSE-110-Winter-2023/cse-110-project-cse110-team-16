@@ -2,6 +2,8 @@ package com.example.cse110_team16_project;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
+import static com.example.cse110_team16_project.AddNameActivity.mockURLKey;
+import static com.example.cse110_team16_project.AddNameActivity.urlFileName;
 import static com.example.cse110_team16_project.classes.Misc.Constants.APP_REQUEST_CODE;
 
 import android.Manifest;
@@ -81,10 +83,9 @@ public class CompassActivity extends AppCompatActivity {
     private void setupRepository() {
         var db = SCLocationDatabase.provide(this);
         var dao = db.getDao();
-        this.repo = new SCLocationRepository(dao);
-
-        repo = new SCLocationRepository(SCLocationDatabase.
-                provide(this).getDao());
+        SharedPreferences sharedPrefUrl = this.getSharedPreferences(urlFileName, Context.MODE_PRIVATE);
+        String APIUrl = sharedPrefUrl.getString(mockURLKey, "");
+        repo = new SCLocationRepository(dao,APIUrl);
     }
     private void loadUserInfo(){
         SharedPreferences sharedPref = this.getSharedPreferences(Constants.SharedPreferences.user_info, Context.MODE_PRIVATE);
