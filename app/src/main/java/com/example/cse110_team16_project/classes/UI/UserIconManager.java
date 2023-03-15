@@ -110,7 +110,7 @@ public class UserIconManager {
             params.circleRadius = friendDistances.get(i).intValue();
             params.circleAngle = (float) Degrees.subtractDegrees(friendOrientation.get(i),userDirection).getDegrees();
             if(params.circleRadius == LARGEST_RADIUS) {
-                activity.runOnUiThread(() -> curView.setText(""));
+                //activity.runOnUiThread(() -> curView.setText(""));
             }
             else {
                 String reAddLabel = friendLabels.get(i);

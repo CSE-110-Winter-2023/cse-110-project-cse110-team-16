@@ -15,7 +15,9 @@ import java.util.List;
 
 public class ScreenDistanceUpdater {
     public static final double LARGEST_RADIUS = 500; //set to whatever proper value
-    public static final int[] MILES_DISTANCES = new int[]{0, 1, 10, 500}; //first index is zero for calculations
+
+    private static final int LARGEST_EARTH_DISTANCE = 12500;
+    public static final int[] MILES_DISTANCES = new int[]{0, 1, 10, 500, LARGEST_EARTH_DISTANCE}; //first index is zero for calculations
 
     private final MutableLiveData<List<Double>> screenDistances = new MutableLiveData<>();
     private final Activity activity;
