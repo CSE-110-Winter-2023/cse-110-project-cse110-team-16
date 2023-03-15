@@ -87,6 +87,7 @@ public class UserIconManager {
             tv.setLayoutParams(params);
             Context context = activity;
             Drawable top = context.getResources().getDrawable(R.drawable.friend_triangle);
+            tv.setTag(R.drawable.friend_triangle); // check tag during testing to see if any tv's are displayed
             tv.setCompoundDrawablesWithIntrinsicBounds(null, top, null, null);
             parentLayout.addView(tv);
     }
