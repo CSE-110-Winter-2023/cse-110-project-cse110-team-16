@@ -20,21 +20,24 @@ public class IconCollisionHandler {
 
     private final int WIDTH_LEFT_RIGHT_CHECK = 120;
     private Degrees userDirection;
-    List<Degrees> friendOrientation;
-    List<Double> friendDistances;
+    private List<Degrees> friendOrientation;
+    private List<Double> friendDistances;
 
-    List<Degrees> adjustedAngles;
-    List<Double> adjustedRadius;
+    private List<Degrees> adjustedAngles;
+    private List<Double> adjustedRadius;
+    private List<Boolean> ignore;
 
     public IconCollisionHandler(Degrees userDirection, List<Degrees> friendOrientation, List<Double> friendDistances){
         this.userDirection = userDirection;
         this.friendDistances = friendDistances;
         this.friendOrientation = friendOrientation;
+        ignore = new ArrayList<>(friendDistances.size());
     }
 
     public void adjustIcons(){
         List<Rect> rects = new ArrayList<>(friendDistances.size());
         for(int i = 0; i < friendDistances.size(); i++){
+            ignore.add(friendDistances.get(i) == LARGEST_RADIUS);
             rects.add(calculateTopDownCheckRectangle(friendDistances.get(i),Degrees.subtractDegrees(friendOrientation.get(i),userDirection)));
         }
         adjustTopDown(rects);
@@ -43,17 +46,19 @@ public class IconCollisionHandler {
 
     public void adjustTopDown(List<Rect> rects){
         for(int i = 1; i < rects.size(); i++){
+            if(ignore.get(i) == true) continue;
             for(int j = 0; j < i; j++){
+                if(ignore.get(j) == true) continue;
                 Rect rect1 = rects.get(i);
                 Rect rect2 = rects.get(j);
                 if(Rect.intersects(rect1,rect2) || rect1.equals(rect2)) {
                     if(rect1.top > rect2.top){
-                        rect1.offset(0,(HEIGHT-rect1.top-rect2.top)/2);
-                        rect2.offset(0,-HEIGHT+(rect1.top-rect2.top)/2);
+                        rect1.offset((HEIGHT-rect1.top-rect2.top)/2,0);
+                        rect2.offset(-HEIGHT+(rect1.top-rect2.top)/2,0);
                     }
                     else {
-                        rect1.offset(0,-HEIGHT+(rect1.top-rect2.top)/2);
-                        rect2.offset(0,HEIGHT-(rect1.top-rect2.top)/2);
+                        rect1.offset(-HEIGHT+(rect1.top-rect2.top)/2,0);
+                        rect2.offset(HEIGHT-(rect1.top-rect2.top)/2,0);
                     }
                 }
             }
@@ -83,11 +88,17 @@ public class IconCollisionHandler {
     public void convertToPolar(List<Rect> rects){
         adjustedAngles = new ArrayList<>(friendDistances.size());
         adjustedRadius = new ArrayList<>(friendDistances.size());
-        for(Rect rect: rects){
-            int x = rect.centerX();
-            int y = rect.centerY();
-            adjustedRadius.add(Math.sqrt(x * x + y * y));
-            adjustedAngles.add(new Degrees(Math.toDegrees(Math.atan2(x, y))));
+        for(int i = 0; i < rects.size(); i++){
+            if(ignore.get(i) == true){
+                adjustedRadius.add(friendDistances.get(i));
+                adjustedAngles.add(Degrees.subtractDegrees(friendOrientation.get(i),userDirection));
+            }
+            else {
+                int x = rects.get(i).centerX();
+                int y = rects.get(i).centerY();
+                adjustedRadius.add(Math.sqrt(x * x + y * y));
+                adjustedAngles.add(new Degrees(Math.toDegrees(Math.atan2(y, x))));
+            }
         }
     }
 

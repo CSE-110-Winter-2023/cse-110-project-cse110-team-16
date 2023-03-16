@@ -41,6 +41,7 @@ public class UserIconManager {
     private List<TextView> friends;
 
 
+
     public UserIconManager(Activity activity, @NonNull LiveData<List<Double>> friendDistances,
                            @NonNull LiveData<List<Degrees>> friendOrientation
                          , LiveData<Radians> userOrientation){
