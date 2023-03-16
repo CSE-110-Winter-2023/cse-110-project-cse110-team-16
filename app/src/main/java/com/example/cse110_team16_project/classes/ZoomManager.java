@@ -54,18 +54,18 @@ public class ZoomManager {
         TextView zoomInBtn = activity.findViewById(R.id.ZoomIn);
 
         if (zoomLevel == 4){
-            zoomOutBtn.setVisibility(View.INVISIBLE);
             zoomOutBtn.setClickable(false);
+            zoomOutBtn.setAlpha(0.35f);
         }
         else if (zoomLevel == 1){
-            zoomInBtn.setVisibility(View.INVISIBLE);
             zoomInBtn.setClickable(false);
+            zoomInBtn.setAlpha(0.35f);
         }
         else{
-            zoomOutBtn.setVisibility(View.VISIBLE);
             zoomOutBtn.setClickable(true);
-            zoomInBtn.setVisibility(View.VISIBLE);
             zoomInBtn.setClickable(true);
+            zoomOutBtn.setAlpha(1f);
+            zoomInBtn.setAlpha(1f);
         }
     }
 
