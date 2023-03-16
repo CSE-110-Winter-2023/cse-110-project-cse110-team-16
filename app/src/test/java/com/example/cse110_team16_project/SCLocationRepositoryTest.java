@@ -148,6 +148,7 @@ public class SCLocationRepositoryTest {
             retrievedLocationLive.observe(activity,(retrievedNull) -> {
                 retrievedLocationLive.removeObservers(activity);
                 retrievedLocationLive.observe(activity,(retrievedLocation) -> {
+                    retrievedLocationLive.removeObservers(activity);
                     try {
                         Thread.sleep(WAIT_FOR_UPDATE_TIME); 
                     } catch (InterruptedException e) {
@@ -187,6 +188,7 @@ public class SCLocationRepositoryTest {
             retrievedLocationLive.observe(activity,(retrievedNull) -> {
                 retrievedLocationLive.removeObservers(activity);
                 retrievedLocationLive.observe(activity,(retrievedLocation) -> {
+                    retrievedLocationLive.removeObservers(activity);
                     try {
                         Thread.sleep(WAIT_FOR_UPDATE_TIME); 
                     } catch (InterruptedException e) {
