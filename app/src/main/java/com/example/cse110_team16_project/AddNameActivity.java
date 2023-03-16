@@ -18,6 +18,7 @@ import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 import com.example.cse110_team16_project.classes.Misc.Constants;
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
+import com.example.cse110_team16_project.classes.Misc.Utilities;
 
 import java.util.UUID;
 
@@ -44,6 +45,10 @@ public class AddNameActivity extends AppCompatActivity {
     public void onSubmitClicked(View view) {
         EditText editName = findViewById(R.id.YourNameField);
         String name = editName.getText().toString();
+        if(name.length() == 0) {
+            Utilities.showAlert(this,"Please enter a valid name.");
+            return;
+        }
         String private_code = UUID.randomUUID().toString();
         String public_code = UUID.randomUUID().toString();
 
