@@ -102,7 +102,7 @@ public class CompassActivity extends AppCompatActivity {
     private void setupUpdaters() {
         distanceUpdater = new DistanceUpdater(this,locations.getMergedList(),deviceTracker.getCoordinates());
         absoluteDirectionUpdater = new AbsoluteDirectionUpdater(this,locations.getMergedList(),deviceTracker.getCoordinates());
-        screenDistanceUpdater = new ScreenDistanceUpdater(this);
+        screenDistanceUpdater = new ScreenDistanceUpdater(this,4);
         screenDistanceUpdater.startObserve(distanceUpdater.getLastKnownEntityDistancesFromUser());
     }
     private void setupUI(){

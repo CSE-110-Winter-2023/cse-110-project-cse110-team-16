@@ -15,22 +15,23 @@ import java.util.List;
 
 public class ScreenDistanceUpdater {
     public static final double LARGEST_RADIUS = 500; //set to whatever proper value
-
     private static final int LARGEST_EARTH_DISTANCE = 12500;
     public static final int[] MILES_DISTANCES = new int[]{0, 1, 10, 500, LARGEST_EARTH_DISTANCE}; //first index is zero for calculations
 
     private final MutableLiveData<List<Double>> screenDistances = new MutableLiveData<>();
     private final Activity activity;
-    public ScreenDistanceUpdater(Activity activity) {
+    private int zoneSetting;
+    public ScreenDistanceUpdater(Activity activity, int zoneSetting) {
         this.activity = activity;
+        this.zoneSetting = zoneSetting;
     }
 
     public void startObserve(LiveData<List<Meters>> distances) {
         distances.observe((LifecycleOwner) activity, (obvDistances) -> {
-            screenDistances.postValue(findScreenDistance(obvDistances,4));
+            screenDistances.postValue(findScreenDistance(obvDistances));
         });
     }
-    public List<Double> findScreenDistance(List<Meters> meters, int numZones) {
+    public List<Double> findScreenDistance(List<Meters> meters) {
         List<Miles> miles = Converters.listMetersToMiles(meters);
         if(miles == null) return null;
         List<Double> screenDistances = new ArrayList<>();
@@ -39,13 +40,13 @@ public class ScreenDistanceUpdater {
                 screenDistances.add(null);
                 continue;
             }
-            if(mile.getMiles() > MILES_DISTANCES[numZones]) {
+            if(mile.getMiles() > MILES_DISTANCES[zoneSetting]) {
                 screenDistances.add(LARGEST_RADIUS);
                 continue;
             }
-            for(int i = 1; i <= numZones; i++){
+            for(int i = 1; i <= zoneSetting; i++){
                 if (mile.getMiles() < MILES_DISTANCES[i]){
-                    screenDistances.add(((mile.getMiles()/(MILES_DISTANCES[i]-MILES_DISTANCES[i-1])) + i-1)* LARGEST_RADIUS/numZones);
+                    screenDistances.add(((mile.getMiles()/(MILES_DISTANCES[i]-MILES_DISTANCES[i-1])) + i-1)* LARGEST_RADIUS/zoneSetting);
                     break;
                 }
             }
@@ -56,4 +57,6 @@ public class ScreenDistanceUpdater {
     public LiveData<List<Double>> getScreenDistances() {
         return this.screenDistances;
     }
+
+    public void setZoneSetting(int newZoneSetting) { this.zoneSetting = newZoneSetting; }
 }
