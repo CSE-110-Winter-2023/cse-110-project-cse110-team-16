@@ -33,6 +33,7 @@ import com.example.cse110_team16_project.classes.Updaters.AbsoluteDirectionUpdat
 import com.example.cse110_team16_project.classes.Updaters.DistanceUpdater;
 import com.example.cse110_team16_project.classes.Updaters.ScreenDistanceUpdater;
 import com.example.cse110_team16_project.classes.UserLocationSync;
+import com.example.cse110_team16_project.classes.ZoomManager;
 
 
 public class CompassActivity extends AppCompatActivity {
@@ -53,8 +54,7 @@ public class CompassActivity extends AppCompatActivity {
     private ScreenDistanceUpdater screenDistanceUpdater;
     private UserIconManager userIconManager;
 
-
-
+    private ZoomManager zoomManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +81,7 @@ public class CompassActivity extends AppCompatActivity {
         gpsstatus = new GPSStatus(deviceTracker.getLocation(), findViewById(R.id.gpsLight), findViewById(R.id.gpsText));
         UserLocationSync locationSync = new UserLocationSync(deviceTracker.getCoordinates(),
                 new SCLocation(userLabel,public_code),private_code, this, repo);
-
+        zoomManager = new ZoomManager(this, screenDistanceUpdater);
     }
 
 
@@ -190,5 +190,10 @@ public class CompassActivity extends AppCompatActivity {
     }
 
     public void onZoomOut(View view) {
+        zoomManager.zoomOut();
+    }
+
+    public void onZoomIn(View view) {
+        zoomManager.zoomIn();
     }
 }

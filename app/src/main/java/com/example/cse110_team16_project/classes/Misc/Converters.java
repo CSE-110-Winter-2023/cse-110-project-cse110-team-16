@@ -1,6 +1,8 @@
 package com.example.cse110_team16_project.classes.Misc;
 
+import android.app.Activity;
 import android.location.Location;
+import android.util.DisplayMetrics;
 
 import androidx.room.TypeConverter;
 
@@ -80,4 +82,9 @@ public class Converters {
     }
 
     public static long milisecToHours(long ms) {return ms/ONE_HOUR;}
+
+    public static int dpToPixel(Activity activity, int dp){
+        DisplayMetrics metrics = activity.getResources().getDisplayMetrics();
+        return (int) (dp * metrics.density);
+    }
 }
