@@ -189,4 +189,6 @@ public class CompassActivity extends AppCompatActivity {
         startActivity(new Intent(this, ListActivity.class));
     }
 
+    public void onZoomOut(View view) {
+    }
 }

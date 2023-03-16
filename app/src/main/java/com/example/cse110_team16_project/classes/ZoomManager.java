@@ -8,6 +8,7 @@ public class ZoomManager {
     private static final int ZOOMERROR = -1;
     private static final int ZOOMDEFAULT = 4;
 
+
     private Activity activity;
     private int zoomLevel;
 
@@ -33,5 +34,9 @@ public class ZoomManager {
 
     private int readZoomLevel(){
         return sharedPref.getInt("zoomLevel", -1);
+    }
+
+    private void setZoomButtonVisibility(){
+
     }
 }
