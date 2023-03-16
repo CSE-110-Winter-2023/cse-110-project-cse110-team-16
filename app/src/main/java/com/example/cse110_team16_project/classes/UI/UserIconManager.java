@@ -16,6 +16,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.cse110_team16_project.IconStacker;
 import com.example.cse110_team16_project.R;
+import com.example.cse110_team16_project.classes.IconTruncater;
 import com.example.cse110_team16_project.classes.Misc.Converters;
 import com.example.cse110_team16_project.classes.Units.Degrees;
 import com.example.cse110_team16_project.classes.Units.Radians;
@@ -108,6 +109,13 @@ public class UserIconManager {
         stacker.adjustIcons();
         List<Degrees> adjustAngles = stacker.getAdjustedAngles();
         List<Double> adjustedRadius = stacker.getAdjustedRadius();
+        //List<Degrees> adjustAngles = stacker.getRegularAngles();
+        //List<Double> adjustedRadius = stacker.getRegularRadius();
+        IconTruncater truncater = new IconTruncater(adjustAngles, adjustedRadius, friends);
+        truncater.truncateIcons();
+        List<Integer> finalWidth = truncater.getFinalWidth();
+        adjustAngles = truncater.getAdjustedAngles();
+        adjustedRadius = truncater.getAdjustedRadius();
         for(int i = 0 ; i < friends.size() ; i++){
             TextView curView = friends.get(i);
             ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) curView.getLayoutParams();
@@ -117,13 +125,17 @@ public class UserIconManager {
                 params.circleRadius += 13;
                 activity.runOnUiThread(() -> {
                     curView.setText("⬤");
+                    curView.setWidth(30);
                     curView.setTextColor(Color.RED);
                 });
             }
             else {
                 String reAddLabel = friendLabels.get(i);
+                int newWidth = finalWidth.get(i);
                 activity.runOnUiThread(() -> {
                     curView.setText(reAddLabel);
+                    curView.setWidth(newWidth);
+                    //curView.setHeight(50);
                     curView.setTextColor(Color.BLUE);
                 });
             }

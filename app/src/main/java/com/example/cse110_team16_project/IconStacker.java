@@ -12,8 +12,8 @@ import java.util.List;
 
 public class IconStacker {
 
-    private final int HEIGHT = 70;
-    private final int WIDTH_TOP_DOWN_CHECK = 40;
+    private final int HEIGHT = 60;
+    private final int WIDTH_TOP_DOWN_CHECK = 10; //maybe 60
 
     private Degrees userDirection;
     private List<Degrees> friendOrientation;
@@ -92,4 +92,13 @@ public class IconStacker {
 
     public List<Degrees> getAdjustedAngles() { return this.adjustedAngles; }
     public List<Double> getAdjustedRadius() { return this.adjustedRadius; }
+
+    public List<Degrees> getRegularAngles() {
+        List<Degrees> regAngles = new ArrayList<>();
+        for(Degrees fO: friendOrientation) {
+            regAngles.add(Degrees.subtractDegrees(fO,userDirection));
+        }
+        return regAngles;
+    }
+    public List<Double> getRegularRadius() { return this.friendDistances; }
 }
