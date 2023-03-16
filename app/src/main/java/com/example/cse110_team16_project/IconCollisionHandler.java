@@ -7,46 +7,90 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import com.example.cse110_team16_project.classes.Misc.Converters;
+import com.example.cse110_team16_project.classes.Units.Degrees;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class IconCollisionHandler {
-    public static final int NO_COLLISION = 0;
-    public static final int FIRST_VIEW_ON_TOP = 1;
-    public static final int SECOND_VIEW_ON_TOP = 2;
-    public static final int FIRST_VIEW_ON_LEFT = 3;
-    public static final int SECOND_VIEW_ON_LEFT = 4;
-    private static final int VERTICAL_ADJUST = 30;
 
-    public static final int ADJUST_UP = 5;
-    public static final int ADJUST_DOWN = 6;
-    public static final int ADJUST_BOTH = 7;
-    public static final int ADJUST_NONE = 7;
+    private final int HEIGHT = 20;
+    private final int WIDTH_TOP_DOWN_CHECK = 60;
 
+    private final int WIDTH_LEFT_RIGHT_CHECK = 120;
+    private Degrees userDirection;
+    List<Degrees> friendOrientation;
+    List<Double> friendDistances;
 
-    /* Prioritize bumping each view up and down. If doing either would cause a view to leave circle or have negative radius,
-     attempt to prevent.
-     If return is positive, move Top up by that amount.
-     If return negative, move Bottom down by the abs amount.
-     */
-    public static int adjustTopDownCollision(@NonNull View topView, int d1, @NonNull View bottomView, int d2){
-        if(d2-VERTICAL_ADJUST >= 0) return ADJUST_DOWN;
-        if(d1+VERTICAL_ADJUST < LARGEST_RADIUS) return ADJUST_UP;
-        if(d2-VERTICAL_ADJUST/2 >= 0 && d1+VERTICAL_ADJUST/2 < LARGEST_RADIUS) return ADJUST_BOTH;
-        return ADJUST_NONE; //give up
+    List<Degrees> adjustedAngles;
+    List<Double> adjustedRadius;
 
+    public IconCollisionHandler(Degrees userDirection, List<Degrees> friendOrientation, List<Double> friendDistances){
+        this.userDirection = userDirection;
+        this.friendDistances = friendDistances;
+        this.friendOrientation = friendOrientation;
     }
 
-    public static int checkTopDownCollision(@NonNull View v1, @NonNull View v2){
-        Rect R1= new Rect(v1.getLeft(), v1.getTop(), v1.getRight(), v1.getBottom());
-        Rect R2= new Rect(v2.getLeft(), v2.getTop(), v2.getRight(), v2.getBottom());
-        if (!R1.intersect(R2)) return NO_COLLISION;
-        if(v1.getTop() < v2.getTop()) return SECOND_VIEW_ON_TOP;
-        return FIRST_VIEW_ON_TOP;
+    public void adjustIcons(){
+        List<Rect> rects = new ArrayList<>(friendDistances.size());
+        for(int i = 0; i < friendDistances.size(); i++){
+            rects.add(calculateTopDownCheckRectangle(friendDistances.get(i),Degrees.subtractDegrees(friendOrientation.get(i),userDirection)));
+        }
+        adjustTopDown(rects);
+        convertToPolar(rects);
     }
 
-    public static int checkLeftRightCollision(@NonNull View v1, @NonNull View v2){
-        Rect R1= new Rect(v1.getLeft(), v1.getTop(), v1.getRight(), v1.getBottom());
-        Rect R2= new Rect(v2.getLeft(), v2.getTop(), v2.getRight(), v2.getBottom());
-        if (!R1.intersect(R2)) return NO_COLLISION;
-        if(v1.getLeft() < v2.getLeft()) return FIRST_VIEW_ON_LEFT;
-        return SECOND_VIEW_ON_LEFT;
+    public void adjustTopDown(List<Rect> rects){
+        for(int i = 1; i < rects.size(); i++){
+            for(int j = 0; j < i; j++){
+                Rect rect1 = rects.get(i);
+                Rect rect2 = rects.get(j);
+                if(Rect.intersects(rect1,rect2) || rect1.equals(rect2)) {
+                    if(rect1.top > rect2.top){
+                        rect1.offset(0,(HEIGHT-rect1.top-rect2.top)/2);
+                        rect2.offset(0,-HEIGHT+(rect1.top-rect2.top)/2);
+                    }
+                    else {
+                        rect1.offset(0,-HEIGHT+(rect1.top-rect2.top)/2);
+                        rect2.offset(0,HEIGHT-(rect1.top-rect2.top)/2);
+                    }
+                }
+            }
+        }
     }
+
+    public Rect calculateTopDownCheckRectangle(Double dist1, Degrees deg1){
+        int x1 = (int) (dist1*Math.cos(Converters.DegreesToRadians(deg1).getRadians()));
+        int y1 = (int) (dist1*Math.sin(Converters.DegreesToRadians(deg1).getRadians()));
+        return new Rect(x1-WIDTH_TOP_DOWN_CHECK/2, y1+HEIGHT/2, x1+WIDTH_TOP_DOWN_CHECK/2, y1-HEIGHT/2);
+    }
+    public boolean checkTopDownCollision(Rect rect1, Rect rect2){
+        return Rect.intersects(rect1,rect2);
+    }
+
+    public boolean checkLeftRightCollision(Double dist1, Degrees deg1,
+                                           Double dist2, Degrees deg2){
+        int x1 = (int) (dist1*Math.cos(Converters.DegreesToRadians(deg1).getRadians()));
+        int y1 = (int) (dist1*Math.sin(Converters.DegreesToRadians(deg1).getRadians()));
+        int x2 = (int) (dist2*Math.cos(Converters.DegreesToRadians(deg2).getRadians()));
+        int y2 = (int) (dist2*Math.sin(Converters.DegreesToRadians(deg2).getRadians()));
+        Rect R1= new Rect(x1-WIDTH_LEFT_RIGHT_CHECK/2, y1+HEIGHT/2, x1+WIDTH_LEFT_RIGHT_CHECK/2, y1-HEIGHT/2);
+        Rect R2= new Rect(x2-WIDTH_LEFT_RIGHT_CHECK/2, y2+HEIGHT/2, x2+WIDTH_LEFT_RIGHT_CHECK/2, y2-HEIGHT/2);
+        return R1.intersect(R2);
+    }
+
+    public void convertToPolar(List<Rect> rects){
+        adjustedAngles = new ArrayList<>(friendDistances.size());
+        adjustedRadius = new ArrayList<>(friendDistances.size());
+        for(Rect rect: rects){
+            int x = rect.centerX();
+            int y = rect.centerY();
+            adjustedRadius.add(Math.sqrt(x * x + y * y));
+            adjustedAngles.add(new Degrees(Math.toDegrees(Math.atan2(x, y))));
+        }
+    }
+
+    public List<Degrees> getAdjustedAngles() { return this.adjustedAngles; }
+    public List<Double> getAdjustedRadius() { return this.adjustedRadius; }
 }

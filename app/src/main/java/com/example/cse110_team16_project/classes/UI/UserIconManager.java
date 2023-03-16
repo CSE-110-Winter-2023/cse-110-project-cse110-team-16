@@ -1,5 +1,6 @@
 package com.example.cse110_team16_project.classes.UI;
 
+import static com.example.cse110_team16_project.IconCollisionHandler.*;
 import static com.example.cse110_team16_project.classes.Updaters.ScreenDistanceUpdater.LARGEST_RADIUS;
 
 import android.app.Activity;
@@ -83,17 +84,13 @@ public class UserIconManager {
 
     public void displayFriendLabel(TextView tv){
         ConstraintLayout parentLayout = activity.findViewById(R.id.MainLayout);
-            ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+            ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, 50);
             params.circleConstraint = R.id.CompassLayout;
             params.circleRadius = 999;
             params.circleAngle = 90;
             params.startToStart = R.id.MainLayout;
             params.topToTop = R.id.MainLayout;
             tv.setLayoutParams(params);
-            Context context = activity;
-//            Drawable top = context.getResources().getDrawable(R.drawable.friend_triangle);
-//            tv.setTag(R.drawable.friend_triangle); // check tag during testing to see if any tv's are displayed
-//            tv.setCompoundDrawablesWithIntrinsicBounds(null, top, null, null);
             parentLayout.addView(tv);
     }
 
@@ -108,12 +105,15 @@ public class UserIconManager {
         }
 
         if(friends.size() != friendOrientation.size() || friends.size() != friendDistances.size()) return;
-
+        IconCollisionHandler handler = new IconCollisionHandler(userDirection, friendOrientation, friendDistances);
+        handler.adjustIcons();
+        List<Degrees> adjustAngles = handler.getAdjustedAngles();
+        List<Double> adjustedRadius = handler.getAdjustedRadius();
         for(int i = 0 ; i < friends.size() ; i++){
             TextView curView = friends.get(i);
             ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) curView.getLayoutParams();
-            params.circleRadius = friendDistances.get(i).intValue();
-            params.circleAngle = (float) Degrees.subtractDegrees(friendOrientation.get(i),userDirection).getDegrees();
+            params.circleRadius = adjustedRadius.get(i).intValue();
+            params.circleAngle = (float) adjustAngles.get(i).getDegrees();
             if(params.circleRadius == LARGEST_RADIUS) {
                 params.circleRadius += 13;
                 activity.runOnUiThread(() -> {
@@ -132,17 +132,6 @@ public class UserIconManager {
         }
     }
 
-    public ConstraintLayout.LayoutParams adjustViewParams(ConstraintLayout.LayoutParams params, int order, Degrees userDirection,
-                                                          Degrees friendOrientation, Double friendDistance){
-        TextView viewToMove = friends.get(order);
-        for(int i = 1; i < order; i++){
-                int collision = IconCollisionHandler.checkTopDownCollision(viewToMove, friends.get(i));
-
-        }
-            params.circleRadius = friendDistance.intValue();
-            params.circleAngle = (float) Degrees.subtractDegrees(friendOrientation,userDirection).getDegrees();
-            return params;
-    }
     public void destroyTextViews(){
         for(TextView tv: friends){
             ViewGroup parent = ((ViewGroup)tv.getParent());
