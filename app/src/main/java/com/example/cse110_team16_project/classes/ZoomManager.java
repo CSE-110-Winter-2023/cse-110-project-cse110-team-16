@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.Image;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,6 +32,8 @@ public class ZoomManager {
         this.zoomLevel = readZoomLevel();
         this.sdu = sdu;
         setZoomButtonVisibility();
+        setRing();
+        sdu.setZoneSetting(zoomLevel);
     }
 
     private void setUpZoomSharedPref(){
