@@ -47,6 +47,10 @@ public class AddNameActivity extends AppCompatActivity {
     public void onSubmitNameClicked(View view) {
         EditText editName = findViewById(R.id.YourNameField);
         String name = editName.getText().toString();
+        if(name.length() == 0) {
+            Utilities.showAlert(this,"Please enter a valid name.");
+            return;
+        }
         String private_code = UUID.randomUUID().toString();
         String public_code = UUID.randomUUID().toString();
 

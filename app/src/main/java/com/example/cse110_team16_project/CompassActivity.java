@@ -7,12 +7,6 @@ import static com.example.cse110_team16_project.AddNameActivity.urlFileName;
 import static com.example.cse110_team16_project.classes.Misc.Constants.APP_REQUEST_CODE;
 
 import android.Manifest;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,17 +15,23 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
-import com.example.cse110_team16_project.classes.Updaters.AbsoluteDirectionUpdater;
-import com.example.cse110_team16_project.classes.DeviceInfo.DeviceTracker;
-import com.example.cse110_team16_project.classes.Updaters.DistanceUpdater;
-import com.example.cse110_team16_project.classes.LiveDataListMerger;
-import com.example.cse110_team16_project.classes.Updaters.ScreenDistanceUpdater;
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
-import com.example.cse110_team16_project.classes.UI.CompassUIManager;
-import com.example.cse110_team16_project.classes.Misc.Constants;
+import com.example.cse110_team16_project.classes.DeviceInfo.DeviceTracker;
 import com.example.cse110_team16_project.classes.GPSStatus;
+import com.example.cse110_team16_project.classes.LiveDataListMerger;
+import com.example.cse110_team16_project.classes.Misc.Constants;
+import com.example.cse110_team16_project.classes.UI.CompassUIManager;
+import com.example.cse110_team16_project.classes.UI.UserIconManager;
+import com.example.cse110_team16_project.classes.Updaters.AbsoluteDirectionUpdater;
+import com.example.cse110_team16_project.classes.Updaters.DistanceUpdater;
+import com.example.cse110_team16_project.classes.Updaters.ScreenDistanceUpdater;
 import com.example.cse110_team16_project.classes.UserLocationSync;
 
 
@@ -46,11 +46,13 @@ public class CompassActivity extends AppCompatActivity {
     private SCLocationRepository repo;
 
     private RepositoryMediator mediator;
-    private LiveDataListMerger<SCLocation> locations = null;
+    private LiveDataListMerger<SCLocation> locations = new LiveDataListMerger<>();
 
     private DistanceUpdater distanceUpdater;
     private AbsoluteDirectionUpdater absoluteDirectionUpdater;
     private ScreenDistanceUpdater screenDistanceUpdater;
+    private UserIconManager userIconManager;
+
 
 
 
@@ -61,9 +63,10 @@ public class CompassActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         setContentView(R.layout.activity_compass);
+        //getLayoutInflater().inflate(R.layout.activity_compass,null);
         handleLocationPermission();
 
-
+        setIntent(getIntent().putExtra("locationsChanged",true));
     }
 
     private void finishOnCreate(){
@@ -73,10 +76,12 @@ public class CompassActivity extends AppCompatActivity {
 
         deviceTracker = new DeviceTracker(this);
         deviceTracker.registerListeners(); //battery life is a social construct
-        compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
+        setupUpdaters();
+        setupUI();
         gpsstatus = new GPSStatus(deviceTracker.getLocation(), findViewById(R.id.gpsLight), findViewById(R.id.gpsText));
         UserLocationSync locationSync = new UserLocationSync(deviceTracker.getCoordinates(),
                 new SCLocation(userLabel,public_code),private_code, this, repo);
+
     }
 
 
@@ -101,7 +106,9 @@ public class CompassActivity extends AppCompatActivity {
         screenDistanceUpdater.startObserve(distanceUpdater.getLastKnownEntityDistancesFromUser());
     }
     private void setupUI(){
-
+        compassUIManager = new CompassUIManager(this, deviceTracker.getOrientation(), findViewById(R.id.compassRing));
+        userIconManager = new UserIconManager(this, screenDistanceUpdater.getScreenDistances(), absoluteDirectionUpdater.getLastKnownEntityDirectionsFromUser(),
+                 deviceTracker.getOrientation());
     }
 
     private void handleLocationPermission(){
@@ -144,17 +151,21 @@ public class CompassActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
 
+
         if (this.repo != null){
             Log.d("Number of locations","" + repo.getLocalPublicCodes().size());
-            if (locations == null || getIntent().getBooleanExtra("locationsChanged",false)){
-                Log.d("CompassActivity","Locations changed!");
-                if(locations != null) locations.stopUpdating();
-                locations = new LiveDataListMerger<>(mediator.refreshSCLocations(repo.getLocalPublicCodes()));
-                setupUpdaters();
-                setupUI();
+            if (getIntent().getBooleanExtra("locationsChanged",false)){
+                onLocationsChanged();
             }
         }
         if(gpsstatus != null) gpsstatus.trackGPSStatus();
+    }
+
+    private void onLocationsChanged() {
+        Log.d("CompassActivity","Locations changed!");
+        locations.stopUpdating();
+        locations.startObserving(mediator.refreshSCLocations(repo.getLocalPublicCodes()));
+        userIconManager.onFriendsChanged(repo.getLocalLabels());
     }
 
     @Override

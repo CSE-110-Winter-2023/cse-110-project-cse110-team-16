@@ -16,6 +16,8 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class SCLocationRepository {
+
+    public static final int LIVE_UPDATE_TIME_MS = 500;
     private final SCLocationDao dao;
     private final SCLocationAPI api;
     public SCLocationRepository(SCLocationDao dao) {
@@ -26,7 +28,6 @@ public class SCLocationRepository {
         this(dao);
         if(mockUrl.length() != 0) api.setUrl(mockUrl);
     }
-
     private final List<ScheduledFuture<?>> remoteUpdateThreads = new ArrayList<>();
 
     // Synced Methods
@@ -86,6 +87,8 @@ public class SCLocationRepository {
 
     public List<String> getLocalPublicCodes() { return dao.getAllPublicCodes();}
 
+    public List<String> getLocalLabels() {return dao.getAllLabels();}
+
     //TODO: Reminder that dao.insert is used here and not dao.upsert
     public void upsertLocal(SCLocation scLocation) {
         dao.insert(scLocation);
@@ -134,7 +137,7 @@ public class SCLocationRepository {
         var executor = Executors.newSingleThreadScheduledExecutor();
         remoteUpdateThreads.add(
             executor.scheduleAtFixedRate(() -> scLocation.postValue(api.getSCLocation(public_code)),
-                    0,3, TimeUnit.SECONDS)
+                    0, LIVE_UPDATE_TIME_MS, TimeUnit.MILLISECONDS)
         );
         return scLocation;
     }
@@ -153,7 +156,7 @@ public class SCLocationRepository {
             if (location != null) {
                 api.patchSCLocation(location,private_code,false);
             }
-        }, 0,3, TimeUnit.SECONDS);
+        }, 0,LIVE_UPDATE_TIME_MS, TimeUnit.MILLISECONDS);
     }
 
     public void killAllRemoteLiveThreads(){

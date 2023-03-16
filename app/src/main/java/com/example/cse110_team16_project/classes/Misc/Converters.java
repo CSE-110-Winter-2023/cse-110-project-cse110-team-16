@@ -61,6 +61,7 @@ public class Converters {
     }
 
     public static Miles metersToMiles(Meters meters) {
+        if(meters == null) return null;
         return new Miles(meters.getMeters()*.0006213712);
     }
 

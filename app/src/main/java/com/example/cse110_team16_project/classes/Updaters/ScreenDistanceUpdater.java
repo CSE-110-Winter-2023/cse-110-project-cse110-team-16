@@ -14,8 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ScreenDistanceUpdater {
-    public static final double LARGEST_RADIUS = 45; //set to whatever proper value
-    public static final int[] MILES_DISTANCES = new int[]{0, 1, 10, 500}; //first index is zero for calculations
+    public static final double LARGEST_RADIUS = 500; //set to whatever proper value
+
+    private static final int LARGEST_EARTH_DISTANCE = 12500;
+    public static final int[] MILES_DISTANCES = new int[]{0, 1, 10, 500, LARGEST_EARTH_DISTANCE}; //first index is zero for calculations
 
     private final MutableLiveData<List<Double>> screenDistances = new MutableLiveData<>();
     private final Activity activity;
@@ -25,7 +27,7 @@ public class ScreenDistanceUpdater {
 
     public void startObserve(LiveData<List<Meters>> distances) {
         distances.observe((LifecycleOwner) activity, (obvDistances) -> {
-            findScreenDistance(obvDistances,3);
+            screenDistances.postValue(findScreenDistance(obvDistances,4));
         });
     }
     public List<Double> findScreenDistance(List<Meters> meters, int numZones) {
@@ -33,6 +35,10 @@ public class ScreenDistanceUpdater {
         if(miles == null) return null;
         List<Double> screenDistances = new ArrayList<>();
         for(Miles mile: miles){
+            if(mile == null) {
+                screenDistances.add(null);
+                continue;
+            }
             if(mile.getMiles() > MILES_DISTANCES[numZones]) {
                 screenDistances.add(LARGEST_RADIUS);
                 continue;

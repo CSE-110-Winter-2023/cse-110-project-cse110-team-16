@@ -36,6 +36,9 @@ public abstract class SCLocationDao {
     @Query("SELECT public_code FROM location ORDER BY public_code")
     public abstract List<String> getAllPublicCodes();
 
+    @Query("SELECT label FROM location ORDER BY public_code")
+    public abstract List<String> getAllLabels();
+
     @Query("DELETE FROM location WHERE public_code=:public_code")
     public abstract void deleteByCode(String public_code);
 

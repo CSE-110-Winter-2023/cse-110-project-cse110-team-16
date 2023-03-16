@@ -34,7 +34,8 @@ public class LiveDataListMergerTest {
         listToConvert.add(l2);
         listToConvert.add(l3);
 
-        LiveDataListMerger<Double> merger = new LiveDataListMerger<>(listToConvert);
+        LiveDataListMerger<Double> merger = new LiveDataListMerger<>();
+        merger.startObserving(listToConvert);
         try {
             Thread.sleep(UPDATE_TIME + 1000);
         } catch (InterruptedException e) {
