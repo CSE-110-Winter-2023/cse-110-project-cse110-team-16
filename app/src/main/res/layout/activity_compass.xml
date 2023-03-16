@@ -140,6 +140,7 @@
         android:id="@+id/toListActivityButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:enabled="false"
         android:onClick="ontoListClicked"
         android:text="Edit Locations"
         app:layout_constraintEnd_toEndOf="@id/rightGuide"

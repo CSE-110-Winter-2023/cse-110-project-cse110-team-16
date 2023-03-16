@@ -35,6 +35,9 @@ import com.example.cse110_team16_project.classes.Updaters.ScreenDistanceUpdater;
 import com.example.cse110_team16_project.classes.UserLocationSync;
 import com.example.cse110_team16_project.classes.ZoomManager;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 
 public class CompassActivity extends AppCompatActivity {
 
@@ -82,6 +85,11 @@ public class CompassActivity extends AppCompatActivity {
         UserLocationSync locationSync = new UserLocationSync(deviceTracker.getCoordinates(),
                 new SCLocation(userLabel,public_code),private_code, this, repo);
         zoomManager = new ZoomManager(this, screenDistanceUpdater);
+        Executors.newSingleThreadScheduledExecutor().schedule(() ->
+            {
+                this.runOnUiThread(() ->  this.findViewById(R.id.toListActivityButton).setEnabled(true));},
+            5, TimeUnit.SECONDS);
+
     }
 
 
