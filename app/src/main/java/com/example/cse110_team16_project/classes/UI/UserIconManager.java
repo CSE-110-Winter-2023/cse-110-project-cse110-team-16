@@ -15,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 
+import com.example.cse110_team16_project.IconCollisionHandler;
 import com.example.cse110_team16_project.R;
 import com.example.cse110_team16_project.classes.Misc.Converters;
 import com.example.cse110_team16_project.classes.Units.Degrees;
@@ -131,6 +132,17 @@ public class UserIconManager {
         }
     }
 
+    public ConstraintLayout.LayoutParams adjustViewParams(ConstraintLayout.LayoutParams params, int order, Degrees userDirection,
+                                                          Degrees friendOrientation, Double friendDistance){
+        TextView viewToMove = friends.get(order);
+        for(int i = 1; i < order; i++){
+                int collision = IconCollisionHandler.checkTopDownCollision(viewToMove, friends.get(i));
+
+        }
+            params.circleRadius = friendDistance.intValue();
+            params.circleAngle = (float) Degrees.subtractDegrees(friendOrientation,userDirection).getDegrees();
+            return params;
+    }
     public void destroyTextViews(){
         for(TextView tv: friends){
             ViewGroup parent = ((ViewGroup)tv.getParent());
@@ -142,4 +154,5 @@ public class UserIconManager {
     public List<TextView> getTextViews(){
         return this.friends;
     }
+
 }
