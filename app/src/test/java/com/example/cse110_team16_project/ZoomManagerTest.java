@@ -38,19 +38,18 @@ public class ZoomManagerTest {
             ZoomManager zoomManager = new ZoomManager(activity, sdu);
 
             // Start at default zoom
-            assertEquals(4, zoomManager.getZoomLevel());
-            assertEquals(4, zoomManager.readZoomLevel());
-
-            // Zoom in twice
-            zoomManager.zoomIn();
-            zoomManager.zoomIn();
             assertEquals(2, zoomManager.getZoomLevel());
             assertEquals(2, zoomManager.readZoomLevel());
 
+            // Zoom in twice
+            zoomManager.zoomIn();
+            assertEquals(1, zoomManager.getZoomLevel());
+            assertEquals(1, zoomManager.readZoomLevel());
+
             // Zoom out once
             zoomManager.zoomOut();
-            assertEquals(3, zoomManager.getZoomLevel());
-            assertEquals(3, zoomManager.readZoomLevel());
+            assertEquals(2, zoomManager.getZoomLevel());
+            assertEquals(2, zoomManager.readZoomLevel());
         });
     }
 
@@ -70,14 +69,14 @@ public class ZoomManagerTest {
             List<ImageView> rings = Arrays.asList(ringsArr);
 
             // Start at default zoom
-            for (ImageView r : rings) {
-                assertEquals(View.VISIBLE, r.getVisibility());
+            for (int i = 0; i < ringsArr.length; ++i) {
+                if (i < 2) assertEquals(View.INVISIBLE, ringsArr[i].getVisibility());
+                else assertEquals(View.VISIBLE, ringsArr[i].getVisibility());
             }
 
-            // Zoom in three times
+            // Zoom in one time
             zoomManager.zoomIn();
-            zoomManager.zoomIn();
-            zoomManager.zoomIn();
+
             for (ImageView r : rings) {
                 if (r != ring4) assertEquals(View.INVISIBLE, r.getVisibility());
                 else assertEquals(View.VISIBLE, r.getVisibility());
