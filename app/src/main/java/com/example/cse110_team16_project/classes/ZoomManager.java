@@ -17,7 +17,7 @@ import org.w3c.dom.Text;
 
 public class ZoomManager {
     private static final int ZOOMERROR = -1;
-    private static final int ZOOMDEFAULT = 4;
+    private static final int ZOOMDEFAULT = 2;
 
 
     private Activity activity;
