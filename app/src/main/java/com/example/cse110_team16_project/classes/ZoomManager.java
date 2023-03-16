@@ -70,6 +70,7 @@ public class ZoomManager {
         putZoomLevel(--zoomLevel);
         sdu.setZoneSetting(zoomLevel);
         setZoomButtonVisibility();
+        setRing();
     }
 
     public void zoomOut(){
@@ -83,7 +84,6 @@ public class ZoomManager {
         var editor = sharedPref.edit();
         editor.putInt("zoomLevel", level);
         editor.apply();
-        setRing();
     }
 
     private void setRingSize(ImageView iv, int width){
