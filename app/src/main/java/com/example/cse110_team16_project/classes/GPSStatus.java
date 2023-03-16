@@ -56,8 +56,8 @@ public class GPSStatus {
         return locationAge < TIME_THRESHOLD;
     }
 
-    public void updateGPSLostTime() {
-        long locationAge = getLocationAge(System.currentTimeMillis());
+    public void updateGPSLostTime(long currentMillis) {
+        long locationAge = getLocationAge(currentMillis);
         if (locationAge < ONE_HOUR) {
             this.gpsText.setText(Converters.milisecToMins(locationAge) + "m");
         } else {
@@ -67,7 +67,8 @@ public class GPSStatus {
 
     public void trackGPSStatus() {
         var executor = Executors.newSingleThreadScheduledExecutor();
-        future = executor.scheduleAtFixedRate(this::updateGPSStatus, 0, REFRESH_PERIOD, TimeUnit.MILLISECONDS);
+        future = executor.scheduleAtFixedRate(() -> updateGPSStatus(System.currentTimeMillis()),
+                0, REFRESH_PERIOD, TimeUnit.MILLISECONDS);
     }
 
     public void stopTracking() {
@@ -76,16 +77,16 @@ public class GPSStatus {
         }
     }
 
-    public void updateGPSStatus(){
+    public void updateGPSStatus(long currentMillis){
         try {
             this.initTime += REFRESH_PERIOD;
-            if (isLocationLive(System.currentTimeMillis()) && this.location.getValue() != null) {
+            if (isLocationLive(currentMillis) && this.location.getValue() != null) {
                 this.setGreen();
                 this.gpsText.setText("");
                 Log.d("GPS", "GPS status set to green");
             } else {
                 this.setRed();
-                updateGPSLostTime();
+                updateGPSLostTime(currentMillis);
                 Log.d("GPS", "GPS status set to red");
             }
         } catch (Exception e) {

@@ -68,26 +68,27 @@ public class Story8ScenarioTest {
         scenario.onActivity(activity -> {
             MutableLiveData<Location> mockLiveLoc = new MutableLiveData<>();
             Location mockLoc = new Location("dummy provider");
-            long timeElapsed = System.currentTimeMillis()-60000;
-            mockLoc.setTime(timeElapsed);
+            long currentTime = 10000000;
+            mockLoc.setTime(currentTime);
             mockLoc.setLatitude(100);
             mockLoc.setLongitude(-100);
             GPSStatus mockGPSStatus = new GPSStatus(mockLiveLoc, activity.findViewById(R.id.gpsLight),
                     activity.findViewById(R.id.gpsText));
             mockLiveLoc.setValue(mockLoc);
-            mockGPSStatus.updateGPSStatus();
+            currentTime += 60000;
+            mockGPSStatus.updateGPSStatus(currentTime);
             TextView gpsText = activity.findViewById(R.id.gpsText);
             assertEquals("1m", gpsText.getText().toString());
 
             // turn gps off for another min
-            mockLoc.setTime(timeElapsed-=60000);
-            mockGPSStatus.setMockLocation(mockLoc);
-            mockGPSStatus.updateGPSStatus();
+            currentTime += 60000;
+            mockGPSStatus.updateGPSStatus(currentTime);
             assertEquals("2m", gpsText.getText().toString());
             // turn gps back on for 30s
-            mockLoc.setTime(System.currentTimeMillis());
+            mockLoc.setTime(currentTime);
             mockGPSStatus.setMockLocation(mockLoc);
-            mockGPSStatus.updateGPSStatus();
+            currentTime += 30000;
+            mockGPSStatus.updateGPSStatus(currentTime);
             assertEquals("", gpsText.getText().toString());
         });
     }
@@ -102,22 +103,20 @@ public class Story8ScenarioTest {
         scenario.onActivity(activity -> {
             MutableLiveData<Location> mockLiveLoc = new MutableLiveData<>();
             Location mockLoc = new Location("dummy provider");
-            long timeElapsed = System.currentTimeMillis();
-            mockLoc.setTime(timeElapsed);
+            long currentTime = 10000000;
+            mockLoc.setTime(currentTime);
             mockLoc.setLatitude(100);
             mockLoc.setLongitude(-100);
             mockLiveLoc.setValue(mockLoc);
             GPSStatus mockGPSStatus = new GPSStatus(mockLiveLoc, activity.findViewById(R.id.gpsLight),
                     activity.findViewById(R.id.gpsText));
-            mockLoc.setTime(timeElapsed-= 59*60000);
-            mockLiveLoc.setValue(mockLoc);
-            mockGPSStatus.updateGPSStatus();
+            currentTime+=59*60000;
+            mockGPSStatus.updateGPSStatus(currentTime);
             TextView gpsText = activity.findViewById(R.id.gpsText);
             assertEquals("59m", gpsText.getText().toString());
 
-            mockLoc.setTime(timeElapsed-= 60000);
-            mockLiveLoc.setValue(mockLoc);
-            mockGPSStatus.updateGPSStatus();
+            currentTime+=60000;
+            mockGPSStatus.updateGPSStatus(currentTime);
             assertEquals("1h", gpsText.getText().toString());
         });
     }

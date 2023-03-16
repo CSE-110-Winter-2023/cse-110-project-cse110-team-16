@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 import com.example.cse110_team16_project.classes.Misc.Constants;
@@ -23,7 +24,8 @@ import com.example.cse110_team16_project.classes.Misc.Utilities;
 import java.util.UUID;
 
 public class AddNameActivity extends AppCompatActivity {
-
+    public static final String urlFileName = "UrlFile";
+    public static final String mockURLKey = "mockURL";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +44,7 @@ public class AddNameActivity extends AppCompatActivity {
         });
     }
 
-    public void onSubmitClicked(View view) {
+    public void onSubmitNameClicked(View view) {
         EditText editName = findViewById(R.id.YourNameField);
         String name = editName.getText().toString();
         if(name.length() == 0) {
@@ -52,8 +54,8 @@ public class AddNameActivity extends AppCompatActivity {
         String private_code = UUID.randomUUID().toString();
         String public_code = UUID.randomUUID().toString();
 
-        SharedPreferences sharedPref = this.getSharedPreferences(Constants.SharedPreferences.user_info, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
+        SharedPreferences sharedPrefName = this.getSharedPreferences(Constants.SharedPreferences.user_info, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPrefName.edit();
 
         editor.putString(Constants.SharedPreferences.label, name);
         editor.putString(Constants.SharedPreferences.private_code, private_code);
@@ -63,11 +65,29 @@ public class AddNameActivity extends AppCompatActivity {
 
         Log.d("AddName", "name is " + name + ".");
         Log.d("AddName", "private code is " + private_code + ".");
+        SharedPreferences sharedPrefUrl = this.getSharedPreferences(urlFileName, Context.MODE_PRIVATE);
+        String APIUrl = sharedPrefUrl.getString(mockURLKey, "");
         SCLocationRepository repo = new SCLocationRepository(SCLocationDatabase.
-                provide(this).getDao());
+                provide(this).getDao(),APIUrl);
         SCLocation newUser = new SCLocation(name,public_code);
         repo.upsertRemote(newUser,private_code);
         finish();
         startActivity(new Intent(this, CompassActivity.class));
+    }
+
+    public void onSubmitUrlClicked(View view) {
+        EditText editUrl = findViewById(R.id.mockUrlField);
+        String mockUrl = editUrl.getText().toString();
+        if(mockUrl.length() == 0){
+            Utilities.showError(this,"No URL inputted. API URL remains unchanged");
+            return;
+        }
+
+        SharedPreferences sharedPref = this.getSharedPreferences(urlFileName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+        editor.putString(mockURLKey, mockUrl);
+
+        editor.apply();
     }
 }

@@ -1,6 +1,11 @@
 package com.example.cse110_team16_project.classes;
+import static com.example.cse110_team16_project.AddNameActivity.mockURLKey;
+import static com.example.cse110_team16_project.AddNameActivity.urlFileName;
+
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -9,6 +14,7 @@ import androidx.lifecycle.LiveData;
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
+import com.example.cse110_team16_project.classes.Misc.Constants;
 import com.example.cse110_team16_project.classes.Misc.Utilities;
 
 import java.util.List;
@@ -22,7 +28,9 @@ public class ListViewModel extends AndroidViewModel {
         var context = application.getApplicationContext();
         var db = SCLocationDatabase.provide(context);
         var dao = db.getDao();
-        this.repo = new SCLocationRepository(dao);
+        SharedPreferences sharedPrefUrl = application.getSharedPreferences(urlFileName, Context.MODE_PRIVATE);
+        String APIUrl = sharedPrefUrl.getString(mockURLKey, "");
+        repo = new SCLocationRepository(dao,APIUrl);
     }
 
     /**
