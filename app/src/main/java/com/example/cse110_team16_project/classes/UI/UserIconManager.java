@@ -114,14 +114,18 @@ public class UserIconManager {
             params.circleRadius = friendDistances.get(i).intValue();
             params.circleAngle = (float) Degrees.subtractDegrees(friendOrientation.get(i),userDirection).getDegrees();
             if(params.circleRadius == LARGEST_RADIUS) {
+                params.circleRadius += 13;
                 activity.runOnUiThread(() -> {
-                    curView.setText("O");
+                    curView.setText("⬤");
                     curView.setTextColor(Color.RED);
                 });
             }
             else {
                 String reAddLabel = friendLabels.get(i);
-                activity.runOnUiThread(() -> curView.setText(reAddLabel));
+                activity.runOnUiThread(() -> {
+                    curView.setText(reAddLabel);
+                    curView.setTextColor(Color.BLUE);
+                });
             }
             activity.runOnUiThread(() -> curView.setLayoutParams(params));
         }
