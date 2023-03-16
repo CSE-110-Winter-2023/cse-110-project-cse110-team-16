@@ -72,8 +72,8 @@ public class IconCollisionHandler {
     }
 
     public Rect calculateTopDownCheckRectangle(Double dist1, Degrees deg1){
-        int x1 = (int) (dist1*Math.cos(Converters.DegreesToRadians(deg1).getRadians()));
-        int y1 = (int) (dist1*Math.sin(Converters.DegreesToRadians(deg1).getRadians()));
+        int x1 = (int) (dist1*Math.cos(Converters.DegreesToRadians(deg1).getRadians()-Math.PI/2));
+        int y1 = (int) (dist1*Math.sin(Converters.DegreesToRadians(deg1).getRadians()-Math.PI/2));
         return new Rect(x1-WIDTH_TOP_DOWN_CHECK/2, y1-HEIGHT/2, x1+WIDTH_TOP_DOWN_CHECK/2, y1+HEIGHT/2);
     }
     public boolean checkTopDownCollision(Rect rect1, Rect rect2){
