@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.cse110_team16_project.classes.Misc.Constants;
-
-public class zoomManager {
+public class ZoomManager {
     private static final int ZOOMERROR = -1;
     private static final int ZOOMDEFAULT = 4;
 
@@ -15,7 +13,7 @@ public class zoomManager {
 
     private SharedPreferences sharedPref;
 
-    public zoomManager(Activity activity){
+    public ZoomManager(Activity activity){
         this.activity = activity;
         this.sharedPref = activity.getSharedPreferences("user_info", Context.MODE_PRIVATE);
         setUpZoomSharedPref();
