@@ -4,6 +4,7 @@ import static com.example.cse110_team16_project.classes.Updaters.ScreenDistanceU
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,6 +72,7 @@ public class UserIconManager {
             // Get the CompassActivity layout
             TextView addFriend = new TextView(activity);
             addFriend.setText(friendLabels.get(i));
+            addFriend.setTextColor(Color.BLUE);
             addFriend.setId(View.generateViewId());
             friends.add(addFriend);
         }
@@ -88,9 +90,9 @@ public class UserIconManager {
             params.topToTop = R.id.MainLayout;
             tv.setLayoutParams(params);
             Context context = activity;
-            Drawable top = context.getResources().getDrawable(R.drawable.friend_triangle);
-            tv.setTag(R.drawable.friend_triangle); // check tag during testing to see if any tv's are displayed
-            tv.setCompoundDrawablesWithIntrinsicBounds(null, top, null, null);
+//            Drawable top = context.getResources().getDrawable(R.drawable.friend_triangle);
+//            tv.setTag(R.drawable.friend_triangle); // check tag during testing to see if any tv's are displayed
+//            tv.setCompoundDrawablesWithIntrinsicBounds(null, top, null, null);
             parentLayout.addView(tv);
     }
 
