@@ -33,6 +33,10 @@ import com.example.cse110_team16_project.classes.Updaters.AbsoluteDirectionUpdat
 import com.example.cse110_team16_project.classes.Updaters.DistanceUpdater;
 import com.example.cse110_team16_project.classes.Updaters.ScreenDistanceUpdater;
 import com.example.cse110_team16_project.classes.UserLocationSync;
+import com.example.cse110_team16_project.classes.ZoomManager;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 
 public class CompassActivity extends AppCompatActivity {
@@ -53,8 +57,7 @@ public class CompassActivity extends AppCompatActivity {
     private ScreenDistanceUpdater screenDistanceUpdater;
     private UserIconManager userIconManager;
 
-
-
+    private ZoomManager zoomManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +84,11 @@ public class CompassActivity extends AppCompatActivity {
         gpsstatus = new GPSStatus(deviceTracker.getLocation(), findViewById(R.id.gpsLight), findViewById(R.id.gpsText));
         UserLocationSync locationSync = new UserLocationSync(deviceTracker.getCoordinates(),
                 new SCLocation(userLabel,public_code),private_code, this, repo);
+        zoomManager = new ZoomManager(this, screenDistanceUpdater);
+        Executors.newSingleThreadScheduledExecutor().schedule(() ->
+            {
+                this.runOnUiThread(() ->  this.findViewById(R.id.toListActivityButton).setEnabled(true));},
+            5, TimeUnit.SECONDS);
 
     }
 
@@ -102,7 +110,7 @@ public class CompassActivity extends AppCompatActivity {
     private void setupUpdaters() {
         distanceUpdater = new DistanceUpdater(this,locations.getMergedList(),deviceTracker.getCoordinates());
         absoluteDirectionUpdater = new AbsoluteDirectionUpdater(this,locations.getMergedList(),deviceTracker.getCoordinates());
-        screenDistanceUpdater = new ScreenDistanceUpdater(this);
+        screenDistanceUpdater = new ScreenDistanceUpdater(this,4);
         screenDistanceUpdater.startObserve(distanceUpdater.getLastKnownEntityDistancesFromUser());
     }
     private void setupUI(){
@@ -189,4 +197,11 @@ public class CompassActivity extends AppCompatActivity {
         startActivity(new Intent(this, ListActivity.class));
     }
 
+    public void onZoomOut(View view) {
+        zoomManager.zoomOut();
+    }
+
+    public void onZoomIn(View view) {
+        zoomManager.zoomIn();
+    }
 }

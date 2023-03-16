@@ -70,8 +70,8 @@ public class ScreenDistanceUpdaterTest {
             distances.add(new Meters(5000000)); // 3106.855961
             distances.add(new Meters(50000)); // 31.06856
 
-            ScreenDistanceUpdater updater = new ScreenDistanceUpdater(activity);
-            List<Double> requiredDistances = updater.findScreenDistance(distances,3);
+            ScreenDistanceUpdater updater = new ScreenDistanceUpdater(activity,3);
+            List<Double> requiredDistances = updater.findScreenDistance(distances);
             assertEquals(Converters.metersToMiles(new Meters(300)).getMiles()*
                     ScreenDistanceUpdater.LARGEST_RADIUS/3,requiredDistances.get(0),0.1);
             assertEquals((Converters.metersToMiles(new Meters(2000)).getMiles()/9 + 1)*

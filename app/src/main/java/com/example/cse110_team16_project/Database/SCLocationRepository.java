@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 public class SCLocationRepository {
 
-    public static final int LIVE_UPDATE_TIME_MS = 500;
+    public static final int LIVE_UPDATE_TIME_MS = 1000;
     private final SCLocationDao dao;
     private final SCLocationAPI api;
     public SCLocationRepository(SCLocationDao dao) {
