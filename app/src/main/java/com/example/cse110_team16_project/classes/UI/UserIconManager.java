@@ -1,12 +1,10 @@
 package com.example.cse110_team16_project.classes.UI;
 
-import static com.example.cse110_team16_project.IconCollisionHandler.*;
 import static com.example.cse110_team16_project.classes.Updaters.ScreenDistanceUpdater.LARGEST_RADIUS;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -16,13 +14,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 
-import com.example.cse110_team16_project.IconCollisionHandler;
+import com.example.cse110_team16_project.IconStacker;
 import com.example.cse110_team16_project.R;
 import com.example.cse110_team16_project.classes.Misc.Converters;
 import com.example.cse110_team16_project.classes.Units.Degrees;
 import com.example.cse110_team16_project.classes.Units.Radians;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +72,8 @@ public class UserIconManager {
             TextView addFriend = new TextView(activity);
             addFriend.setText(friendLabels.get(i));
             addFriend.setTextColor(Color.BLUE);
+            addFriend.setMaxLines(1);
+            addFriend.setEllipsize(TextUtils.TruncateAt.END);
             addFriend.setId(View.generateViewId());
             friends.add(addFriend);
         }
@@ -106,10 +104,10 @@ public class UserIconManager {
         }
 
         if(friends.size() != friendOrientation.size() || friends.size() != friendDistances.size()) return;
-        IconCollisionHandler handler = new IconCollisionHandler(userDirection, friendOrientation, friendDistances);
-        handler.adjustIcons();
-        List<Degrees> adjustAngles = handler.getAdjustedAngles();
-        List<Double> adjustedRadius = handler.getAdjustedRadius();
+        IconStacker stacker = new IconStacker(userDirection, friendOrientation, friendDistances);
+        stacker.adjustIcons();
+        List<Degrees> adjustAngles = stacker.getAdjustedAngles();
+        List<Double> adjustedRadius = stacker.getAdjustedRadius();
         for(int i = 0 ; i < friends.size() ; i++){
             TextView curView = friends.get(i);
             ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) curView.getLayoutParams();
