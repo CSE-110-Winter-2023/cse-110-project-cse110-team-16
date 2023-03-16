@@ -45,7 +45,11 @@ public class ZoomManager {
         }
     }
 
-    private int readZoomLevel(){
+    public int getZoomLevel() {
+        return this.zoomLevel;
+    }
+
+    public int readZoomLevel(){
         return sharedPref.getInt("zoomLevel", ZOOMDEFAULT);
     }
 
