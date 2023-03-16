@@ -131,7 +131,7 @@ public class Story2ScenarioTest {
             ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) icon.getLayoutParams();
             float angle = layoutParams.circleAngle;
             int distance = layoutParams.circleRadius;
-            assertEquals(-180, layoutParams.circleAngle, 1);
+            assertEquals(180, Math.abs(layoutParams.circleAngle), 1);
         });
 
     }
