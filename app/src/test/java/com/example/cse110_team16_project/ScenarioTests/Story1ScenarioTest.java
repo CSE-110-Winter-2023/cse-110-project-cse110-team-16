@@ -34,6 +34,7 @@ import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import java.io.IOException;
 import java.util.List;
 
 import okhttp3.mockwebserver.Dispatcher;
@@ -50,21 +51,23 @@ public class Story1ScenarioTest {
 
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
-    @Rule
-    public MockWebServer mockWebServer = new MockWebServer();
+    MockWebServer mockWebServer;
+
     @Before
-    public void createDb(){
+    public void createDb() throws IOException {
         Context context = ApplicationProvider.getApplicationContext();
         db = Room.inMemoryDatabaseBuilder(context, SCLocationDatabase.class)
                 .allowMainThreadQueries()
                 .build();
         dao = db.getDao();
         SCLocationDatabase.inject(db);
+        mockWebServer = new MockWebServer();
     }
 
     @After
     public void closeDb() throws Exception {
         db.close();
+        mockWebServer.shutdown();
     }
 
     @Test

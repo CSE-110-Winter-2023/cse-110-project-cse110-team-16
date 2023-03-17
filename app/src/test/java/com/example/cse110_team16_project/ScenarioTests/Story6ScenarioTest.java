@@ -27,6 +27,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import java.io.IOException;
+
 import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -40,22 +42,23 @@ public class Story6ScenarioTest {
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
-    @Rule
-    public MockWebServer mockWebServer = new MockWebServer();
+    MockWebServer mockWebServer;
 
     @Before
-    public void createDb(){
+    public void createDb() throws IOException {
         Context context = ApplicationProvider.getApplicationContext();
         db = Room.inMemoryDatabaseBuilder(context, SCLocationDatabase.class)
                 .allowMainThreadQueries()
                 .build();
         dao = db.getDao();
         SCLocationDatabase.inject(db);
+        mockWebServer = new MockWebServer();
     }
 
     @After
     public void closeDb() throws Exception {
         db.close();
+        mockWebServer.shutdown();
     }
 
     @Test

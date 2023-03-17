@@ -34,6 +34,8 @@ import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import java.io.IOException;
+
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
@@ -55,22 +57,23 @@ public class SCLocationAPITest {
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule
             .grant(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION);
 
-    @Rule
-    public MockWebServer mockWebServer = new MockWebServer();
+    MockWebServer mockWebServer;
 
     @Before
-    public void createDb(){
+    public void createDb() throws IOException {
         Context context = ApplicationProvider.getApplicationContext();
         db = Room.inMemoryDatabaseBuilder(context, SCLocationDatabase.class)
                 .allowMainThreadQueries()
                 .build();
         dao = db.getDao();
         SCLocationDatabase.inject(db);
+        mockWebServer = new MockWebServer();
     }
 
     @After
     public void closeDb() throws Exception {
         db.close();
+        mockWebServer.shutdown();
     }
 
     @Test
