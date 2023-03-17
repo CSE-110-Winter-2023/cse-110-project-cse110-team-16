@@ -128,15 +128,6 @@
         app:srcCompat="@drawable/ms2_user_dot" />
 
     <Button
-        android:id="@+id/uidButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onUIDClicked"
-        android:text="UID/Debug"
-        app:layout_constraintStart_toStartOf="@id/leftGuide"
-        app:layout_constraintTop_toBottomOf="@id/botGuide" />
-
-    <Button
         android:id="@+id/toListActivityButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
