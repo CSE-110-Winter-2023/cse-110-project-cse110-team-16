@@ -64,6 +64,7 @@ public class SCLocationRepositoryTest {
         dao = db.getDao();
         SCLocationDatabase.inject(db);
         mockWebServer = new MockWebServer();
+        mockWebServer.start();
     }
 
     @After

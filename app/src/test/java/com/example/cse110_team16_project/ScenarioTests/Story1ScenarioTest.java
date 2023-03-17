@@ -62,6 +62,7 @@ public class Story1ScenarioTest {
         dao = db.getDao();
         SCLocationDatabase.inject(db);
         mockWebServer = new MockWebServer();
+        mockWebServer.start();
     }
 
     @After
