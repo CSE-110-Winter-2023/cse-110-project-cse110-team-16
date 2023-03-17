@@ -121,11 +121,6 @@ public class SCLocationRepositoryTest {
             repository.upsertLocal(scLocation3);
             mockWebServer.enqueue(new MockResponse().setBody(""));
             repository.deleteRemote(scLocation3.getPublicCode(), private_code);
-            try {
-                Thread.sleep(WAIT_FOR_UPDATE_TIME);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
             assertTrue(repository.existsLocal(scLocation1.getPublicCode()));
             assertFalse(repository.existsRemote(scLocation1.getPublicCode()));
         });
@@ -169,26 +164,17 @@ public class SCLocationRepositoryTest {
             } catch (ExecutionException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            mockWebServer.enqueue(new MockResponse().setBody(response));
-            mockWebServer.enqueue(new MockResponse().setBody(response));
-            mockWebServer.enqueue(new MockResponse().setBody(response));
-            mockWebServer.enqueue(new MockResponse().setBody(response));
-            mockWebServer.enqueue(new MockResponse().setBody(response));
+            final Dispatcher dispatcher = new Dispatcher() {
+                @Override
+                public MockResponse dispatch (RecordedRequest request) throws InterruptedException {
+                    return new MockResponse().setBody(response);
+                }
+            };
             LiveData<SCLocation> retrievedLocationLive = repository.getSynced(location.public_code);
-            try {
-                Thread.sleep(WAIT_FOR_UPDATE_TIME); 
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
             retrievedLocationLive.observe(activity,(retrievedNull) -> {
                 retrievedLocationLive.removeObservers(activity);
                 retrievedLocationLive.observe(activity,(retrievedLocation) -> {
                     retrievedLocationLive.removeObservers(activity);
-                    try {
-                        Thread.sleep(WAIT_FOR_UPDATE_TIME); 
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
                     assertEquals(retrievedLocation.getLabel(), location.getLabel());
                     assertEquals(retrievedLocation.getLatitude(), location.getLatitude(), 0.01);
                     assertEquals(retrievedLocation.getLongitude(), location.getLongitude(), 0.01);
@@ -220,26 +206,17 @@ public class SCLocationRepositoryTest {
             } catch (ExecutionException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            mockWebServer.enqueue(new MockResponse().setBody(response));
-            mockWebServer.enqueue(new MockResponse().setBody(response));
-            mockWebServer.enqueue(new MockResponse().setBody(response));
-            mockWebServer.enqueue(new MockResponse().setBody(response));
-            mockWebServer.enqueue(new MockResponse().setBody(response));
+            final Dispatcher dispatcher = new Dispatcher() {
+                @Override
+                public MockResponse dispatch (RecordedRequest request) throws InterruptedException {
+                    return new MockResponse().setBody(response);
+                }
+            };
             LiveData<SCLocation> retrievedLocationLive = repository.getRemoteLive(location.public_code);
-            try {
-                Thread.sleep(WAIT_FOR_UPDATE_TIME); 
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
             retrievedLocationLive.observe(activity,(retrievedNull) -> {
                 retrievedLocationLive.removeObservers(activity);
                 retrievedLocationLive.observe(activity,(retrievedLocation) -> {
                     retrievedLocationLive.removeObservers(activity);
-                    try {
-                        Thread.sleep(WAIT_FOR_UPDATE_TIME); 
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
                     assertEquals(retrievedLocation.getLabel(), location.getLabel());
                     assertEquals(retrievedLocation.getLatitude(), location.getLatitude(), 0.01);
                     assertEquals(retrievedLocation.getLongitude(), location.getLongitude(), 0.01);
