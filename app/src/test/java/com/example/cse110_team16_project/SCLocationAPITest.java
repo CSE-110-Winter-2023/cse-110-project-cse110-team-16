@@ -34,6 +34,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 
 
 @RunWith(RobolectricTestRunner.class)
@@ -83,6 +84,20 @@ public class SCLocationAPITest {
             SCLocation location = new SCLocation(3,3,label,public_code);
             mockWebServer.enqueue(new MockResponse().setBody(""));
             api.putSCLocation(location,private_code);
+            try {
+                RecordedRequest request1 = mockWebServer.takeRequest();
+                assertEquals(mockWebServer.url("/").toString()+public_code, request1.getRequestUrl().toString());
+                String requestBody = request1.getBody().readUtf8();
+                System.out.println(requestBody);
+                SCLocation retrievedLocation = SCLocation.fromJSON(requestBody);
+                assertEquals(retrievedLocation.getPublicCode(),public_code);
+                assertEquals(retrievedLocation.getLabel(),label);
+                assertEquals(retrievedLocation.getLatitude(),3,0.01);
+                assertEquals(retrievedLocation.getLongitude(),3,0.01);
+
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
 
             String response = new MockResponseBodyBuilder.Get()
                     .addLabel(label)
