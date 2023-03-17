@@ -160,12 +160,7 @@ public class SCLocationRepositoryTest {
                     .addPublicCode(public_code)
                     .build();
             mockWebServer.enqueue(new MockResponse().setBody(response));
-            Future<Void> future = repository.upsertRemote(location,location.public_code);
-            try {
-                future.get();
-            } catch (ExecutionException | InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            repository.upsertRemote(location,location.public_code);
             final Dispatcher dispatcher = new Dispatcher() {
                 @Override
                 public MockResponse dispatch (RecordedRequest request) throws InterruptedException {
@@ -203,12 +198,7 @@ public class SCLocationRepositoryTest {
                     .addPublicCode(public_code)
                     .build();
             mockWebServer.enqueue(new MockResponse().setBody(response));
-            Future<Void> future = repository.upsertRemote(location,location.public_code);
-            try {
-                future.get();
-            } catch (ExecutionException | InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            repository.upsertRemote(location,location.public_code);
             final Dispatcher dispatcher = new Dispatcher() {
                 @Override
                 public MockResponse dispatch (RecordedRequest request) throws InterruptedException {
