@@ -206,7 +206,11 @@ public class SCLocationRepositoryTest {
             liveLocation.postValue(location);
 
             repository.updateSCLocationLive(liveLocation,private_code);
-
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             SCLocation retrievedLocation = repository.getRemote(location.getPublicCode());
             assertEquals(retrievedLocation.getLabel(), location.getLabel());
             assertEquals(retrievedLocation.getLatitude(), location.getLatitude(), 0.01);
