@@ -8,9 +8,12 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.*;
+import static org.robolectric.Shadows.shadowOf;
+import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
 
 
 import android.content.Context;
+import android.os.Looper;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Lifecycle;
@@ -30,14 +33,18 @@ import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.LooperMode;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 
 @RunWith(RobolectricTestRunner.class)
+@LooperMode(PAUSED)
 public class SCLocationRepositoryTest {
 
     private final int WAIT_FOR_UPDATE_TIME = 1500;
@@ -83,11 +90,13 @@ public class SCLocationRepositoryTest {
                     .addPublicCode(public_code)
                     .build();
             mockWebServer.enqueue(new MockResponse().setBody(response));
-            try {
-                Thread.sleep(WAIT_FOR_UPDATE_TIME);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            final Dispatcher dispatcher = new Dispatcher() {
+                @Override
+                public MockResponse dispatch (RecordedRequest request) throws InterruptedException {
+                    return new MockResponse().setBody(response);
+                }
+            };
+            mockWebServer.setDispatcher(dispatcher);
             SCLocation retrievedLocation = repository.getRemote(location.getPublicCode());
             assertEquals(retrievedLocation.getLabel(),location.getLabel());
             assertEquals(retrievedLocation.getLatitude(),location.getLatitude(),0.01);
@@ -258,23 +267,18 @@ public class SCLocationRepositoryTest {
                     .build();
             mockWebServer.enqueue(new MockResponse().setBody(response));
             repository.upsertRemote(location,private_code);
-            try {
-                Thread.sleep(WAIT_FOR_UPDATE_TIME); 
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+
             MutableLiveData<SCLocation> liveLocation = new MutableLiveData<>();
             liveLocation.postValue(location);
-            mockWebServer.enqueue(new MockResponse().setBody(response));
-            mockWebServer.enqueue(new MockResponse().setBody(response));
-            mockWebServer.enqueue(new MockResponse().setBody(response));
-            mockWebServer.enqueue(new MockResponse().setBody(response));
+            String finalResponse = response;
+            final Dispatcher dispatcher1 = new Dispatcher() {
+                @Override
+                public MockResponse dispatch (RecordedRequest request) throws InterruptedException {
+                    return new MockResponse().setBody(finalResponse);
+                }
+            };
+            mockWebServer.setDispatcher(dispatcher1);
             repository.updateSCLocationLive(liveLocation,private_code);
-            try {
-                Thread.sleep(WAIT_FOR_UPDATE_TIME); 
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
 
             SCLocation retrievedLocation = repository.getRemote(location.getPublicCode());
             assertEquals(retrievedLocation.getLabel(), location.getLabel());
@@ -290,15 +294,14 @@ public class SCLocationRepositoryTest {
                     .addLongitude("3")
                     .addPublicCode(public_code)
                     .build();
-            mockWebServer.enqueue(new MockResponse().setBody(response));
-            mockWebServer.enqueue(new MockResponse().setBody(response));
-            mockWebServer.enqueue(new MockResponse().setBody(response));
-            mockWebServer.enqueue(new MockResponse().setBody(response));
-            try {
-                Thread.sleep(WAIT_FOR_UPDATE_TIME); 
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            String finalResponse1 = response;
+            final Dispatcher dispatcher = new Dispatcher() {
+                @Override
+                public MockResponse dispatch (RecordedRequest request) throws InterruptedException {
+                    return new MockResponse().setBody(finalResponse1);
+                }
+            };
+            mockWebServer.setDispatcher(dispatcher);
             retrievedLocation = repository.getRemote(location.getPublicCode());
             assertEquals(retrievedLocation.getLabel(), location.getLabel());
             assertEquals(retrievedLocation.getLatitude(), location.getLatitude(), 0.01);

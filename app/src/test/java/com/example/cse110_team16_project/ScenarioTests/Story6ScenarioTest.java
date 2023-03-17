@@ -27,8 +27,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 
 @RunWith(RobolectricTestRunner.class)
 public class Story6ScenarioTest {
@@ -82,19 +84,17 @@ public class Story6ScenarioTest {
                     .addLongitude("2")
                     .addPublicCode(public_code)
                     .build();
-            mockWebServer.enqueue(new MockResponse().setBody(response));
-            mockWebServer.enqueue(new MockResponse().setBody(response));
-            mockWebServer.enqueue(new MockResponse().setBody(response));
-            mockWebServer.enqueue(new MockResponse().setBody(response));
+            String finalResponse = response;
+            final Dispatcher dispatcher = new Dispatcher() {
+                @Override
+                public MockResponse dispatch (RecordedRequest request) throws InterruptedException {
+                    return new MockResponse().setBody(finalResponse);
+                }
+            };
+            mockWebServer.setDispatcher(dispatcher);
             UserLocationSync syncher = new UserLocationSync(liveCoordinates,
                     new SCLocation(label,public_code),private_code,activity,repository);
             liveCoordinates.postValue(coords);
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            mockWebServer.enqueue(new MockResponse().setBody(response));
             SCLocation updatedLocation = repository.getRemote(public_code);
             assertEquals(2,updatedLocation.getLatitude(),0.01);
             assertEquals(2,updatedLocation.getLongitude(),0.01);
