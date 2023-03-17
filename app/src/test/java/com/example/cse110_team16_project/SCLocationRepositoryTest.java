@@ -138,45 +138,6 @@ public class SCLocationRepositoryTest {
     }
 
     @Test
-    public void testGetSynced(){
-        var scenario = ActivityScenario.launch(CompassActivity.class);
-        scenario.moveToState(Lifecycle.State.RESUMED);
-        scenario.onActivity(activity -> {
-            SCLocationRepository repository = new SCLocationRepository(dao,mockWebServer.url("/").toString());
-            String public_code = "SCLocationRepositoryTest3Public";
-            String label = "testLabel";
-
-            SCLocation location = new SCLocation(2,2,label,public_code);
-            String response = new MockResponseBodyBuilder.Get()
-                    .addLabel(label)
-                    .addLatitude("2")
-                    .addLongitude("2")
-                    .addPublicCode(public_code)
-                    .build();
-            final Dispatcher dispatcher = new Dispatcher() {
-                @Override
-                public MockResponse dispatch (RecordedRequest request) throws InterruptedException {
-                    return new MockResponse().setBody(response);
-                }
-            };
-            mockWebServer.setDispatcher(dispatcher);
-            repository.upsertRemote(location,location.public_code);
-
-            LiveData<SCLocation> retrievedLocationLive = repository.getSynced(location.public_code);
-            retrievedLocationLive.observe(activity,(retrievedNull) -> {
-                retrievedLocationLive.removeObservers(activity);
-                retrievedLocationLive.observe(activity,(retrievedLocation) -> {
-                    retrievedLocationLive.removeObservers(activity);
-                    assertEquals(retrievedLocation.getLabel(), location.getLabel());
-                    assertEquals(retrievedLocation.getLatitude(), location.getLatitude(), 0.01);
-                    assertEquals(retrievedLocation.getLongitude(), location.getLongitude(), 0.01);
-                    assertEquals(retrievedLocation.getPublicCode(), location.getPublicCode());
-                });
-            });
-        });
-    }
-
-    @Test
     public void testGetRemoteLive(){
         var scenario = ActivityScenario.launch(CompassActivity.class);
         scenario.moveToState(Lifecycle.State.RESUMED);

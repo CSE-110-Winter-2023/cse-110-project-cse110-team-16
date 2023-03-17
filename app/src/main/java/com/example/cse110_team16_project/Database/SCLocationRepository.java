@@ -30,47 +30,6 @@ public class SCLocationRepository {
     }
     private final List<ScheduledFuture<?>> remoteUpdateThreads = new ArrayList<>();
 
-    // Synced Methods
-    // ==============
-
-    /**
-     * This is where the magic happens. This method will return a LiveData object that will be
-     * updated when the SCLocation is updated either locally or remotely on the server. Our activities
-     * however will only need to observe this one LiveData object, and don't need to care where
-     * it comes from!
-     *
-     * This method will always prefer the newest version of the SCLocation.
-     *
-     * @param public_code the public_code of the SCLocation
-     * @return a LiveData object that will be updated when the SCLocation is updated locally or remotely.
-     */
-
-    //likely unnecessary for this MS, just use getRemote
-    public LiveData<SCLocation> getSynced(String public_code) {
-        var scLocation = new MediatorLiveData<SCLocation>();
-
-        Observer<SCLocation> updateFromRemote = theirSCLocation -> {
-            var ourSCLocation = scLocation.getValue();
-            if(theirSCLocation == null) return;
-            if (ourSCLocation == null) {
-                upsertLocal(theirSCLocation);
-            }
-        };
-
-        // If we get a local update, pass it on.
-        scLocation.addSource(getLocalLive(public_code), scLocation::postValue);
-        // If we get a remote update, update the local version (triggering the above observer)
-        scLocation.addSource(getRemoteLive(public_code), updateFromRemote);
-
-        return scLocation;
-    }
-
-    /*
-    public void upsertSynced(SCLocation scLocation, String private_code) {
-        upsertLocal(scLocation);
-        upsertRemote(scLocation, private_code);
-    }
-    */
 
     // Local Methods
     // =============
