@@ -16,7 +16,7 @@ import androidx.test.rule.GrantPermissionRule;
 
 import com.example.cse110_team16_project.Database.SCLocationDao;
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
-import com.example.cse110_team16_project.classes.GPSStatus;
+import com.example.cse110_team16_project.classes.DeviceInfo.GPSStatus;
 
 import org.junit.After;
 import org.junit.Before;
@@ -24,9 +24,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.shadows.ShadowSystemClock;
-
-import java.util.concurrent.TimeUnit;
 
 @RunWith(RobolectricTestRunner.class)
 public class Story8ScenarioTest {

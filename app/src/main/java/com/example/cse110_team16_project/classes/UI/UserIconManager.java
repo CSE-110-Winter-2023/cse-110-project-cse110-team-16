@@ -14,9 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 
-import com.example.cse110_team16_project.IconStacker;
 import com.example.cse110_team16_project.R;
-import com.example.cse110_team16_project.classes.IconTruncater;
 import com.example.cse110_team16_project.classes.Misc.Converters;
 import com.example.cse110_team16_project.classes.Units.Degrees;
 import com.example.cse110_team16_project.classes.Units.Radians;
