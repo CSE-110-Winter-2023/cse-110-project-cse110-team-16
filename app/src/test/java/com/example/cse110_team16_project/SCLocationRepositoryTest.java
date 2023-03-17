@@ -21,6 +21,7 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 
 
+import com.example.cse110_team16_project.Database.MockResponseBuilder;
 import com.example.cse110_team16_project.Database.SCLocationDao;
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
@@ -33,6 +34,9 @@ import org.robolectric.RobolectricTestRunner;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+
 @RunWith(RobolectricTestRunner.class)
 public class SCLocationRepositoryTest {
 
@@ -43,6 +47,8 @@ public class SCLocationRepositoryTest {
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
+    @Rule
+    public MockWebServer mockWebServer = new MockWebServer();
     @Before
     public void createDb(){
         Context context = ApplicationProvider.getApplicationContext();
@@ -58,20 +64,27 @@ public class SCLocationRepositoryTest {
         db.close();
     }
 
-    //Yes I know it's bad practice to not mock the server and stuff but I got things to do man
     @Test
-    public void testRealUpsertGetRemote() {
+    public void testFakeUpsertGetRemote() {
         var scenario = ActivityScenario.launch(CompassActivity.class);
         scenario.moveToState(Lifecycle.State.STARTED);
         scenario.onActivity(activity -> {
-            SCLocationRepository repository = new SCLocationRepository(dao);
+            SCLocationRepository repository = new SCLocationRepository(dao,mockWebServer.url("/").toString());
             String private_code = "SCLocationRepositoryTest1Private";
             String public_code = "SCLocationRepositoryTest1Public";
             String label = "testLabel";
             SCLocation location = new SCLocation(3,3,label,public_code);
+            mockWebServer.enqueue(new MockResponse().setBody(""));
             repository.upsertRemote(location,private_code);
+            String response = new MockResponseBuilder.Get()
+                    .addLabel(label)
+                    .addLatitude("3")
+                    .addLongitude("3")
+                    .addPublicCode(public_code)
+                    .build();
+            mockWebServer.enqueue(new MockResponse().setBody(response));
             try {
-                Thread.sleep(WAIT_FOR_UPDATE_TIME); 
+                Thread.sleep(WAIT_FOR_UPDATE_TIME);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -89,7 +102,7 @@ public class SCLocationRepositoryTest {
         var scenario = ActivityScenario.launch(CompassActivity.class);
             scenario.moveToState(Lifecycle.State.STARTED);
             scenario.onActivity(activity -> {
-            SCLocationRepository repository = new SCLocationRepository(dao);
+            SCLocationRepository repository = new SCLocationRepository(dao,mockWebServer.url("/").toString());
             String public_code = "SCLocationRepositoryTest2Public";
             String private_code = "SCLocationRepositoryTest2Private";
             SCLocation scLocation1 = new SCLocation(2,2,"testLabel1",public_code);
@@ -97,12 +110,13 @@ public class SCLocationRepositoryTest {
 
             repository.upsertLocal(scLocation1);
             repository.upsertLocal(scLocation3);
+            mockWebServer.enqueue(new MockResponse().setBody(""));
             repository.deleteRemote(scLocation3.getPublicCode(), private_code);
-                try {
-                    Thread.sleep(WAIT_FOR_UPDATE_TIME); 
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+            try {
+                Thread.sleep(WAIT_FOR_UPDATE_TIME);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             assertTrue(repository.existsLocal(scLocation1.getPublicCode()));
             assertFalse(repository.existsRemote(scLocation1.getPublicCode()));
         });
@@ -113,7 +127,7 @@ public class SCLocationRepositoryTest {
         var scenario = ActivityScenario.launch(CompassActivity.class);
         scenario.moveToState(Lifecycle.State.STARTED);
         scenario.onActivity(activity -> {
-            SCLocationRepository repository = new SCLocationRepository(dao);
+            SCLocationRepository repository = new SCLocationRepository(dao,mockWebServer.url("/").toString());
             String public_code = "SCLocationRepositoryTest3Public";
             String label = "testLabel";
             SCLocation scLocation1 = new SCLocation(2,2,label,public_code);
@@ -128,17 +142,29 @@ public class SCLocationRepositoryTest {
         var scenario = ActivityScenario.launch(CompassActivity.class);
         scenario.moveToState(Lifecycle.State.STARTED);
         scenario.onActivity(activity -> {
-            SCLocationRepository repository = new SCLocationRepository(dao);
+            SCLocationRepository repository = new SCLocationRepository(dao,mockWebServer.url("/").toString());
             String public_code = "SCLocationRepositoryTest3Public";
             String label = "testLabel";
 
             SCLocation location = new SCLocation(2,2,label,public_code);
+            String response = new MockResponseBuilder.Get()
+                    .addLabel(label)
+                    .addLatitude("2")
+                    .addLongitude("2")
+                    .addPublicCode(public_code)
+                    .build();
+            mockWebServer.enqueue(new MockResponse().setBody(response));
             Future<Void> future = repository.upsertRemote(location,location.public_code);
             try {
                 future.get();
             } catch (ExecutionException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
+            mockWebServer.enqueue(new MockResponse().setBody(response));
+            mockWebServer.enqueue(new MockResponse().setBody(response));
+            mockWebServer.enqueue(new MockResponse().setBody(response));
+            mockWebServer.enqueue(new MockResponse().setBody(response));
+            mockWebServer.enqueue(new MockResponse().setBody(response));
             LiveData<SCLocation> retrievedLocationLive = repository.getSynced(location.public_code);
             try {
                 Thread.sleep(WAIT_FOR_UPDATE_TIME); 
@@ -168,17 +194,28 @@ public class SCLocationRepositoryTest {
         var scenario = ActivityScenario.launch(CompassActivity.class);
         scenario.moveToState(Lifecycle.State.STARTED);
         scenario.onActivity(activity -> {
-            SCLocationRepository repository = new SCLocationRepository(dao);
+            SCLocationRepository repository = new SCLocationRepository(dao,mockWebServer.url("/").toString());
             String public_code = "SCLocationRepositoryTest4Public";
             String label = "testLabel";
             SCLocation location = new SCLocation(2,2,label,public_code);
-
+            String response = new MockResponseBuilder.Get()
+                    .addLabel(label)
+                    .addLatitude("2")
+                    .addLongitude("2")
+                    .addPublicCode(public_code)
+                    .build();
+            mockWebServer.enqueue(new MockResponse().setBody(response));
             Future<Void> future = repository.upsertRemote(location,location.public_code);
             try {
                 future.get();
             } catch (ExecutionException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
+            mockWebServer.enqueue(new MockResponse().setBody(response));
+            mockWebServer.enqueue(new MockResponse().setBody(response));
+            mockWebServer.enqueue(new MockResponse().setBody(response));
+            mockWebServer.enqueue(new MockResponse().setBody(response));
+            mockWebServer.enqueue(new MockResponse().setBody(response));
             LiveData<SCLocation> retrievedLocationLive = repository.getRemoteLive(location.public_code);
             try {
                 Thread.sleep(WAIT_FOR_UPDATE_TIME); 
@@ -208,11 +245,18 @@ public class SCLocationRepositoryTest {
         var scenario = ActivityScenario.launch(CompassActivity.class);
         scenario.moveToState(Lifecycle.State.STARTED);
         scenario.onActivity(activity -> {
-            SCLocationRepository repository = new SCLocationRepository(dao);
+            SCLocationRepository repository = new SCLocationRepository(dao,mockWebServer.url("/").toString());
             String public_code = "SCLocationRepositoryTest5Public";
             String private_code = "SCLocationRepositoryTest5Private";
             String label = "testLabel";
             SCLocation location = new SCLocation(0,0,label,public_code);
+            String response = new MockResponseBuilder.Get()
+                    .addLabel(label)
+                    .addLatitude("0")
+                    .addLongitude("0")
+                    .addPublicCode(public_code)
+                    .build();
+            mockWebServer.enqueue(new MockResponse().setBody(response));
             repository.upsertRemote(location,private_code);
             try {
                 Thread.sleep(WAIT_FOR_UPDATE_TIME); 
@@ -221,6 +265,10 @@ public class SCLocationRepositoryTest {
             }
             MutableLiveData<SCLocation> liveLocation = new MutableLiveData<>();
             liveLocation.postValue(location);
+            mockWebServer.enqueue(new MockResponse().setBody(response));
+            mockWebServer.enqueue(new MockResponse().setBody(response));
+            mockWebServer.enqueue(new MockResponse().setBody(response));
+            mockWebServer.enqueue(new MockResponse().setBody(response));
             repository.updateSCLocationLive(liveLocation,private_code);
             try {
                 Thread.sleep(WAIT_FOR_UPDATE_TIME); 
@@ -236,6 +284,16 @@ public class SCLocationRepositoryTest {
 
             location.setCoordinates(new Coordinates(3,3));
             liveLocation.postValue(location);
+            response = new MockResponseBuilder.Get()
+                    .addLabel(label)
+                    .addLatitude("3")
+                    .addLongitude("3")
+                    .addPublicCode(public_code)
+                    .build();
+            mockWebServer.enqueue(new MockResponse().setBody(response));
+            mockWebServer.enqueue(new MockResponse().setBody(response));
+            mockWebServer.enqueue(new MockResponse().setBody(response));
+            mockWebServer.enqueue(new MockResponse().setBody(response));
             try {
                 Thread.sleep(WAIT_FOR_UPDATE_TIME); 
             } catch (InterruptedException e) {
