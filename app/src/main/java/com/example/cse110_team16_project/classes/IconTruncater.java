@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IconTruncater {
-    private final int HEIGHT = 50;
-    private final int WIDTH_PER_CHAR = 20;
+    private final int HEIGHT = 20;
+    private final int WIDTH_PER_CHAR = 25;
 
     private Degrees userDirection;
     private List<Degrees> adjustedOrientation;
