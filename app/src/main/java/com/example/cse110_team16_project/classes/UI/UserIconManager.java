@@ -3,9 +3,8 @@ package com.example.cse110_team16_project.classes.UI;
 import static com.example.cse110_team16_project.classes.Updaters.ScreenDistanceUpdater.LARGEST_RADIUS;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -19,8 +18,6 @@ import com.example.cse110_team16_project.R;
 import com.example.cse110_team16_project.classes.Misc.Converters;
 import com.example.cse110_team16_project.classes.Units.Degrees;
 import com.example.cse110_team16_project.classes.Units.Radians;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +33,8 @@ public class UserIconManager {
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
     Activity activity;
     private List<String> friendLabels;
-    private List<TextView> friends;
+    private final List<TextView> friends;
+
 
 
     public UserIconManager(Activity activity, @NonNull LiveData<List<Double>> friendDistances,
@@ -73,6 +71,8 @@ public class UserIconManager {
             TextView addFriend = new TextView(activity);
             addFriend.setText(friendLabels.get(i));
             addFriend.setTextColor(Color.BLUE);
+            addFriend.setMaxLines(1);
+            addFriend.setEllipsize(TextUtils.TruncateAt.END);
             addFriend.setId(View.generateViewId());
             friends.add(addFriend);
         }
@@ -82,17 +82,13 @@ public class UserIconManager {
 
     public void displayFriendLabel(TextView tv){
         ConstraintLayout parentLayout = activity.findViewById(R.id.MainLayout);
-            ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+            ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, 50);
             params.circleConstraint = R.id.CompassLayout;
             params.circleRadius = 999;
             params.circleAngle = 90;
             params.startToStart = R.id.MainLayout;
             params.topToTop = R.id.MainLayout;
             tv.setLayoutParams(params);
-            Context context = activity;
-//            Drawable top = context.getResources().getDrawable(R.drawable.friend_triangle);
-//            tv.setTag(R.drawable.friend_triangle); // check tag during testing to see if any tv's are displayed
-//            tv.setCompoundDrawablesWithIntrinsicBounds(null, top, null, null);
             parentLayout.addView(tv);
     }
 
@@ -107,23 +103,36 @@ public class UserIconManager {
         }
 
         if(friends.size() != friendOrientation.size() || friends.size() != friendDistances.size()) return;
-
+        IconStacker stacker = new IconStacker(userDirection, friendOrientation, friendDistances);
+        stacker.adjustIcons();
+        List<Degrees> adjustAngles = stacker.getAdjustedAngles();
+        List<Double> adjustedRadius = stacker.getAdjustedRadius();
+        //List<Degrees> adjustAngles = stacker.getRegularAngles();
+        //List<Double> adjustedRadius = stacker.getRegularRadius();
+        IconTruncater truncater = new IconTruncater(adjustAngles, adjustedRadius, friends);
+        truncater.truncateIcons();
+        List<Integer> finalWidth = truncater.getFinalWidth();
+        adjustAngles = truncater.getAdjustedAngles();
+        adjustedRadius = truncater.getAdjustedRadius();
         for(int i = 0 ; i < friends.size() ; i++){
             TextView curView = friends.get(i);
             ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) curView.getLayoutParams();
-            params.circleRadius = friendDistances.get(i).intValue();
-            params.circleAngle = (float) Degrees.subtractDegrees(friendOrientation.get(i),userDirection).getDegrees();
+            params.circleRadius = adjustedRadius.get(i).intValue();
+            params.circleAngle = (float) adjustAngles.get(i).getDegrees();
             if(params.circleRadius == LARGEST_RADIUS) {
                 params.circleRadius += 13;
                 activity.runOnUiThread(() -> {
                     curView.setText("⬤");
+                    curView.setWidth(30);
                     curView.setTextColor(Color.RED);
                 });
             }
             else {
                 String reAddLabel = friendLabels.get(i);
+                int newWidth = finalWidth.get(i);
                 activity.runOnUiThread(() -> {
                     curView.setText(reAddLabel);
+                    curView.setWidth(newWidth);
                     curView.setTextColor(Color.BLUE);
                 });
             }
@@ -142,4 +151,5 @@ public class UserIconManager {
     public List<TextView> getTextViews(){
         return this.friends;
     }
+
 }

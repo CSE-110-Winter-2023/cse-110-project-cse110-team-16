@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project.classes;
+package com.example.cse110_team16_project.classes.UI;
 
 import android.app.Activity;
 import android.content.Context;
@@ -37,12 +37,8 @@ public class ZoomManager {
     }
 
     private void setUpZoomSharedPref(){
-        if (sharedPref.contains("zoomLevel")){
-            this.zoomLevel = sharedPref.getInt("zoomLevel", ZOOMDEFAULT);
-        }
-        else{
-            putZoomLevel(ZOOMDEFAULT);
-        }
+        this.zoomLevel = sharedPref.getInt("zoomLevel", ZOOMDEFAULT);
+        if(zoomLevel > 4 || zoomLevel < 1) zoomLevel = 2; //if stored shared preferences freaks out
     }
 
     public int getZoomLevel() {

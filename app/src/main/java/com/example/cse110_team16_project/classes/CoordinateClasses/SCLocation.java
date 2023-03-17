@@ -9,9 +9,8 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
 /*
-SCLocation class is responsible for storing information about the SCLocation's location and name.
+SCLocation class is responsible for storing information about the SCLocation's location,name, and label.
 It is NOT responsible for updating the SCLocation position, this is currently handled in DeviceTracker.
-
  */
 
 @Entity(tableName = "location")

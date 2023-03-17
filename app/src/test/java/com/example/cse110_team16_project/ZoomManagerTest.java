@@ -2,8 +2,6 @@ package com.example.cse110_team16_project;
 
 import static org.junit.Assert.assertEquals;
 
-import android.app.Activity;
-import android.opengl.Visibility;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -12,14 +10,13 @@ import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 
 import com.example.cse110_team16_project.classes.Updaters.ScreenDistanceUpdater;
-import com.example.cse110_team16_project.classes.ZoomManager;
+import com.example.cse110_team16_project.classes.UI.ZoomManager;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

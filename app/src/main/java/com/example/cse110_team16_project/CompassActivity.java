@@ -2,6 +2,7 @@ package com.example.cse110_team16_project;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
+import static com.example.cse110_team16_project.AddNameActivity.*;
 import static com.example.cse110_team16_project.AddNameActivity.mockURLKey;
 import static com.example.cse110_team16_project.AddNameActivity.urlFileName;
 import static com.example.cse110_team16_project.classes.Misc.Constants.APP_REQUEST_CODE;
@@ -24,16 +25,17 @@ import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 import com.example.cse110_team16_project.classes.DeviceInfo.DeviceTracker;
-import com.example.cse110_team16_project.classes.GPSStatus;
+import com.example.cse110_team16_project.classes.DeviceInfo.GPSStatus;
 import com.example.cse110_team16_project.classes.LiveDataListMerger;
 import com.example.cse110_team16_project.classes.Misc.Constants;
+import com.example.cse110_team16_project.classes.RepositoryMediator;
 import com.example.cse110_team16_project.classes.UI.CompassUIManager;
 import com.example.cse110_team16_project.classes.UI.UserIconManager;
 import com.example.cse110_team16_project.classes.Updaters.AbsoluteDirectionUpdater;
 import com.example.cse110_team16_project.classes.Updaters.DistanceUpdater;
 import com.example.cse110_team16_project.classes.Updaters.ScreenDistanceUpdater;
-import com.example.cse110_team16_project.classes.UserLocationSync;
-import com.example.cse110_team16_project.classes.ZoomManager;
+import com.example.cse110_team16_project.classes.DeviceInfo.UserLocationSync;
+import com.example.cse110_team16_project.classes.UI.ZoomManager;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -101,10 +103,10 @@ public class CompassActivity extends AppCompatActivity {
         repo = new SCLocationRepository(dao,APIUrl);
     }
     private void loadUserInfo(){
-        SharedPreferences sharedPref = this.getSharedPreferences(Constants.SharedPreferences.user_info, Context.MODE_PRIVATE);
-        userLabel = sharedPref.getString(Constants.SharedPreferences.label, "");
-        public_code = sharedPref.getString(Constants.SharedPreferences.public_code, "");
-        private_code = sharedPref.getString(Constants.SharedPreferences.private_code, "");
+        SharedPreferences sharedPref = this.getSharedPreferences(SP_user_info, Context.MODE_PRIVATE);
+        userLabel = sharedPref.getString(SP_label, "");
+        public_code = sharedPref.getString(SP_public_code, "");
+        private_code = sharedPref.getString(SP_private_code, "");
     }
 
     private void setupUpdaters() {
@@ -188,10 +190,6 @@ public class CompassActivity extends AppCompatActivity {
     }
 
     public DeviceTracker getDeviceTracker() { return this.deviceTracker; }
-
-    public void onUIDClicked(View view) {
-        startActivity(new Intent(this, UIDActivity.class));
-    }
 
     public void ontoListClicked(View view) {
         startActivity(new Intent(this, ListActivity.class));

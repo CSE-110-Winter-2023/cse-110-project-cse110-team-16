@@ -1,5 +1,7 @@
 package com.example.cse110_team16_project;
 
+import static com.example.cse110_team16_project.AddNameActivity.*;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -20,9 +22,9 @@ public class UIDActivity extends AppCompatActivity {
         setContentView(R.layout.activity_uidactivity);
 
         // Set text for UID_display
-        SharedPreferences sharedPref = this.getSharedPreferences(Constants.SharedPreferences.user_info, Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = this.getSharedPreferences(SP_user_info, Context.MODE_PRIVATE);
         TextView UID_display = findViewById(R.id.UID_display);
-        UID_display.setText(sharedPref.getString(Constants.SharedPreferences.public_code, ""));
+        UID_display.setText(sharedPref.getString(SP_public_code, ""));
 
         // Set text for UID_Btn
         Button UID_Btn = findViewById(R.id.UID_Btn);

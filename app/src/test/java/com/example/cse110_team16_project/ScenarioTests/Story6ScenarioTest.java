@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project;
+package com.example.cse110_team16_project.ScenarioTests;
 
 import static org.junit.Assert.assertEquals;
 
@@ -11,12 +11,13 @@ import androidx.room.Room;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 
+import com.example.cse110_team16_project.CompassActivity;
 import com.example.cse110_team16_project.Database.SCLocationDao;
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
 import com.example.cse110_team16_project.classes.CoordinateClasses.Coordinates;
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
-import com.example.cse110_team16_project.classes.UserLocationSync;
+import com.example.cse110_team16_project.classes.DeviceInfo.UserLocationSync;
 
 import org.junit.After;
 import org.junit.Before;
