@@ -35,6 +35,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.LooperMode;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -44,7 +45,6 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
 @RunWith(RobolectricTestRunner.class)
-@LooperMode(PAUSED)
 public class SCLocationRepositoryTest {
 
     private final int WAIT_FOR_UPDATE_TIME = 1500;
@@ -56,19 +56,22 @@ public class SCLocationRepositoryTest {
 
     @Rule
     public MockWebServer mockWebServer = new MockWebServer();
+
     @Before
-    public void createDb(){
+    public void createDb() throws IOException {
         Context context = ApplicationProvider.getApplicationContext();
         db = Room.inMemoryDatabaseBuilder(context, SCLocationDatabase.class)
                 .allowMainThreadQueries()
                 .build();
         dao = db.getDao();
         SCLocationDatabase.inject(db);
+        mockWebServer.start();
     }
 
     @After
     public void closeDb() throws Exception {
         db.close();
+        mockWebServer.close();
     }
 
     @Test
