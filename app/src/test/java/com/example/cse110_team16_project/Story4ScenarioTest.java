@@ -16,11 +16,11 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
 @RunWith(RobolectricTestRunner.class)
-public class AddNameTest {
+public class Story4ScenarioTest {
 
     // Test for Story 4 Scenario 1
     @Test
-    public void testAddName(){
+    public void story4Scenario1(){
         var scenario = ActivityScenario.launch(AddNameActivity.class);
         scenario.moveToState(Lifecycle.State.CREATED);
         scenario.moveToState(Lifecycle.State.STARTED);
