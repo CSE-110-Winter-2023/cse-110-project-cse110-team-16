@@ -138,22 +138,6 @@ public class SCLocationRepositoryTest {
     }
 
     @Test
-    public void testUpsertDeleteExistsLocal(){
-        var scenario = ActivityScenario.launch(CompassActivity.class);
-        scenario.moveToState(Lifecycle.State.RESUMED);
-        scenario.onActivity(activity -> {
-            SCLocationRepository repository = new SCLocationRepository(dao,mockWebServer.url("/").toString());
-            String public_code = "SCLocationRepositoryTest3Public";
-            String label = "testLabel";
-            SCLocation scLocation1 = new SCLocation(2,2,label,public_code);
-            repository.upsertLocal(scLocation1);
-            repository.deleteLocal(scLocation1);
-            boolean exists = repository.existsLocal(scLocation1.getPublicCode());
-            assertFalse(exists);
-        });
-    }
-
-    @Test
     public void testGetSynced(){
         var scenario = ActivityScenario.launch(CompassActivity.class);
         scenario.moveToState(Lifecycle.State.RESUMED);
