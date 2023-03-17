@@ -34,12 +34,12 @@ public class Story5ScenarioTest {
         editor.putString("public_code", public_code);
         editor.apply();
 
-        var scenario = ActivityScenario.launch(UIDActivity.class);
+        var scenario = ActivityScenario.launch(ListActivity.class);
         scenario.moveToState(Lifecycle.State.CREATED);
         scenario.moveToState(Lifecycle.State.STARTED);
         scenario.onActivity(activity -> {
-            Button UID_Btn = activity.findViewById(R.id.UID_Btn);
-            TextView UID_display = activity.findViewById(R.id.UID_display);
+            Button UID_Btn = activity.findViewById(R.id.show_uid_btn);
+            TextView UID_display = activity.findViewById(R.id.uid_text);
             UID_display.setVisibility(View.INVISIBLE);
             assertEquals(View.INVISIBLE, UID_display.getVisibility());
 
@@ -59,12 +59,12 @@ public class Story5ScenarioTest {
         editor.putString("public_code", public_code);
         editor.apply();
 
-        var scenario = ActivityScenario.launch(UIDActivity.class);
+        var scenario = ActivityScenario.launch(ListActivity.class);
         scenario.moveToState(Lifecycle.State.CREATED);
         scenario.moveToState(Lifecycle.State.STARTED);
         scenario.onActivity(activity -> {
-            Button UID_Btn = activity.findViewById(R.id.UID_Btn);
-            TextView UID_display = activity.findViewById(R.id.UID_display);
+            Button UID_Btn = activity.findViewById(R.id.show_uid_btn);
+            TextView UID_display = activity.findViewById(R.id.uid_text);
             UID_display.setVisibility(View.VISIBLE);
             assertEquals(View.VISIBLE, UID_display.getVisibility());
             assertEquals(public_code, UID_display.getText().toString());
