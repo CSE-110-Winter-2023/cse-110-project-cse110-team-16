@@ -36,11 +36,6 @@ public class AbsoluteDirectionUpdater {
             );
     }
 
-    public AbsoluteDirectionUpdater(Activity activity,
-                                    @NonNull LiveData<Coordinates> userCoordinates){
-        this(activity, new MutableLiveData<>(),userCoordinates);
-    }
-
 
     public LiveData<List<Degrees>> getLastKnownEntityDirectionsFromUser(){
         return this.lastKnownEntityDirectionsFromUser;

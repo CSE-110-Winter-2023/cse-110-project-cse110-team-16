@@ -1,5 +1,7 @@
 package com.example.cse110_team16_project.classes.Misc;
 
+import static com.example.cse110_team16_project.classes.Misc.Constants.*;
+
 import android.app.Activity;
 import android.location.Location;
 import android.util.DisplayMetrics;
@@ -17,9 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Converters {
-
-    private static final int ONE_MIN = 60000;
-    private static final int ONE_HOUR = 3600000;
     @TypeConverter
     public static Coordinates StringToCoordinates(String str){
         if (str == null) return null;

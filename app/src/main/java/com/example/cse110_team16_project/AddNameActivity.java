@@ -26,6 +26,12 @@ import java.util.UUID;
 public class AddNameActivity extends AppCompatActivity {
     public static final String urlFileName = "UrlFile";
     public static final String mockURLKey = "mockURL";
+
+    public static final String SP_user_info = "user_info";
+    public static final String SP_public_code = "public_code";
+    public static final String SP_private_code = "private_code";
+    public static final String SP_label = "label";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,12 +60,12 @@ public class AddNameActivity extends AppCompatActivity {
         String private_code = UUID.randomUUID().toString();
         String public_code = UUID.randomUUID().toString();
 
-        SharedPreferences sharedPrefName = this.getSharedPreferences(Constants.SharedPreferences.user_info, Context.MODE_PRIVATE);
+        SharedPreferences sharedPrefName = this.getSharedPreferences(SP_user_info, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPrefName.edit();
 
-        editor.putString(Constants.SharedPreferences.label, name);
-        editor.putString(Constants.SharedPreferences.private_code, private_code);
-        editor.putString(Constants.SharedPreferences.public_code, public_code);
+        editor.putString(SP_label, name);
+        editor.putString(SP_private_code, private_code);
+        editor.putString(SP_public_code, public_code);
 
         editor.apply();
 

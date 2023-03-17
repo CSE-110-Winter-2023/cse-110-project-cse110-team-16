@@ -19,7 +19,6 @@ import java.util.concurrent.Future;
 public class CompassUIManager {
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
     private Future<Void> future;
-    //private static final float SCREEN_PERCENTAGE = .475f;
 
     Activity activity;
     private final ImageView compass;

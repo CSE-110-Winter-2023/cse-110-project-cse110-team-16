@@ -33,7 +33,7 @@ public class UserIconManager {
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
     Activity activity;
     private List<String> friendLabels;
-    private List<TextView> friends;
+    private final List<TextView> friends;
 
 
 

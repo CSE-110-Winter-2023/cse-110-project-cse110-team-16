@@ -2,6 +2,7 @@ package com.example.cse110_team16_project;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
+import static com.example.cse110_team16_project.AddNameActivity.*;
 import static com.example.cse110_team16_project.AddNameActivity.mockURLKey;
 import static com.example.cse110_team16_project.AddNameActivity.urlFileName;
 import static com.example.cse110_team16_project.classes.Misc.Constants.APP_REQUEST_CODE;
@@ -102,10 +103,10 @@ public class CompassActivity extends AppCompatActivity {
         repo = new SCLocationRepository(dao,APIUrl);
     }
     private void loadUserInfo(){
-        SharedPreferences sharedPref = this.getSharedPreferences(Constants.SharedPreferences.user_info, Context.MODE_PRIVATE);
-        userLabel = sharedPref.getString(Constants.SharedPreferences.label, "");
-        public_code = sharedPref.getString(Constants.SharedPreferences.public_code, "");
-        private_code = sharedPref.getString(Constants.SharedPreferences.private_code, "");
+        SharedPreferences sharedPref = this.getSharedPreferences(SP_user_info, Context.MODE_PRIVATE);
+        userLabel = sharedPref.getString(SP_label, "");
+        public_code = sharedPref.getString(SP_public_code, "");
+        private_code = sharedPref.getString(SP_private_code, "");
     }
 
     private void setupUpdaters() {
