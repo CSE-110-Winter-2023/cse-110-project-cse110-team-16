@@ -170,6 +170,7 @@ public class SCLocationRepositoryTest {
                     return new MockResponse().setBody(response);
                 }
             };
+            mockWebServer.setDispatcher(dispatcher);
             LiveData<SCLocation> retrievedLocationLive = repository.getSynced(location.public_code);
             retrievedLocationLive.observe(activity,(retrievedNull) -> {
                 retrievedLocationLive.removeObservers(activity);
@@ -212,6 +213,7 @@ public class SCLocationRepositoryTest {
                     return new MockResponse().setBody(response);
                 }
             };
+            mockWebServer.setDispatcher(dispatcher);
             LiveData<SCLocation> retrievedLocationLive = repository.getRemoteLive(location.public_code);
             retrievedLocationLive.observe(activity,(retrievedNull) -> {
                 retrievedLocationLive.removeObservers(activity);
