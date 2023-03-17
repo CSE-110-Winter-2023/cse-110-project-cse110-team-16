@@ -45,6 +45,7 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
 @RunWith(RobolectricTestRunner.class)
+@LooperMode(PAUSED)
 public class SCLocationRepositoryTest {
     private SCLocationDao dao;
     private SCLocationDatabase db;
@@ -103,6 +104,7 @@ public class SCLocationRepositoryTest {
             };
             mockWebServer.setDispatcher(dispatcher1);
             SCLocation retrievedLocation = repository.getRemote(location.getPublicCode());
+            shadowOf(Looper.getMainLooper()).idle();
             assertEquals(retrievedLocation.getLabel(),location.getLabel());
             assertEquals(retrievedLocation.getLatitude(),location.getLatitude(),0.01);
             assertEquals(retrievedLocation.getLongitude(),location.getLongitude(),0.01);
@@ -132,6 +134,7 @@ public class SCLocationRepositoryTest {
                 };
                 mockWebServer.setDispatcher(dispatcher);
             repository.deleteRemote(scLocation3.getPublicCode(), private_code);
+            shadowOf(Looper.getMainLooper()).idle();
             assertTrue(repository.existsLocal(scLocation1.getPublicCode()));
             assertFalse(repository.existsRemote(scLocation1.getPublicCode()));
         });
@@ -162,8 +165,6 @@ public class SCLocationRepositoryTest {
             repository.upsertRemote(location,location.public_code);
 
             LiveData<SCLocation> retrievedLocationLive = repository.getRemoteLive(location.public_code);
-            retrievedLocationLive.observe(activity,(retrievedNull) -> {
-                retrievedLocationLive.removeObservers(activity);
                 retrievedLocationLive.observe(activity,(retrievedLocation) -> {
                     retrievedLocationLive.removeObservers(activity);
                     assertEquals(retrievedLocation.getLabel(), location.getLabel());
@@ -172,7 +173,6 @@ public class SCLocationRepositoryTest {
                     assertEquals(retrievedLocation.getPublicCode(), location.getPublicCode());
                 });
             });
-        });
     }
 
     @Test
@@ -229,6 +229,7 @@ public class SCLocationRepositoryTest {
             };
             mockWebServer.setDispatcher(dispatcher);
             retrievedLocation = repository.getRemote(location.getPublicCode());
+            shadowOf(Looper.getMainLooper()).idle();
             assertEquals(retrievedLocation.getLabel(), location.getLabel());
             assertEquals(retrievedLocation.getLatitude(), location.getLatitude(), 0.01);
             assertEquals(retrievedLocation.getLongitude(), location.getLongitude(), 0.01);
