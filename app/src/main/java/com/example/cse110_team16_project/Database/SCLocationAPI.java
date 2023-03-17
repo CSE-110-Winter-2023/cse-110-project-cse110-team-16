@@ -53,7 +53,8 @@ public class SCLocationAPI {
 
     public void putSCLocation(SCLocation scLocation, String private_code) {
         // URLs cannot contain spaces, so we replace them with %20.
-        String public_code = scLocation.getPublicCode().replace(" ", "%20");
+        String public_code = scLocation.getPublicCode();
+        String URLCode = public_code.replace(" ", "%20");
         Gson gson = new Gson();
         JsonElement jsonElement = gson.toJsonTree(scLocation,SCLocation.class);
         jsonElement.getAsJsonObject().addProperty("private_code",private_code);
@@ -63,7 +64,7 @@ public class SCLocationAPI {
                 (json, JSON);
 
         var request = new Request.Builder()
-                .url(url + public_code)
+                .url(url + URLCode)
                 .method("PUT", requestBody)
                 .build();
 
@@ -95,7 +96,8 @@ public class SCLocationAPI {
     }
 
     public void patchSCLocation(SCLocation scLocation, String private_code, boolean listed_publicly){
-        String public_code = scLocation.getPublicCode().replace(" ", "%20");;
+        String public_code = scLocation.getPublicCode();
+        String URLCode = public_code.replace(" ", "%20");
         Gson gson = new Gson();
         JsonElement jsonElement = gson.toJsonTree(scLocation,SCLocation.class);
         jsonElement.getAsJsonObject().addProperty("private_code",private_code);
@@ -105,7 +107,7 @@ public class SCLocationAPI {
                 (json, JSON);
 
         var request = new Request.Builder()
-                .url(url + public_code)
+                .url(url + URLCode)
                 .method("PATCH", requestBody)
                 .build();
 
