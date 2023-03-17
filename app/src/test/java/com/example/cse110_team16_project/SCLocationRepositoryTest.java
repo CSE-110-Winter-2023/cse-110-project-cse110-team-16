@@ -74,7 +74,7 @@ public class SCLocationRepositoryTest {
     @Test
     public void testFakeUpsertGetRemote() {
         var scenario = ActivityScenario.launch(CompassActivity.class);
-        scenario.moveToState(Lifecycle.State.STARTED);
+        scenario.moveToState(Lifecycle.State.RESUMED);
         scenario.onActivity(activity -> {
             SCLocationRepository repository = new SCLocationRepository(dao,mockWebServer.url("/").toString());
             String private_code = "SCLocationRepositoryTest1Private";
@@ -114,7 +114,7 @@ public class SCLocationRepositoryTest {
     @Test
     public void testUpsertExistsLocalExistsRemote(){
         var scenario = ActivityScenario.launch(CompassActivity.class);
-            scenario.moveToState(Lifecycle.State.STARTED);
+            scenario.moveToState(Lifecycle.State.RESUMED);
             scenario.onActivity(activity -> {
             SCLocationRepository repository = new SCLocationRepository(dao,mockWebServer.url("/").toString());
             String public_code = "SCLocationRepositoryTest2Public";
@@ -140,7 +140,7 @@ public class SCLocationRepositoryTest {
     @Test
     public void testUpsertDeleteExistsLocal(){
         var scenario = ActivityScenario.launch(CompassActivity.class);
-        scenario.moveToState(Lifecycle.State.STARTED);
+        scenario.moveToState(Lifecycle.State.RESUMED);
         scenario.onActivity(activity -> {
             SCLocationRepository repository = new SCLocationRepository(dao,mockWebServer.url("/").toString());
             String public_code = "SCLocationRepositoryTest3Public";
@@ -156,7 +156,7 @@ public class SCLocationRepositoryTest {
     @Test
     public void testGetSynced(){
         var scenario = ActivityScenario.launch(CompassActivity.class);
-        scenario.moveToState(Lifecycle.State.STARTED);
+        scenario.moveToState(Lifecycle.State.RESUMED);
         scenario.onActivity(activity -> {
             SCLocationRepository repository = new SCLocationRepository(dao,mockWebServer.url("/").toString());
             String public_code = "SCLocationRepositoryTest3Public";
@@ -195,7 +195,7 @@ public class SCLocationRepositoryTest {
     @Test
     public void testGetRemoteLive(){
         var scenario = ActivityScenario.launch(CompassActivity.class);
-        scenario.moveToState(Lifecycle.State.STARTED);
+        scenario.moveToState(Lifecycle.State.RESUMED);
         scenario.onActivity(activity -> {
             SCLocationRepository repository = new SCLocationRepository(dao,mockWebServer.url("/").toString());
             String public_code = "SCLocationRepositoryTest4Public";
@@ -233,7 +233,7 @@ public class SCLocationRepositoryTest {
     @Test
     public void testUpdateSCLocationLive(){
         var scenario = ActivityScenario.launch(CompassActivity.class);
-        scenario.moveToState(Lifecycle.State.STARTED);
+        scenario.moveToState(Lifecycle.State.RESUMED);
         scenario.onActivity(activity -> {
             SCLocationRepository repository = new SCLocationRepository(dao,mockWebServer.url("/").toString());
             String public_code = "SCLocationRepositoryTest5Public";
