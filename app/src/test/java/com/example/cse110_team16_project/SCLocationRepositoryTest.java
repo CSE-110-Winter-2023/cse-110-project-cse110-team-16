@@ -230,7 +230,6 @@ public class SCLocationRepositoryTest {
             };
             mockWebServer.setDispatcher(dispatcher);
             retrievedLocation = repository.getRemote(location.getPublicCode());
-            shadowOf(Looper.getMainLooper()).idle();
             assertEquals(retrievedLocation.getLabel(), location.getLabel());
             assertEquals(retrievedLocation.getLatitude(), location.getLatitude(), 0.01);
             assertEquals(retrievedLocation.getLongitude(), location.getLongitude(), 0.01);
