@@ -52,8 +52,7 @@ public class SCLocationRepositoryTest {
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
-    @Rule
-    public MockWebServer mockWebServer = new MockWebServer();
+    MockWebServer mockWebServer;
 
     @Before
     public void createDb() throws IOException {
@@ -63,6 +62,7 @@ public class SCLocationRepositoryTest {
                 .build();
         dao = db.getDao();
         SCLocationDatabase.inject(db);
+        mockWebServer = new MockWebServer();
     }
 
     @After
