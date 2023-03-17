@@ -17,6 +17,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 
 import android.content.Context;
@@ -88,7 +90,6 @@ public class SCLocationAPITest {
                 RecordedRequest request1 = mockWebServer.takeRequest();
                 assertEquals(mockWebServer.url("/").toString()+public_code, request1.getRequestUrl().toString());
                 String requestBody = request1.getBody().readUtf8();
-                System.out.println(requestBody);
                 SCLocation retrievedLocation = SCLocation.fromJSON(requestBody);
                 assertEquals(retrievedLocation.getPublicCode(),public_code);
                 assertEquals(retrievedLocation.getLabel(),label);
@@ -96,7 +97,7 @@ public class SCLocationAPITest {
                 assertEquals(retrievedLocation.getLongitude(),3,0.01);
 
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                fail();
             }
 
             String response = new MockResponseBodyBuilder.Get()
@@ -128,9 +129,31 @@ public class SCLocationAPITest {
             SCLocation location = new SCLocation(3,3,label,public_code);
             mockWebServer.enqueue(new MockResponse().setBody(""));
             api.putSCLocation(location,private_code);
+            try {
+                RecordedRequest request1 = mockWebServer.takeRequest();
+                assertEquals(mockWebServer.url("/").toString()+public_code, request1.getRequestUrl().toString());
+                String requestBody = request1.getBody().readUtf8();
+                SCLocation retrievedLocation = SCLocation.fromJSON(requestBody);
+                assertEquals(retrievedLocation.getPublicCode(),public_code);
+                assertEquals(retrievedLocation.getLabel(),label);
+                assertEquals(retrievedLocation.getLatitude(),3,0.01);
+                assertEquals(retrievedLocation.getLongitude(),3,0.01);
+
+            } catch (InterruptedException e) {
+                fail();
+            }
             mockWebServer.enqueue(new MockResponse().setBody(""));
             api.deleteSCLocation(public_code,private_code);
-            mockWebServer.enqueue(new MockResponse().setBody(""));
+            try {
+                RecordedRequest request1 = mockWebServer.takeRequest();
+                assertEquals(mockWebServer.url("/").toString()+public_code, request1.getRequestUrl().toString());
+                String requestBody = request1.getBody().readUtf8();
+                assertTrue(requestBody.contains(private_code));
+
+            } catch (InterruptedException e) {
+                fail();
+            }
+            mockWebServer.enqueue(new MockResponse().setBody(MockResponseBodyBuilder.Not_Found()));
             SCLocation retrievedLocation = api.getSCLocation(location.getPublicCode());
             assertNull(retrievedLocation);
         });
@@ -150,9 +173,35 @@ public class SCLocationAPITest {
             SCLocation location = new SCLocation(3,3,label1,public_code);
             mockWebServer.enqueue(new MockResponse().setBody(""));
             api.putSCLocation(location,private_code);
+            try {
+                RecordedRequest request1 = mockWebServer.takeRequest();
+                assertEquals(mockWebServer.url("/").toString()+public_code, request1.getRequestUrl().toString());
+                String requestBody = request1.getBody().readUtf8();
+                SCLocation retrievedLocation = SCLocation.fromJSON(requestBody);
+                assertEquals(retrievedLocation.getPublicCode(),public_code);
+                assertEquals(retrievedLocation.getLabel(),label1);
+                assertEquals(retrievedLocation.getLatitude(),3,0.01);
+                assertEquals(retrievedLocation.getLongitude(),3,0.01);
+
+            } catch (InterruptedException e) {
+                fail();
+            }
             location.setLabel(label2);
             mockWebServer.enqueue(new MockResponse().setBody(""));
             api.patchSCLocation(location,private_code,false);
+            try {
+                RecordedRequest request1 = mockWebServer.takeRequest();
+                assertEquals(mockWebServer.url("/").toString()+public_code, request1.getRequestUrl().toString());
+                String requestBody = request1.getBody().readUtf8();
+                SCLocation retrievedLocation = SCLocation.fromJSON(requestBody);
+                assertEquals(retrievedLocation.getPublicCode(),public_code);
+                assertEquals(retrievedLocation.getLabel(),label2);
+                assertEquals(retrievedLocation.getLatitude(),3,0.01);
+                assertEquals(retrievedLocation.getLongitude(),3,0.01);
+
+            } catch (InterruptedException e) {
+                fail();
+            }
             String response = new MockResponseBodyBuilder.Get()
                     .addLabel(label2)
                     .addLatitude("3")
