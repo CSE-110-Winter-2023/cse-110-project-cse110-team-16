@@ -90,7 +90,7 @@ public class Story6ScenarioTest {
                     new SCLocation(label,public_code),private_code,activity,repository);
             liveCoordinates.postValue(coords);
             try {
-                Thread.sleep(1000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
