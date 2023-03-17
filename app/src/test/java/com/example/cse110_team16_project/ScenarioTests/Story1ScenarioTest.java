@@ -36,8 +36,10 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
 
+import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 
 @RunWith(RobolectricTestRunner.class)
 public class Story1ScenarioTest {
@@ -81,9 +83,13 @@ public class Story1ScenarioTest {
                     .addLongitude("3")
                     .addPublicCode(public_code)
                     .build();
-            mockWebServer.enqueue(new MockResponse().setBody(response));
-            mockWebServer.enqueue(new MockResponse().setBody(response));
-            mockWebServer.enqueue(new MockResponse().setBody(response));
+            final Dispatcher dispatcher = new Dispatcher() {
+                @Override
+                public MockResponse dispatch (RecordedRequest request) throws InterruptedException {
+                    return new MockResponse().setBody(response);
+                }
+            };
+            mockWebServer.setDispatcher(dispatcher);
             repository.upsertRemote(location,private_code);
             List<SCLocation> beforeLocationList = dao.getAll();
             EditText newLocationText = activity.findViewById(R.id.input_new_location_code);
@@ -91,11 +97,6 @@ public class Story1ScenarioTest {
             newLocationText.setText(location.getPublicCode());
             newLocationText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
             newLocationText.clearFocus();
-            try {
-                Thread.sleep(WAIT_FOR_ROOM_TIME);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
             List<SCLocation> afterLocationList = dao.getAll();
             assertEquals(beforeLocationList.size() + 1, afterLocationList.size());
         });
