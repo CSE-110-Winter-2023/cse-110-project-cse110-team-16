@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project;
+package com.example.cse110_team16_project.ScenarioTests;
 
 import static org.junit.Assert.assertEquals;
 
@@ -14,8 +14,10 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.rule.GrantPermissionRule;
 
+import com.example.cse110_team16_project.CompassActivity;
 import com.example.cse110_team16_project.Database.SCLocationDao;
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
+import com.example.cse110_team16_project.R;
 import com.example.cse110_team16_project.classes.DeviceInfo.GPSStatus;
 
 import org.junit.After;

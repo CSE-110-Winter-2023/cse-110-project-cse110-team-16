@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project;
+package com.example.cse110_team16_project.ScenarioTests;
 
 import android.content.Context;
 
@@ -27,6 +27,8 @@ import androidx.test.core.app.ActivityScenario;
 
 
 import com.example.cse110_team16_project.Database.SCLocationRepository;
+import com.example.cse110_team16_project.ListActivity;
+import com.example.cse110_team16_project.R;
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 
 import org.junit.runner.RunWith;

@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project;
+package com.example.cse110_team16_project.ScenarioTests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -11,6 +11,9 @@ import android.widget.TextView;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
+
+import com.example.cse110_team16_project.ListActivity;
+import com.example.cse110_team16_project.R;
 
 import org.junit.Rule;
 import org.junit.Test;

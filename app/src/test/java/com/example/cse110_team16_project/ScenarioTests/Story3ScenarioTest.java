@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project;
+package com.example.cse110_team16_project.ScenarioTests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -22,9 +22,11 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.rule.GrantPermissionRule;
 
+import com.example.cse110_team16_project.CompassActivity;
 import com.example.cse110_team16_project.Database.SCLocationDao;
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
+import com.example.cse110_team16_project.R;
 import com.example.cse110_team16_project.classes.CoordinateClasses.Coordinates;
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 import com.example.cse110_team16_project.classes.UI.UserIconManager;
@@ -48,8 +50,9 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 @RunWith(RobolectricTestRunner.class)
-public class Story10ScenarioTest {
+public class Story3ScenarioTest {
 
+    private final int WAIT_FOR_UPDATE_TIME = 1500;
     private SCLocationDao dao;
     private SCLocationDatabase db;
 
@@ -74,11 +77,28 @@ public class Story10ScenarioTest {
         db.close();
     }
 
-    /*
-    If two friends are in the exact same location, then both should be pushed up and down.
-     */
+    // Helper: find all TextViews of parent View0
+    List<TextView> friends = new ArrayList<>();
+    public void findViews(View v) {
+        try {
+            if (v instanceof ViewGroup) {
+                ViewGroup vg = (ViewGroup) v;
+                for (int i = 0; i < vg.getChildCount(); i++) {
+                    View child = vg.getChildAt(i);
+                    findViews(child);
+                }
+            }
+            else if (v instanceof TextView) {
+                this.friends.add((TextView)v);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Test
-    public void story10Scenario1() {
+    @LooperMode(PAUSED)
+    public void story3Scenario1() {
         // at least one UID added, check friend direction
         // Add UID
         SCLocation cse = new SCLocation(32.8818, -117.2335,
@@ -88,14 +108,12 @@ public class Story10ScenarioTest {
 
         List<String> labels = new ArrayList<>();
         labels.add("CSE");
-        labels.add("SAN");
 
         List<Double> fD = new ArrayList<>();
         fD.add(470.0);
-        fD.add(470.0);
         List<Degrees> fO = new ArrayList<>();
         fO.add(new Degrees(0));
-        fO.add(new Degrees(0));
+
         MutableLiveData<List<Double>> friendDistances = new MutableLiveData<>(fD);
         MutableLiveData<List<Degrees>> friendOrientation = new MutableLiveData<>(fO);
         MutableLiveData<Radians> userOrientation = new MutableLiveData<>(new Radians(Math.PI));
@@ -108,15 +126,14 @@ public class Story10ScenarioTest {
 
             UserIconManager iconManager = new UserIconManager(activity, friendDistances, friendOrientation, userOrientation);
             iconManager.onFriendsChanged(labels);
-            iconManager.updateUI(new Degrees(90),fO,fD);
+            iconManager.updateUI(new Degrees(180),fO,fD);
+            ConstraintLayout parent = activity.findViewById(R.id.MainLayout);
             TextView icon =  iconManager.getTextViews().get(0);
             assertEquals("CSE", icon.getText());
             ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) icon.getLayoutParams();
-            assertTrue((layoutParams.circleAngle+360)%360 <= 270);
-            icon =  iconManager.getTextViews().get(1);
-            assertEquals("SAN", icon.getText());
-            layoutParams = (ConstraintLayout.LayoutParams) icon.getLayoutParams();
-            assertTrue((layoutParams.circleAngle+360)%360 > 270);
+            float angle = layoutParams.circleAngle;
+            int distance = layoutParams.circleRadius;
+            assertEquals(470, layoutParams.circleRadius, 1);
         });
 
     }

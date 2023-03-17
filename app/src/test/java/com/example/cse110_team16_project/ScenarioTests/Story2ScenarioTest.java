@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project;
+package com.example.cse110_team16_project.ScenarioTests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -22,9 +22,11 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.rule.GrantPermissionRule;
 
+import com.example.cse110_team16_project.CompassActivity;
 import com.example.cse110_team16_project.Database.SCLocationDao;
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
+import com.example.cse110_team16_project.R;
 import com.example.cse110_team16_project.classes.CoordinateClasses.Coordinates;
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 import com.example.cse110_team16_project.classes.UI.UserIconManager;
@@ -48,7 +50,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 @RunWith(RobolectricTestRunner.class)
-public class Story3ScenarioTest {
+public class Story2ScenarioTest {
 
     private final int WAIT_FOR_UPDATE_TIME = 1500;
     private SCLocationDao dao;
@@ -96,7 +98,7 @@ public class Story3ScenarioTest {
 
     @Test
     @LooperMode(PAUSED)
-    public void story3Scenario1() {
+    public void story2Scenario1() {
         // at least one UID added, check friend direction
         // Add UID
         SCLocation cse = new SCLocation(32.8818, -117.2335,
@@ -131,7 +133,7 @@ public class Story3ScenarioTest {
             ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) icon.getLayoutParams();
             float angle = layoutParams.circleAngle;
             int distance = layoutParams.circleRadius;
-            assertEquals(470, layoutParams.circleRadius, 1);
+            assertEquals(180, Math.abs(layoutParams.circleAngle), 1);
         });
 
     }

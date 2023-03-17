@@ -1,4 +1,4 @@
-package com.example.cse110_team16_project;
+package com.example.cse110_team16_project.ScenarioTests;
 
 import static com.example.cse110_team16_project.classes.Updaters.ScreenDistanceUpdater.LARGEST_RADIUS;
 import static org.junit.Assert.assertEquals;
@@ -19,16 +19,18 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.rule.GrantPermissionRule;
 
+import com.example.cse110_team16_project.CompassActivity;
 import com.example.cse110_team16_project.Database.SCLocationDao;
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
+import com.example.cse110_team16_project.R;
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 import com.example.cse110_team16_project.classes.Misc.Converters;
 import com.example.cse110_team16_project.classes.UI.UserIconManager;
+import com.example.cse110_team16_project.classes.UI.ZoomManager;
 import com.example.cse110_team16_project.classes.Units.Degrees;
 import com.example.cse110_team16_project.classes.Units.Meters;
 import com.example.cse110_team16_project.classes.Units.Radians;
 import com.example.cse110_team16_project.classes.Updaters.ScreenDistanceUpdater;
-import com.example.cse110_team16_project.classes.ZoomManager;
 
 import org.junit.After;
 import org.junit.Before;
