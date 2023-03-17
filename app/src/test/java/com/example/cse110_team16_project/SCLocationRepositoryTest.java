@@ -46,8 +46,6 @@ import okhttp3.mockwebserver.RecordedRequest;
 
 @RunWith(RobolectricTestRunner.class)
 public class SCLocationRepositoryTest {
-
-    private final int WAIT_FOR_UPDATE_TIME = 1500;
     private SCLocationDao dao;
     private SCLocationDatabase db;
 
@@ -83,7 +81,13 @@ public class SCLocationRepositoryTest {
             String public_code = "SCLocationRepositoryTest1Public";
             String label = "testLabel";
             SCLocation location = new SCLocation(3,3,label,public_code);
-            mockWebServer.enqueue(new MockResponse().setBody(""));
+            final Dispatcher dispatcher = new Dispatcher() {
+                @Override
+                public MockResponse dispatch (RecordedRequest request) throws InterruptedException {
+                    return new MockResponse().setBody("");
+                }
+            };
+            mockWebServer.setDispatcher(dispatcher);
             repository.upsertRemote(location,private_code);
             String response = new MockResponseBodyBuilder.Get()
                     .addLabel(label)
@@ -91,14 +95,13 @@ public class SCLocationRepositoryTest {
                     .addLongitude("3")
                     .addPublicCode(public_code)
                     .build();
-            mockWebServer.enqueue(new MockResponse().setBody(response));
-            final Dispatcher dispatcher = new Dispatcher() {
+            final Dispatcher dispatcher1 = new Dispatcher() {
                 @Override
                 public MockResponse dispatch (RecordedRequest request) throws InterruptedException {
                     return new MockResponse().setBody(response);
                 }
             };
-            mockWebServer.setDispatcher(dispatcher);
+            mockWebServer.setDispatcher(dispatcher1);
             SCLocation retrievedLocation = repository.getRemote(location.getPublicCode());
             assertEquals(retrievedLocation.getLabel(),location.getLabel());
             assertEquals(retrievedLocation.getLatitude(),location.getLatitude(),0.01);
@@ -121,7 +124,13 @@ public class SCLocationRepositoryTest {
 
             repository.upsertLocal(scLocation1);
             repository.upsertLocal(scLocation3);
-            mockWebServer.enqueue(new MockResponse().setBody(""));
+                final Dispatcher dispatcher = new Dispatcher() {
+                    @Override
+                    public MockResponse dispatch (RecordedRequest request) throws InterruptedException {
+                        return new MockResponse().setBody("");
+                    }
+                };
+                mockWebServer.setDispatcher(dispatcher);
             repository.deleteRemote(scLocation3.getPublicCode(), private_code);
             assertTrue(repository.existsLocal(scLocation1.getPublicCode()));
             assertFalse(repository.existsRemote(scLocation1.getPublicCode()));
@@ -139,7 +148,8 @@ public class SCLocationRepositoryTest {
             SCLocation scLocation1 = new SCLocation(2,2,label,public_code);
             repository.upsertLocal(scLocation1);
             repository.deleteLocal(scLocation1);
-            assertFalse(repository.existsLocal(scLocation1.getPublicCode()));
+            boolean exists = repository.existsLocal(scLocation1.getPublicCode());
+            assertFalse(exists);
         });
     }
 
@@ -159,8 +169,6 @@ public class SCLocationRepositoryTest {
                     .addLongitude("2")
                     .addPublicCode(public_code)
                     .build();
-            mockWebServer.enqueue(new MockResponse().setBody(response));
-            repository.upsertRemote(location,location.public_code);
             final Dispatcher dispatcher = new Dispatcher() {
                 @Override
                 public MockResponse dispatch (RecordedRequest request) throws InterruptedException {
@@ -168,6 +176,8 @@ public class SCLocationRepositoryTest {
                 }
             };
             mockWebServer.setDispatcher(dispatcher);
+            repository.upsertRemote(location,location.public_code);
+
             LiveData<SCLocation> retrievedLocationLive = repository.getSynced(location.public_code);
             retrievedLocationLive.observe(activity,(retrievedNull) -> {
                 retrievedLocationLive.removeObservers(activity);
@@ -197,8 +207,6 @@ public class SCLocationRepositoryTest {
                     .addLongitude("2")
                     .addPublicCode(public_code)
                     .build();
-            mockWebServer.enqueue(new MockResponse().setBody(response));
-            repository.upsertRemote(location,location.public_code);
             final Dispatcher dispatcher = new Dispatcher() {
                 @Override
                 public MockResponse dispatch (RecordedRequest request) throws InterruptedException {
@@ -206,6 +214,8 @@ public class SCLocationRepositoryTest {
                 }
             };
             mockWebServer.setDispatcher(dispatcher);
+            repository.upsertRemote(location,location.public_code);
+
             LiveData<SCLocation> retrievedLocationLive = repository.getRemoteLive(location.public_code);
             retrievedLocationLive.observe(activity,(retrievedNull) -> {
                 retrievedLocationLive.removeObservers(activity);
@@ -236,11 +246,6 @@ public class SCLocationRepositoryTest {
                     .addLongitude("0")
                     .addPublicCode(public_code)
                     .build();
-            mockWebServer.enqueue(new MockResponse().setBody(response));
-            repository.upsertRemote(location,private_code);
-
-            MutableLiveData<SCLocation> liveLocation = new MutableLiveData<>();
-            liveLocation.postValue(location);
             String finalResponse = response;
             final Dispatcher dispatcher1 = new Dispatcher() {
                 @Override
@@ -249,6 +254,11 @@ public class SCLocationRepositoryTest {
                 }
             };
             mockWebServer.setDispatcher(dispatcher1);
+            repository.upsertRemote(location,private_code);
+
+            MutableLiveData<SCLocation> liveLocation = new MutableLiveData<>();
+            liveLocation.postValue(location);
+
             repository.updateSCLocationLive(liveLocation,private_code);
 
             SCLocation retrievedLocation = repository.getRemote(location.getPublicCode());
