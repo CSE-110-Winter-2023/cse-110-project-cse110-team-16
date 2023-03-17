@@ -65,13 +65,12 @@ public class SCLocationRepositoryTest {
                 .build();
         dao = db.getDao();
         SCLocationDatabase.inject(db);
-        mockWebServer.start();
     }
 
     @After
     public void closeDb() throws Exception {
         db.close();
-        mockWebServer.close();
+        mockWebServer.shutdown();
     }
 
     @Test
