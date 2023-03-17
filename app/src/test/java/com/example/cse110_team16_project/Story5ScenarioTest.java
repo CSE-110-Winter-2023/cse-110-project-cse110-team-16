@@ -4,10 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
@@ -23,7 +21,7 @@ import org.robolectric.RuntimeEnvironment;
 import java.util.UUID;
 
 @RunWith(RobolectricTestRunner.class)
-public class UIDActivityTest {
+public class Story5ScenarioTest {
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
     // Test for Story 5 Scenario 1
@@ -51,7 +49,7 @@ public class UIDActivityTest {
         });
     }
 
-    // Test for Story 5 Scenario 1
+    // Test for Story 5 Scenario 2
     @Test
     public void testVisibleToInvisible(){
         String public_code = UUID.randomUUID().toString();
