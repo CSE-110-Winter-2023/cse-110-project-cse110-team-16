@@ -16,7 +16,7 @@ import androidx.test.rule.GrantPermissionRule;
 
 import com.example.cse110_team16_project.Database.SCLocationDao;
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
-import com.example.cse110_team16_project.classes.GPSStatus;
+import com.example.cse110_team16_project.classes.DeviceInfo.GPSStatus;
 
 import org.junit.After;
 import org.junit.Before;

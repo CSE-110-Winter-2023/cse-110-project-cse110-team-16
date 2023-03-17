@@ -1,14 +1,14 @@
 package com.example.cse110_team16_project;
 
-import static com.example.cse110_team16_project.classes.GPSStatus.REFRESH_PERIOD;
+import static com.example.cse110_team16_project.classes.DeviceInfo.GPSStatus.REFRESH_PERIOD;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import android.location.Location;
-import android.os.SystemClock;
+
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.cse110_team16_project.classes.GPSStatus;
+import com.example.cse110_team16_project.classes.DeviceInfo.GPSStatus;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
