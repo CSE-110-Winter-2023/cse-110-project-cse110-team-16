@@ -30,6 +30,8 @@ import org.robolectric.RuntimeEnvironment;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.mockwebserver.MockWebServer;
+
 @RunWith(RobolectricTestRunner.class)
 public class ScreenDistanceUpdaterTest {
     private SCLocationDao dao;
@@ -37,7 +39,8 @@ public class ScreenDistanceUpdaterTest {
 
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
-
+    @Rule
+    public MockWebServer mockWebServer = new MockWebServer();
     @Before
     public void createDb(){
         Context context = ApplicationProvider.getApplicationContext();
@@ -61,7 +64,7 @@ public class ScreenDistanceUpdaterTest {
         scenario.moveToState(Lifecycle.State.RESUMED);
         scenario.onActivity(activity ->
         {
-            SCLocationRepository repository = new SCLocationRepository(dao);
+            SCLocationRepository repository = new SCLocationRepository(dao,mockWebServer.url("/").toString());
 
             List<Meters> distances = new ArrayList<>();
             distances.add(new Meters(300)); //.186411 miles
