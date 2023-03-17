@@ -109,6 +109,12 @@ public class SCLocationAPITest {
             mockWebServer.enqueue(new MockResponse().setBody(response));
 
             SCLocation retrievedLocation = api.getSCLocation(location.getPublicCode());
+            try {
+                RecordedRequest request1 = mockWebServer.takeRequest();
+                assertEquals(mockWebServer.url("/").toString()+public_code, request1.getRequestUrl().toString());
+            } catch (InterruptedException e) {
+                fail();
+            }
             assertEquals(retrievedLocation.getLabel(),location.getLabel());
             assertEquals(retrievedLocation.getLatitude(),location.getLatitude(),0.01);
             assertEquals(retrievedLocation.getLongitude(),location.getLongitude(),0.01);
@@ -155,6 +161,12 @@ public class SCLocationAPITest {
             }
             mockWebServer.enqueue(new MockResponse().setBody(MockResponseBodyBuilder.Not_Found()));
             SCLocation retrievedLocation = api.getSCLocation(location.getPublicCode());
+            try {
+                RecordedRequest request1 = mockWebServer.takeRequest();
+                assertEquals(mockWebServer.url("/").toString()+public_code, request1.getRequestUrl().toString());
+            } catch (InterruptedException e) {
+                fail();
+            }
             assertNull(retrievedLocation);
         });
     }
@@ -210,6 +222,12 @@ public class SCLocationAPITest {
                     .build();
             mockWebServer.enqueue(new MockResponse().setBody(response));
             SCLocation retrievedLocation = api.getSCLocation(location.getPublicCode());
+            try {
+                RecordedRequest request1 = mockWebServer.takeRequest();
+                assertEquals(mockWebServer.url("/").toString()+public_code, request1.getRequestUrl().toString());
+            } catch (InterruptedException e) {
+                fail();
+            }
             assertEquals(retrievedLocation.getLabel(),location.getLabel());
             assertEquals(retrievedLocation.getLatitude(),location.getLatitude(),0.01);
             assertEquals(retrievedLocation.getLongitude(),location.getLongitude(),0.01);
