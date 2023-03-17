@@ -189,10 +189,6 @@ public class CompassActivity extends AppCompatActivity {
 
     public DeviceTracker getDeviceTracker() { return this.deviceTracker; }
 
-    public void onUIDClicked(View view) {
-        startActivity(new Intent(this, UIDActivity.class));
-    }
-
     public void ontoListClicked(View view) {
         startActivity(new Intent(this, ListActivity.class));
     }
