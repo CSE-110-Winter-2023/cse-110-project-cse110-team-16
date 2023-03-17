@@ -21,7 +21,7 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 
 
-import com.example.cse110_team16_project.Database.MockResponseBuilder;
+import com.example.cse110_team16_project.Database.MockResponseBodyBuilder;
 import com.example.cse110_team16_project.Database.SCLocationDao;
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
@@ -76,7 +76,7 @@ public class SCLocationRepositoryTest {
             SCLocation location = new SCLocation(3,3,label,public_code);
             mockWebServer.enqueue(new MockResponse().setBody(""));
             repository.upsertRemote(location,private_code);
-            String response = new MockResponseBuilder.Get()
+            String response = new MockResponseBodyBuilder.Get()
                     .addLabel(label)
                     .addLatitude("3")
                     .addLongitude("3")
@@ -147,7 +147,7 @@ public class SCLocationRepositoryTest {
             String label = "testLabel";
 
             SCLocation location = new SCLocation(2,2,label,public_code);
-            String response = new MockResponseBuilder.Get()
+            String response = new MockResponseBodyBuilder.Get()
                     .addLabel(label)
                     .addLatitude("2")
                     .addLongitude("2")
@@ -198,7 +198,7 @@ public class SCLocationRepositoryTest {
             String public_code = "SCLocationRepositoryTest4Public";
             String label = "testLabel";
             SCLocation location = new SCLocation(2,2,label,public_code);
-            String response = new MockResponseBuilder.Get()
+            String response = new MockResponseBodyBuilder.Get()
                     .addLabel(label)
                     .addLatitude("2")
                     .addLongitude("2")
@@ -250,7 +250,7 @@ public class SCLocationRepositoryTest {
             String private_code = "SCLocationRepositoryTest5Private";
             String label = "testLabel";
             SCLocation location = new SCLocation(0,0,label,public_code);
-            String response = new MockResponseBuilder.Get()
+            String response = new MockResponseBodyBuilder.Get()
                     .addLabel(label)
                     .addLatitude("0")
                     .addLongitude("0")
@@ -284,7 +284,7 @@ public class SCLocationRepositoryTest {
 
             location.setCoordinates(new Coordinates(3,3));
             liveLocation.postValue(location);
-            response = new MockResponseBuilder.Get()
+            response = new MockResponseBodyBuilder.Get()
                     .addLabel(label)
                     .addLatitude("3")
                     .addLongitude("3")

@@ -1,6 +1,6 @@
 package com.example.cse110_team16_project.Database;
 
-public class MockResponseBuilder {
+public class MockResponseBodyBuilder {
 
 
     public static class Get{

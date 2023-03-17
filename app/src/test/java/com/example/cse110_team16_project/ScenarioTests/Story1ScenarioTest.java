@@ -6,7 +6,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 
-import com.example.cse110_team16_project.Database.MockResponseBuilder;
+import com.example.cse110_team16_project.Database.MockResponseBodyBuilder;
 import com.example.cse110_team16_project.Database.SCLocationDao;
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
 
@@ -20,7 +20,6 @@ import static org.junit.Assert.assertNull;
 
 
 import android.view.KeyEvent;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
 import androidx.lifecycle.Lifecycle;
@@ -76,7 +75,7 @@ public class Story1ScenarioTest {
             String public_code = "Story1Scenario1Public";
             String label = "testLabel";
             SCLocation location = new SCLocation(3,3,label,public_code);
-            String response = new MockResponseBuilder.Get()
+            String response = new MockResponseBodyBuilder.Get()
                     .addLabel(label)
                     .addLatitude("3")
                     .addLongitude("3")

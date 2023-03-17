@@ -6,13 +6,12 @@ import androidx.lifecycle.Lifecycle;
 import androidx.room.Room;
 import androidx.test.core.app.ActivityScenario;
 
-import com.example.cse110_team16_project.Database.MockResponseBuilder;
+import com.example.cse110_team16_project.Database.MockResponseBodyBuilder;
 import com.example.cse110_team16_project.Database.SCLocationAPI;
 
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -31,7 +30,6 @@ import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.classes.CoordinateClasses.SCLocation;
 
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import okhttp3.mockwebserver.MockResponse;
@@ -86,7 +84,7 @@ public class SCLocationAPITest {
             mockWebServer.enqueue(new MockResponse().setBody(""));
             api.putSCLocation(location,private_code);
 
-            String response = new MockResponseBuilder.Get()
+            String response = new MockResponseBodyBuilder.Get()
                     .addLabel(label)
                     .addLatitude("3")
                     .addLongitude("3")
@@ -140,7 +138,7 @@ public class SCLocationAPITest {
             location.setLabel(label2);
             mockWebServer.enqueue(new MockResponse().setBody(""));
             api.patchSCLocation(location,private_code,false);
-            String response = new MockResponseBuilder.Get()
+            String response = new MockResponseBodyBuilder.Get()
                     .addLabel(label2)
                     .addLatitude("3")
                     .addLongitude("3")

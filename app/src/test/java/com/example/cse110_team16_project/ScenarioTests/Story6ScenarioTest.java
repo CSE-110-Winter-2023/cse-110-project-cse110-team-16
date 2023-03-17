@@ -12,7 +12,7 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 
 import com.example.cse110_team16_project.CompassActivity;
-import com.example.cse110_team16_project.Database.MockResponseBuilder;
+import com.example.cse110_team16_project.Database.MockResponseBodyBuilder;
 import com.example.cse110_team16_project.Database.SCLocationDao;
 import com.example.cse110_team16_project.Database.SCLocationDatabase;
 import com.example.cse110_team16_project.Database.SCLocationRepository;
@@ -66,7 +66,7 @@ public class Story6ScenarioTest {
             String private_code = "Story6Scenario1TestPrivate";
             String public_code = "Story6Scenario1TestPublic";
             SCLocation location = new SCLocation(0,0,label,public_code);
-            String response = new MockResponseBuilder.Get()
+            String response = new MockResponseBodyBuilder.Get()
                     .addLabel(label)
                     .addLatitude("0")
                     .addLongitude("0")
@@ -76,7 +76,7 @@ public class Story6ScenarioTest {
             repository.upsertRemote(location,private_code);
             Coordinates coords = new Coordinates(2,2);
             MutableLiveData<Coordinates> liveCoordinates = new MutableLiveData<>();
-            response = new MockResponseBuilder.Get()
+            response = new MockResponseBodyBuilder.Get()
                     .addLabel(label)
                     .addLatitude("2")
                     .addLongitude("2")
