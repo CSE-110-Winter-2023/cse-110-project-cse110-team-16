@@ -135,7 +135,6 @@ public class UserIconManager {
                 activity.runOnUiThread(() -> {
                     curView.setText(reAddLabel);
                     curView.setWidth(newWidth);
-                    //curView.setHeight(50);
                     curView.setTextColor(Color.BLUE);
                 });
             }
