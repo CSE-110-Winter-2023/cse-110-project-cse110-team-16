@@ -13,7 +13,7 @@ import java.util.List;
 public class IconStacker {
 
     private final int HEIGHT = 60;
-    private final int WIDTH_TOP_DOWN_CHECK = 10; //maybe 60
+    private final int WIDTH_TOP_DOWN_CHECK = 40; //maybe 60
 
     private Degrees userDirection;
     private List<Degrees> friendOrientation;
