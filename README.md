@@ -2,7 +2,7 @@
 
 ## Objective
 
-This app is an easy, interactive way to keep track of friends in a certain radius around you. You can see your close by friends, and message directly on the app, as well as see which way they are pointing. This app gives you an easy way to keep track of your loved ones and keep in touch! 
+This app is an easy, interactive way to keep track of friends in a certain radius around you. You can see your close by friends, as well as see which way they are pointing. This app gives you an easy way to keep track of your loved ones and keep in touch! 
 This project was done by a 6 person team in an agile development format. This app was developed using Android Studio.
 
 ### Skills Learned
